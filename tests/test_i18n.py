@@ -1,11 +1,11 @@
 """
-test_i18n.py: Unit tests for ``librarian.i18n`` module
+test_i18n.py: Unit tests for ``bottle_utils.i18n`` module
 
-Copyright 2014, Outernet Inc.
-Some rights reserved.
+Bottle Utils
+2014 Outernet Inc <hello@outernet.is>
+All rights reserved
 
-This software is free software licensed under the terms of GPLv3. See COPYING
-file that comes with the source code, or http://www.gnu.org/licenses/gpl.txt.
+Licensed under BSD license. See ``LICENSE`` file in the source directory.
 """
 
 try:
