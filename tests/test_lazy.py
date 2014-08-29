@@ -209,6 +209,15 @@ def test_lazy_class():
         assert isinstance(lazy_obj, str)
 
 
+def test_hash():
+    fn = mock.Mock()
+    fn.__name__ = str('foo')
+    fn.return_value = 'foo'
+    lazy_fn = lazy(fn)
+    lazy_obj = lazy_fn()
+    assert hash('foo') == hash(lazy_obj)
+
+
 def test_subscript():
     fn = mock.Mock()
     fn.__name__ = str('foo')
