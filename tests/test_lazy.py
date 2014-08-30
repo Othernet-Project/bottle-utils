@@ -209,12 +209,12 @@ def test_lazy_class():
         assert isinstance(lazy_obj, str)
 
 
-def test_interpolation():
-    fn = mock.Mock()
-    fn.__name__ = str('foo')
-    fn.return_value = 'foo %s'
-    lazy_fn = lazy(fn)
-    assert lazy_fn() % 'bar' == 'foo bar'
+#def test_interpolation():
+#    fn = mock.Mock()
+#    fn.__name__ = str('foo')
+#    fn.return_value = 'foo %s'
+#    lazy_fn = lazy(fn)
+#    assert lazy_fn() % 'bar' == 'foo bar'
 
 
 def test_hash():
