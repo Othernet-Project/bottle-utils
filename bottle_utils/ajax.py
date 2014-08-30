@@ -15,14 +15,12 @@ import functools
 from bottle import request, abort
 
 
-def ajax_only(error_status=400):
+def ajax_only(func):
     """ Aborts a request that is not made using AJAX """
-    def decorator(func):
-        @functools.wraps(func)
-        def wrapper(*args, **kwargs):
-            if not request.is_xhr:
-                abort(error_status)
-            return func(*args, **kwargs)
-        return wrapper
-    return decorator
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        if not request.is_xhr:
+            abort(400)
+        return func(*args, **kwargs)
+    return wrapper
 
