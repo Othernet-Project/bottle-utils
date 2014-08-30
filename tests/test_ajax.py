@@ -22,17 +22,6 @@ from webtest import TestApp
 from bottle_utils.ajax import *
 
 PY2 = sys.version_info.major == 2
-
-
-# Test handler
-@bottle.get('/')
-@ajax_only
-def ajax_only_handler():
-    return 'success'
-
-# Test app
-app = TestApp(bottle.default_app())
-
 MOD = 'bottle_utils.ajax.'
 
 
@@ -48,6 +37,18 @@ def test_ajax_only_aborts_non_ajax(abort, request):
     request.is_xhr = False
     ajax_handler()
     abort.assert_called_with(400)
+
+
+# Integration tests
+
+# Test handler
+@bottle.get('/')
+@ajax_only
+def ajax_only_handler():
+    return 'success'
+
+# Test app
+app = TestApp(bottle.default_app())
 
 
 def test_normal_request_returns_400():
