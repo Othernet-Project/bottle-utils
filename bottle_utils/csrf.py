@@ -31,12 +31,13 @@ from __future__ import unicode_literals
 
 import os
 import hashlib
+import functools
 
 from bottle import request, response, abort
 
 
-ROOT = b'/'
-CSRF_TOKEN = b'_csrf_token'
+ROOT = '/'
+CSRF_TOKEN = '_csrf_token'
 EXPIRES = 600  # seconds
 ENCODING = 'latin1'
 
@@ -44,7 +45,7 @@ ENCODING = 'latin1'
 def get_conf():
     conf = request.app.config
     csrf_secret = conf['csrf.secret']
-    csrf_token_name = conf.get('csrf.token_name', CSRF_TOKEN).encode(ENCODING)
+    csrf_token_name = str(conf.get('csrf.token_name', CSRF_TOKEN))
     csrf_path = conf.get('csrf.path', ROOT).encode(ENCODING)
     try:
         cookie_expires = int(conf.get('csrf.expires', EXPIRES))
@@ -71,6 +72,14 @@ def generate_csrf_token():
 def csrf_token(func):
     """ CSRF token management
 
+    When an existing token is found, it is automatically reused. A new cookie
+    is also set to extend the expiration time of the existing token each time.
+
+    If no tokens are found in cookies, a new one is automatically generated.
+
+    Any response from handlers decorated with this decorator will have caching
+    disabled to prevent the browser from caching the token form field.
+
     The POST handler must use the ``csrf_protect`` decotrator for the token to
     be used in any way.
     """
@@ -80,6 +89,8 @@ def csrf_token(func):
         token = request.get_cookie(token_name, secret=secret)
         if token:
             # We will reuse existing tokens
+            response.set_cookie(token_name, token, path=path,
+                                secret=secret, max_age=expires)
             request.csrf_token = token.decode('utf8')
         else:
             generate_csrf_token()
@@ -102,9 +113,8 @@ def csrf_protect(func):
         token = request.get_cookie(token_name, secret=secret)
         if not token:
             abort(403, 'The form you submitted is invalid or has expired')
-        token = token.decode(ENCODING)
-        form_token = request.forms.getunicode('_csrf_token')
-        if form_token != token:
+        form_token = request.forms.get(token_name)
+        if str(form_token) != str(token):
             response.delete_cookie(token_name, path=path, secret=secret,
                                    max_age=expires)
             abort(403, 'The form you submitted is invalid or has expired')
@@ -113,7 +123,12 @@ def csrf_protect(func):
     return wrapper
 
 
-def csrf_tag(token=None):
-    token = token or request.csrf_token
-    return '<input type="hidden" name="_csrf_token" value="%s">' % token
+def csrf_tag():
+    _, token_name, _, _ = get_conf()
+    token = request.csrf_token
+    try:
+        token_name = token_name.decode('utf8')
+    except AttributeError:
+        pass
+    return '<input type="hidden" name="%s" value="%s">' % (token_name, token)
 
