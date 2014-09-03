@@ -40,9 +40,10 @@ Please report all bugs to our `GitHub issue tracker`_.
 License
 =======
 
-This package is licensed under BSD license. See [LICENSE](./LICENSE) for more
+This package is licensed under BSD license. See LICENSE_ for more
 info.
 
 .. _Bottle: http://bottlepy.org/
 .. _Outernet: https://www.outernet.is/
 .. _GitHub issue tracker: https://github.com/Outernet-Project/bottle-utils/issues
+.. _LICENSE: LICENSE
