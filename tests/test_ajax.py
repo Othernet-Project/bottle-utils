@@ -16,9 +16,6 @@ try:
 except ImportError:
     import mock
 
-import bottle
-from webtest import TestApp
-
 from bottle_utils.ajax import *
 
 PY2 = sys.version_info.major == 2
@@ -41,22 +38,14 @@ def test_ajax_only_aborts_non_ajax(abort, request):
 
 # Integration tests
 
-# Test handler
-@bottle.get('/')
-@ajax_only
-def ajax_only_handler():
-    return 'success'
-
-# Test app
-app = TestApp(bottle.default_app())
-
+from app import test_app
 
 def test_normal_request_returns_400():
-    res = app.get('/', expect_errors=True)
+    res = test_app.get('/ajax_only', expect_errors=True)
     assert res.status_int == 400
 
 
-def test_ajax_request_deos_work():
-    res = app.get('/', xhr=True)
+def test_ajax_request_does_work():
+    res = test_app.get('/ajax_only', xhr=True)
     assert res.status == '200 OK'
     assert res.ubody == 'success'
