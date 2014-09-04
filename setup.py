@@ -25,6 +25,7 @@ setup(
     """,
     install_requires = [
         'bottle==0.12.7',
+        'python-dateutil==2.2',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',

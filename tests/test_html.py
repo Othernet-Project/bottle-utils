@@ -1,0 +1,263 @@
+"""
+test_html.py: Unit tests for ``bottle_utils.html`` module
+
+Bottle Utils
+2014 Outernet Inc <hello@outernet.is>
+All rights reserved
+
+Licensed under BSD license. See ``LICENSE`` file in the source directory.
+"""
+
+from __future__ import unicode_literals
+
+import sys
+
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
+from bottle_utils.html import *
+
+
+MOD = 'bottle_utils.html.'
+
+
+def assert_attr(s, name, val):
+    assert ('%s="%s"' % (name, val)) in s
+
+
+def assert_value(s, val):
+    assert_attr(s, 'value', val)
+
+
+def assert_type(s, val):
+    assert_attr(s, 'type', val)
+
+
+def assert_name(s, val):
+    assert_attr(s, 'name', val)
+
+
+def assert_tag(s, name):
+    assert s.startswith('<' + name) and s.endswith('>')
+
+
+def assert_content(s, content):
+    assert ('>%s<' % content) in s
+
+
+def test_plur():
+    assert plur('book', 1) == 'book'
+    assert plur('book', 2) == 'books'
+
+
+def test_custom_plural_function():
+    pfunc = lambda n: n > 2
+    assert plur('book', 1, pfunc) == 'book'
+    assert plur('book', 2, pfunc) == 'book'
+    assert plur('book', 3, pfunc) == 'books'
+
+
+def test_custom_convert_function():
+    cfunc = lambda s, p: s + 'mi' if p else s
+    assert plur('book', 1, convert=cfunc) == 'book'
+    assert plur('book', 2, convert=cfunc) == 'bookmi'
+
+
+def test_hsize():
+    assert hsize(12) == '12.00 B'
+    assert hsize(1030) == '1.01 KB'
+    assert hsize(2097152) == '2.00 MB'
+
+
+def test_hsize_step():
+    assert hsize(12, step=1000) == '12.00 B'
+    assert hsize(1200, step=1000) == '1.20 KB'
+
+
+def test_hsize_units():
+    assert hsize(12, 'm', 1000) == '12.00 m'
+    assert hsize(1200, 'm', 1000) == '1.20 Km'
+
+
+def test_attr():
+    assert attr('foo', 'bar') == 'foo="bar"'
+    assert attr('foo', 1) == 'foo="1"'
+
+
+def test_attr_escaping():
+    assert attr('foo', '"bar"') == 'foo="&quot;bar&quot;"'
+    assert attr('src', '/?q=foo&b=bar') == 'src="/?q=foo&amp;b=bar"'
+
+
+def test_tag():
+    assert tag('foo') == '<foo></foo>'
+
+
+def test_tag_content():
+    assert tag('foo', 'bar') == '<foo>bar</foo>'
+
+
+def test_tag_content_html():
+    assert tag('foo', '<bar>') == '<foo><bar></foo>'
+
+
+def test_nonclosing_tag():
+    assert tag('foo', nonclosing=True) == '<foo>'
+    assert tag('foo', 'bar', nonclosing=True) == '<foo>'
+
+
+def test_tag_attributes():
+    assert tag('foo', bar='fam') == '<foo bar="fam"></foo>'
+
+
+def test_tag_attribute_with_underscore():
+    assert tag('foo', _bar='fam') == '<foo bar="fam"></foo>'
+
+
+def test_hidden_field():
+    s = HIDDEN('foo', 'bar')
+    # Making partial assumptions because attribute order is not always same
+    assert_tag(s, 'input')
+    assert_type(s, 'hidden')
+    assert_name(s, 'foo')
+    assert_value(s, 'bar')
+
+
+def test_vinput():
+    s = vinput('foo', {})
+    assert_tag(s, 'input')
+    assert_name(s, 'foo')
+    assert_attr(s, 'id', 'foo')
+
+
+def test_vinput_override_id():
+    s = vinput('foo', {}, _id='bar')
+    assert_attr(s, 'id', 'bar')
+
+
+def test_vinput_value():
+    s = vinput('foo', {'foo': '12'})
+    assert_value(s, '12')
+
+
+def test_varea():
+    s = varea('foo', {})
+    assert_tag(s, 'textarea')
+    assert_name(s, 'foo')
+    assert_attr(s, 'id', 'foo')
+
+
+def test_varea_override_id():
+    s = varea('foo', {}, _id='bar')
+
+
+def test_varea_value():
+    s = varea('foo', {'foo': 'bar'})
+    assert_content(s, 'bar')
+
+
+def test_vcheckbox():
+    s = vcheckbox('foo', 'fooval', {})
+    assert_tag(s, 'input')
+    assert_type(s, 'checkbox')
+    assert_value(s, 'fooval')
+    assert_attr(s, 'id', 'foo')
+
+
+def test_vcheckbox_value():
+    s = vcheckbox('foo', 'fooval', {'foo': 'fooval'})
+    assert 'checked' in s
+
+
+def test_vcheckbox_value_no_partial_match():
+    s = vcheckbox('foo', 'fooval', {'foo': 'foovaliant'})
+    assert 'checked' not in s
+
+
+def test_vcheckbox_values_list():
+    s = vcheckbox('foo', 'fooval', {'foo': ['fooval', 'barval']})
+    assert 'checked' in s
+
+
+def test_vcheckbox_default():
+    s = vcheckbox('foo', 'fooval', {}, True)
+    assert 'checked' in s
+    s = vcheckbox('foo', 'fooval', {}, False)
+    assert 'checked' not in s
+
+
+def test_vselect():
+    s = vselect('foo', [], {})
+    assert_tag(s, 'select')
+    assert_content(s, '')
+
+
+def test_vselect_choices():
+    s = vselect('foo', ((1, 'bar'), (2, 'baz')), {})
+    assert tag('option', 'bar', value=1) in s
+    assert tag('option', 'baz', value=2) in s
+
+
+def test_vselect_value():
+    s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': 1})
+    assert tag('option', 'bar', value=1, selected=None) in s
+    assert tag('option', 'baz', value=2) in s
+
+    s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': 2})
+    assert tag('option', 'bar', value=1) in s
+    assert tag('option', 'baz', value=2, selected=None) in s
+
+
+def test_link_other():
+    s = link_other('foo', '/bar', '/baz')
+    assert_tag(s, 'a')
+    assert_attr(s, 'href', '/bar')
+    s = link_other('foo', '/bar', '/bar')
+    assert s == 'foo'
+
+
+def test_link_other_alternative_wrapper():
+    s = link_other('foo', '/bar', '/bar', SPAN)
+    assert_tag(s, 'span')
+    assert_content(s, 'foo')
+
+
+def test_link_other_common_kwargs():
+    s = link_other('foo', '/bar', '/baz', SPAN, _class='cls')
+    assert_attr(s, 'class', 'cls')
+    s = link_other('foo', '/bar', '/bar', SPAN, _class='cls')
+    assert_attr(s, 'class', 'cls')
+
+
+def test_trunc():
+    assert trunc('123456789', 10) == '123456789'
+    assert trunc('123456789', 4) == '1234...'
+
+
+def test_yesno():
+    assert yesno(True) == 'yes'
+    assert yesno(False) == 'no'
+
+
+def test_yesno_custom_yes_no():
+    assert yesno(True, 'available', 'not available') == 'available'
+    assert yesno(False, 'available', 'not available') == 'not available'
+
+
+@mock.patch(MOD + 'request')
+def test_full_url(request):
+    request.urlparts.scheme = 'http'
+    request.urlparts.hostname = 'foo'
+    request.urlparts.port = None
+    assert full_url('/') == 'http://foo/'
+
+
+@mock.patch(MOD + 'request')
+def test_full_url(request):
+    request.urlparts.scheme = 'https'
+    request.urlparts.hostname = 'foo'
+    request.urlparts.port = 9000
+    assert full_url('/bar/baz') == 'https://foo:9000/bar/baz'
+
