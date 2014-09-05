@@ -16,7 +16,7 @@ are of high quality. You should conisder this package Alpha quality.
 Status
 ======
 
-
+bottle-utils is still in early development.
 
 Modules
 =======
@@ -25,6 +25,7 @@ The following modules are currently available:
 
 - ``bottle_utils.ajax`` - Decorators for AJAX-specific handlers
 - ``bottle_utils.csrf`` - Decorators for CSRF protection
+- ``bottle_utils.html`` - Functions for use in HTML templates
 - ``bottle_utils.http`` - Decorators for managing HTTP reponse headers
 - ``bottle_utils.i18n`` - Support for internationalization
 - ``bottle_utils.lazy`` - Provides functionality for lazy evaluation of 
