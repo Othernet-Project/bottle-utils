@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 try:
     from http.cookiejar import CookieJar
 except ImportError:
@@ -6,7 +8,7 @@ except ImportError:
 import bottle
 from webtest import TestApp
 
-from bottle_utils import ajax, csrf
+from bottle_utils import ajax, csrf, flash
 
 bottle.debug()
 bottle.BaseTemplate.defaults.update({
@@ -14,7 +16,8 @@ bottle.BaseTemplate.defaults.update({
 })
 
 app = bottle.default_app()
-app.config.update({'csrf.secret': 'foo'})
+app.config.update({str('csrf.secret'): 'foo'})
+app.install(flash.message_plugin)
 
 
 # Test handler
@@ -46,6 +49,16 @@ def other_form_view():
 @csrf.csrf_protect
 def other_post_view():
     return 'success other'
+
+
+@app.get('/message')
+def get_message():
+    return str(bottle.request.message)
+
+
+@app.post('/message')
+def set_message():
+    bottle.response.flash('Come on!')
 
 
 test_app = TestApp(app, cookiejar=CookieJar())
