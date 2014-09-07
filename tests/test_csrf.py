@@ -86,7 +86,7 @@ def test_generate_token(request, response, os, hashlib, get_conf):
     response.set_cookie.assert_called_once_with('bar', b'abc',
                                                 path=b'/foo/bar',
                                                 secret='foo', max_age=200)
-    assert request.csrf_token == b'abc'
+    assert request.csrf_token == 'abc'
 
 
 @mock.patch(MOD + 'get_conf')
@@ -220,8 +220,11 @@ def test_protect_good_token(request, generate_csrf_token, get_conf):
 def test_csrf_tag(request, get_conf):
     get_conf.return_value = MOCK_CONF
     request.csrf_token = 'abc'
-    assert csrf_tag() == '<input type="hidden" name="bar" value="abc">'
-
+    s = csrf_tag()
+    assert s.startswith('<input') and s.endswith('>')
+    assert 'value="abc"' in s
+    assert 'name="bar"' in s
+    assert 'type="hidden"' in s
 
 # Integration tests
 

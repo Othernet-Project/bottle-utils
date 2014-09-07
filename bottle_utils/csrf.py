@@ -35,6 +35,8 @@ import functools
 
 from bottle import request, response, abort
 
+from .html import HIDDEN
+from .common import to_unicode
 
 ROOT = '/'
 CSRF_TOKEN = '_csrf_token'
@@ -114,7 +116,7 @@ def csrf_protect(func):
         if not token:
             abort(403, 'The form you submitted is invalid or has expired')
         form_token = request.forms.get(token_name)
-        if str(form_token) != str(token):
+        if to_unicode(form_token) != to_unicode(token):
             response.delete_cookie(token_name, path=path, secret=secret,
                                    max_age=expires)
             abort(403, 'The form you submitted is invalid or has expired')
@@ -130,5 +132,5 @@ def csrf_tag():
         token_name = token_name.decode('utf8')
     except AttributeError:
         pass
-    return '<input type="hidden" name="%s" value="%s">' % (token_name, token)
+    return HIDDEN(token_name, token)
 
