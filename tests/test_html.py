@@ -86,11 +86,6 @@ def test_attr():
     assert attr('foo', 1) == 'foo="1"'
 
 
-def test_attr_escaping():
-    assert attr('foo', '"bar"') == 'foo="&quot;bar&quot;"'
-    assert attr('src', '/?q=foo&b=bar') == 'src="/?q=foo&amp;b=bar"'
-
-
 def test_tag():
     assert tag('foo') == '<foo></foo>'
 
@@ -201,6 +196,8 @@ def test_vselect_choices():
 
 
 def test_vselect_value():
+    # FIXME: This test may fail in Python 3.4 because of HTML attribute
+    # ordering.
     s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': 1})
     assert tag('option', 'bar', value=1, selected=None) in s
     assert tag('option', 'baz', value=2) in s
@@ -244,20 +241,4 @@ def test_yesno():
 def test_yesno_custom_yes_no():
     assert yesno(True, 'available', 'not available') == 'available'
     assert yesno(False, 'available', 'not available') == 'not available'
-
-
-@mock.patch(MOD + 'request')
-def test_full_url(request):
-    request.urlparts.scheme = 'http'
-    request.urlparts.hostname = 'foo'
-    request.urlparts.port = None
-    assert full_url('/') == 'http://foo/'
-
-
-@mock.patch(MOD + 'request')
-def test_full_url(request):
-    request.urlparts.scheme = 'https'
-    request.urlparts.hostname = 'foo'
-    request.urlparts.port = 9000
-    assert full_url('/bar/baz') == 'https://foo:9000/bar/baz'
 
