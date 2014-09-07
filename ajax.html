@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>AJAX (bottle_utils.ajax) &mdash; Bottle Utils 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bottle Utils 0.1a1 documentation" href="index.html" />
+    <link rel="next" title="CSRF protection (bottle_utils.csrf)" href="csrf.html" />
+    <link rel="prev" title="Common utilities (bottle_utils.common)" href="common.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="Common utilities (bottle_utils.common)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="ajax-bottle-utils-ajax">
+<h1>AJAX (<tt class="docutils literal"><span class="pre">bottle_utils.ajax</span></tt>)<a class="headerlink" href="#ajax-bottle-utils-ajax" title="Permalink to this headline">¶</a></h1>
+<p>The <tt class="docutils literal"><span class="pre">bottle_utils.ajax</span></tt> module provides decorators for working with AJAX
+requests.</p>
+<div class="section" id="module-bottle_utils.ajax">
+<span id="decorators"></span><h2>Decorators<a class="headerlink" href="#module-bottle_utils.ajax" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-bottle_utils.ajax"></span><dl class="function">
+<dt id="bottle_utils.ajax.ajax_only">
+<tt class="descclassname">bottle_utils.ajax.</tt><tt class="descname">ajax_only</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/ajax.html#ajax_only"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.ajax.ajax_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>This decorator simply tests if request <tt class="docutils literal"><span class="pre">is_xhr</span></tt> and aborts any requests
+that are not XHR with an HTTP 400 status code. Keep in mind, though, that
+AJAX header (&#8216;X-Requested-With&#8217;) can be faked, so don&#8217;t use this decorator
+as a security measure of any kind.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@ajax_only</span>
+<span class="k">def</span> <span class="nf">hidden_from_non_xhr</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s">&quot;Foo!&quot;</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> &#8211; request handler</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><tt class="docutils literal"><span class="pre">bottle.HTTPResponse</span></tt></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">wrapped function</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">AJAX (<tt class="docutils literal"><span class="pre">bottle_utils.ajax</span></tt>)</a><ul>
+<li><a class="reference internal" href="#module-bottle_utils.ajax">Decorators</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="common.html"
+                        title="previous chapter">Common utilities (<tt class="docutils literal"><span class="pre">bottle_utils.common</span></tt>)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="csrf.html"
+                        title="next chapter">CSRF protection (<tt class="docutils literal"><span class="pre">bottle_utils.csrf</span></tt>)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/ajax.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="common.html" title="Common utilities (bottle_utils.common)"
+             >previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

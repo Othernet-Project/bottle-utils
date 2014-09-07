@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bottle_utils.meta &mdash; Bottle Utils 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="Bottle Utils 0.1a1 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bottle_utils.meta</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">.. module:: bottle_utils.meta</span>
+<span class="sd">   :synopsis: Social metadata</span>
+
+<span class="sd">.. moduleauthor:: Outernet Inc &lt;hello@outernet.is&gt;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">request</span>
+
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="o">*</span>
+
+
+<div class="viewcode-block" id="MetaBase"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.MetaBase">[docs]</a><span class="k">class</span> <span class="nc">MetaBase</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Base class for metadata. This class is a simple placeholder to collect base</span>
+<span class="sd">    functionality for various subclasses.</span>
+
+<span class="sd">    Currently, the only functionality this base class provides is calling</span>
+<span class="sd">    :py:meth:`~bottle_utils.meta.MetaBase.render` method when ``__str__()``</span>
+<span class="sd">    magic method is called on the class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MetaBase.render"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.MetaBase.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the meta object into HTML. In the base class this method</span>
+<span class="sd">        renders to empty string.</span>
+
+<span class="sd">        :returns:   HTML representation of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;&#39;</span>
+</div>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">()</span>
+
+</div>
+<div class="viewcode-block" id="SimpleMetadata"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.SimpleMetadata">[docs]</a><span class="k">class</span> <span class="nc">SimpleMetadata</span><span class="p">(</span><span class="n">MetaBase</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The basic (classic) metadata. This class is used to render title tag and</span>
+<span class="sd">    description meta tag.</span>
+
+<span class="sd">    Both title and description are option. If neither is supplied, it is</span>
+<span class="sd">    rendered into empty string.</span>
+
+<span class="sd">    Here is a simple example handler::</span>
+
+<span class="sd">        @app.get(&#39;/my/shareable/page&#39;)</span>
+<span class="sd">        @bottle.view(&#39;page&#39;)</span>
+<span class="sd">        def handler():</span>
+<span class="sd">            m = SimpleMetadata(title=&#39;My page&#39;,</span>
+<span class="sd">                               description=&#39;A page about sharing&#39;)</span>
+<span class="sd">            return dict(meta=m)</span>
+
+<span class="sd">    In the template, simply render this object in ``&lt;head&gt;`` section where you</span>
+<span class="sd">    would normally have the ``&lt;title&gt;`` tag.::</span>
+
+<span class="sd">        &lt;html&gt;</span>
+<span class="sd">            &lt;head&gt;</span>
+<span class="sd">                &lt;meta charset=&quot;utf-8&quot;&gt;</span>
+<span class="sd">                {{! meta }}</span>
+<span class="sd">            &lt;/head&gt;</span>
+<span class="sd">            &lt;body&gt;</span>
+<span class="sd">            ...</span>
+<span class="sd">            &lt;/body&gt;</span>
+<span class="sd">        &lt;/html&gt;</span>
+
+<span class="sd">    :param title:           title</span>
+<span class="sd">    :param description:     description</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="SimpleMetadata.meta"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.SimpleMetadata.meta">[docs]</a>    <span class="k">def</span> <span class="nf">meta</span><span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a generic ``&lt;meta&gt;`` tag. This function is the basis for</span>
+<span class="sd">        rendering most of the social meta tags.</span>
+
+<span class="sd">        The arguments are rendered like this::</span>
+
+<span class="sd">            &lt;meta $attr=$name content=$value&gt;</span>
+
+<span class="sd">        :param attr:    attribute name used for tag name</span>
+<span class="sd">        :param name:    tag name</span>
+<span class="sd">        :param value:   tag value</span>
+<span class="sd">        :returns:       HTML markup for the meta tag</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&#39;&lt;meta </span><span class="si">%s</span><span class="s">=&quot;</span><span class="si">%s</span><span class="s">&quot; content=&quot;</span><span class="si">%s</span><span class="s">&quot;&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attr</span><span class="p">,</span> <span class="n">attr_escape</span><span class="p">(</span><span class="n">name</span><span class="p">),</span>
+                                                <span class="n">attr_escape</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="SimpleMetadata.simple"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.SimpleMetadata.simple">[docs]</a>    <span class="k">def</span> <span class="nf">simple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a simple &#39;name&#39; meta tag. This function renders a meta tag that</span>
+<span class="sd">        uses the &#39;name&#39; attribute.</span>
+
+<span class="sd">        The arguments are rendered like this::</span>
+
+<span class="sd">            &lt;meta name=$name content=$value&gt;</span>
+
+<span class="sd">        :param name:    tag name</span>
+<span class="sd">        :param value:   tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="SimpleMetadata.render"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.SimpleMetadata.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the meta object into HTML.</span>
+
+<span class="sd">        :returns:   HTML representation of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;&lt;title&gt;</span><span class="si">%s</span><span class="s">&lt;/title&gt;&#39;</span> <span class="o">%</span> <span class="n">html_escape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">simple</span><span class="p">(</span><span class="s">&#39;description&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">SimpleMetadata</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> <span class="o">+</span> <span class="n">s</span>
+
+</div></div>
+<div class="viewcode-block" id="Metadata"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata">[docs]</a><span class="k">class</span> <span class="nc">Metadata</span><span class="p">(</span><span class="n">SimpleMetadata</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Complete set of social meta tags. This class renders a complete set of</span>
+<span class="sd">    social meta tags including `schema.org &lt;http://schema.org/&gt;`_ properties,</span>
+<span class="sd">    `OpenGraph tags &lt;https://developers.facebook.com/docs/opengraph&gt;`, and</span>
+<span class="sd">    `Twitter Cards markup</span>
+<span class="sd">    &lt;https://dev.twitter.com/docs/cards/markup-reference&gt;`.</span>
+
+<span class="sd">    The meta tags are only rendered for the property that is specified (i.e.,</span>
+<span class="sd">    one or more of the title, description, thumbnail, url). The properties have</span>
+<span class="sd">    following meanings:</span>
+
+<span class="sd">    - title: page title</span>
+<span class="sd">    - description: page description (usually used as message shown next to the</span>
+<span class="sd">      post on a social network)</span>
+<span class="sd">    - thumbnail: (also known as &#39;image&#39;) appears as a thumbnail or banner</span>
+<span class="sd">      alongside the post on a social network</span>
+<span class="sd">    - url: canonical URL of the page (usually an URL that does not include any</span>
+<span class="sd">      query parameters that change it&#39;s appearance or generate unnecessary</span>
+<span class="sd">      data, such as Google Analytics campaign tags, etc), which is used instead</span>
+<span class="sd">      of the URL that was shared</span>
+
+<span class="sd">    To render social tags, simply instantiate an object using meta data of your</span>
+<span class="sd">    choosing and render the object in template.</span>
+
+<span class="sd">    Here is an example of what it may look like in a handler function::</span>
+
+<span class="sd">        @app.get(&#39;/my/shareable/page&#39;)</span>
+<span class="sd">        @bottle.view(&#39;page&#39;)</span>
+<span class="sd">        def handler():</span>
+<span class="sd">            m = Metadata(title=&#39;My page&#39;,</span>
+<span class="sd">                         description=&#39;A page about sharing&#39;,</span>
+<span class="sd">                         thumbnail=&#39;/static/images/awesome.png&#39;,</span>
+<span class="sd">                         url=bottle.request.path)</span>
+<span class="sd">            return dict(meta=m)</span>
+
+<span class="sd">    And here is a template::</span>
+
+<span class="sd">        &lt;html&gt;</span>
+<span class="sd">            &lt;head&gt;</span>
+<span class="sd">                &lt;meta charset=&quot;utf-8&quot;&gt;</span>
+<span class="sd">                {{! meta }}</span>
+<span class="sd">            &lt;/head&gt;</span>
+<span class="sd">            &lt;body&gt;</span>
+<span class="sd">            ....</span>
+<span class="sd">            &lt;/body&gt;</span>
+<span class="sd">        &lt;/html&gt;</span>
+
+<span class="sd">    Don&#39;t forget to prevent escaping of the rendered HTML by using ``{{! }}``</span>
+<span class="sd">    syntax instead of ``{{ }}``.</span>
+
+<span class="sd">    This class does not render any of the other numerous tags (authorship tags,</span>
+<span class="sd">    for instance). However, the instance methods it provides can be used to</span>
+<span class="sd">    render them.</span>
+
+<span class="sd">    For example, to render a Twitter creator tag in a template that has access</span>
+<span class="sd">    to any instance of this class::</span>
+
+<span class="sd">        {{! meta.twitterprop(&#39;creator&#39;, &#39;@OuternetForAll&#39;) }}</span>
+
+<span class="sd">    When it comes to thumbnails and canonical URLs, the social networks usually</span>
+<span class="sd">    expect to see a full URL (including scheme and hostname). However, it may</span>
+<span class="sd">    not feel right to hard-code these things. This class automatically converts</span>
+<span class="sd">    paths to full URLs based on request data, so passing paths is fine.</span>
+
+<span class="sd">    :param title:           page title</span>
+<span class="sd">    :param description:     page description</span>
+<span class="sd">    :param thumbnail:       path or full URL to thumbnail image</span>
+<span class="sd">    :param url:             path or full canonical URL of the page</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">thumbnail</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Metadata</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">description</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">thumbnail</span><span class="p">)</span> <span class="ow">or</span> <span class="n">thumbnail</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;http&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span> <span class="o">=</span> <span class="n">thumbnail</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span> <span class="o">=</span> <span class="n">thumbnail</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_full</span><span class="p">(</span><span class="n">thumbnail</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_full</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="ow">or</span> <span class="s">&#39;&#39;</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Metadata.make_full"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.make_full">[docs]</a>    <span class="k">def</span> <span class="nf">make_full</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert an input to full URL if not already a full URL. This static</span>
+<span class="sd">        method will ensure that the specified url is a full URL.</span>
+
+<span class="sd">        This method only checks if the provided URL starts with &#39;http&#39;, though,</span>
+<span class="sd">        so it is possible to trick it using a path that looks like &#39;httpfoo&#39;:</span>
+<span class="sd">        it is clearly not a full URL, but will be treated as one. If the input</span>
+<span class="sd">        value is user-supplied, please perform a more through check.</span>
+
+<span class="sd">        Under the hood, this method uses</span>
+<span class="sd">        :py:func:`bottle_utils.common.full_url` to convert paths to full URLs.</span>
+
+<span class="sd">        :param url:     path or full URL</span>
+<span class="sd">        :returns:       full URL as per request data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">url</span><span class="p">)</span> <span class="ow">or</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;http&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">url</span>
+        <span class="k">return</span> <span class="n">full_url</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.prop"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.prop">[docs]</a>    <span class="k">def</span> <span class="nf">prop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a generic property meta tag. This method renders a generic</span>
+<span class="sd">        property meta tags that uses ``property`` attribute to designate the</span>
+<span class="sd">        tag name.</span>
+
+<span class="sd">        Each tag name consists of two parts: namespace and name. Most notably,</span>
+<span class="sd">        OpenGraph uses this form with &#39;og&#39; namespace.</span>
+
+<span class="sd">        The arguments are rendered like this::</span>
+
+<span class="sd">            &lt;meta property=$namespace:$name content=$value&gt;</span>
+
+<span class="sd">        :param namespace:   property namespace</span>
+<span class="sd">        :param name:        property name</span>
+<span class="sd">        :param value:       tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prop_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attr_escape</span><span class="p">(</span><span class="n">namespace</span><span class="p">),</span> <span class="n">attr_escape</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="s">&#39;property&#39;</span><span class="p">,</span> <span class="n">prop_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.nameprop"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.nameprop">[docs]</a>    <span class="k">def</span> <span class="nf">nameprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render a generic name property. This method renders a generic name</span>
+<span class="sd">        property meta tag that uses ``name`` attribute to designate the tag</span>
+<span class="sd">        name.</span>
+
+<span class="sd">        Each tag name consist of namespace and name parts. Most notably,</span>
+<span class="sd">        Twitter Card markup uses this form.</span>
+
+<span class="sd">        The arguments are rendered like this::</span>
+
+<span class="sd">            &lt;meta name=$namespace:$name content=$value&gt;</span>
+
+<span class="sd">        :param namespace:   property namespace</span>
+<span class="sd">        :param name:        property name</span>
+<span class="sd">        :param value:       tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">prop_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">attr_escape</span><span class="p">(</span><span class="n">namespace</span><span class="p">),</span> <span class="n">attr_escape</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="n">prop_name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.itemprop"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.itemprop">[docs]</a>    <span class="k">def</span> <span class="nf">itemprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render schema.org itemprop meta tag. This method renders a schema.org</span>
+<span class="sd">        itemprop meta tag which uses the ``itemprop`` attribute to designate</span>
+<span class="sd">        the name of the tag.</span>
+
+<span class="sd">        This form is used by Google, but it&#39;s otherwise an open standard for</span>
+<span class="sd">        semantic markup. This method only renders meta tags, and not every</span>
+<span class="sd">        other kind of markup that schema.org uses.</span>
+
+<span class="sd">        The arguments are rendered into the following markup::</span>
+
+<span class="sd">            &lt;meta itemprop=$name content=$value&gt;</span>
+
+<span class="sd">        :param name:    tag name</span>
+<span class="sd">        :param value:   tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">meta</span><span class="p">(</span><span class="s">&#39;itemprop&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.twitterprop"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.twitterprop">[docs]</a>    <span class="k">def</span> <span class="nf">twitterprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Renders Twitter Card markup. This method renders Twitter Card markup</span>
+<span class="sd">        meta data. That is a name property meta tag with &#39;twitter&#39; namespace.</span>
+
+<span class="sd">        The arguments are rendered like so::</span>
+
+<span class="sd">            &lt;meta name=twitter:$name content=$value&gt;</span>
+
+<span class="sd">        :param name:    property name</span>
+<span class="sd">        :param value:   tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nameprop</span><span class="p">(</span><span class="s">&#39;twitter&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.ogprop"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.ogprop">[docs]</a>    <span class="k">def</span> <span class="nf">ogprop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Renders OpenGraph meta tag. This method renders a property meta tag</span>
+<span class="sd">        that uses &#39;og&#39; namespace.</span>
+
+<span class="sd">        The arguments are rendered like this::</span>
+
+<span class="sd">            &lt;meta property=og:$name content=$value&gt;</span>
+
+<span class="sd">        :param name:    property name</span>
+<span class="sd">        :param value:   tag value</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&#39;og&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Metadata.render"><a class="viewcode-back" href="../../meta.html#bottle_utils.meta.Metadata.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Render the meta object into HTML.</span>
+
+<span class="sd">        :returns:   HTML representation of the object</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogprop</span><span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">twitterprop</span><span class="p">(</span><span class="s">&#39;title&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemprop</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogprop</span><span class="p">(</span><span class="s">&#39;description&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">twitterprop</span><span class="p">(</span><span class="s">&#39;description&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemprop</span><span class="p">(</span><span class="s">&#39;description&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogprop</span><span class="p">(</span><span class="s">&#39;image&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">twitterprop</span><span class="p">(</span><span class="s">&#39;image&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemprop</span><span class="p">(</span><span class="s">&#39;image&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">thumbnail</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogprop</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">twitterprop</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">itemprop</span><span class="p">(</span><span class="s">&#39;url&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">Metadata</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">()</span> <span class="o">+</span> <span class="n">s</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

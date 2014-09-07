@@ -1,0 +1,108 @@
+Translation support (``bottle_utils.i18n``)
+===========================================
+
+Basic concept
+-------------
+
+This module provides plugins and functions for translation and language
+selection. 
+
+Language selection is based on URLs. Each path in the app is augmented with
+locale prefix. Therefore, ``/foo/bar/baz`` becomes ``/LOCALE/foo/bar/baz``
+where locale is any of the locales chosen as translation target.
+
+Translation is performed by calling several of the translation functions
+provied by this module. These are simple ``gettext()`` and ``ngettext()``
+wrappers that are lazily evaluated with the help of
+:py:class:`~bottle_utils.lazy.Lazy` class.
+
+This module doesn't deal with message extraction or compilation. For this, you
+can use the standard `GNU Gettext`_ utilities. You can see examples of scripts
+that automate this process in scripts used by Librarian_, xmsgs.sh_ and
+compmsgs.sh_. Detailed description of what these scripts do is outside the
+scope of this documentation. However, it's worth noting that allowing Gettext
+to treat Bottle's SimpleTemplate markup as Python code works fine.
+
+Setting up the app for translation
+----------------------------------
+
+To activate translations and language selection, you will need to configure the
+plugin and middleware. 
+
+.. note::
+
+   The plugin class,
+   :py:class:`~bottle_utils.i18n.I18NPlugin`, is both a Bottle plugin and WSGI
+   middleware.
+
+First prepare a list of languages you want to support::
+
+    LANGS = [
+        ('de_DE', 'Deutsch'),
+        ('en_US', 'English'),
+        ('fr_FR', 'français'),
+        ('es_ES', 'español'),
+        ('zh_CN', '中文')
+    ]
+
+Also decide which locale you would like to use as default.::
+
+    DEFAULT_LOCAL = 'en_US'
+
+Finally you need to decide where you want to keep the locale directory where
+translations are looked up.
+
+The most straightforward way to install the plugin and middleware in one go is
+to pass it a bottle application object instead of a pure WSGI app (such as one
+returned by other WSGI middleware). There is usually no harm in making this
+plugin the first middleware in the stack, so it's safe to do so.::
+
+    from bottle_utils.i18n import I18NPlugin
+    app = bottle.default_app()
+    wsgi_app = I18NPlugin(app, languages=LANGS, default_locale=DEFAULT_LOCALE,
+                          locale_dir='./locales')
+
+This installs both the Bottle plugin and the WSGI middleware, and returns a
+WSGI application object.
+
+Translating in Python code
+--------------------------
+
+To translate in Python code, use the :py:func:`~bottle_utils.i18n.lazy_gettext`
+and :py:func:`~bottle_utils.i18n.lazy_ngettext` functions.
+
+``lazy_gettext()`` is usually imported as ``_``, which is a common convention
+(alias) for ``gettext()``. ``lazy_ngettext()`` should be aliased as simply
+``ngettext()``. Using the lazy versions allows your code to postpone evaluation
+of translations until they are actually needed.::
+
+    from bottle_utils.i18n import lazy_ngettext as ngettext, lazy_gettext as _
+
+    def handler():
+        return _('This is a translatable string')
+
+Translating in templates
+------------------------
+
+Translating in SimpleTemplate template code is very similar to translating in
+Python code except that all the aliasess have already been set up. Just wrap
+the translations in the usual ``{{ }}`` tags.::
+
+    <p>{{ _('Current time') }}: {{ time }}</p>
+
+.. note::
+
+   Thanks to this syntactic similarity you can extract messages from templates
+   using GNU Gettext command line tools and treating templates as normal Python
+   code.
+
+Functions
+---------
+
+.. automodule:: bottle_utils.i18n
+   :members:
+
+.. _GNU Gettext: http://www.gnu.org/software/gettext/
+.. _Librarian: https://github.com/Outernet-Project/librarian/
+.. _xmsgs.sh: https://github.com/Outernet-Project/librarian/blob/master/scripts/xmsgs.sh
+.. _compmsgs.sh: https://github.com/Outernet-Project/librarian/blob/master/scripts/cmpmsgs.sh

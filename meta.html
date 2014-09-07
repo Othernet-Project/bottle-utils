@@ -1,0 +1,510 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Social metadta (bottle_utils.meta) &mdash; Bottle Utils 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bottle Utils 0.1a1 documentation" href="index.html" />
+    <link rel="prev" title="Lazy evaluation (bottle_utils.lazy)" href="lazy.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lazy.html" title="Lazy evaluation (bottle_utils.lazy)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="social-metadta-bottle-utils-meta">
+<h1>Social metadta (<tt class="docutils literal"><span class="pre">bottle_utils.meta</span></tt>)<a class="headerlink" href="#social-metadta-bottle-utils-meta" title="Permalink to this headline">¶</a></h1>
+<p>This module provides classes for working with social meta data (Facebook,
+Google+, Twitter).</p>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>There are two flavors of meta data classes,
+<a class="reference internal" href="#bottle_utils.meta.SimpleMetadata" title="bottle_utils.meta.SimpleMetadata"><tt class="xref py py-class docutils literal"><span class="pre">SimpleMetadata</span></tt></a> and
+<a class="reference internal" href="#bottle_utils.meta.Metadata" title="bottle_utils.meta.Metadata"><tt class="xref py py-class docutils literal"><span class="pre">Metadata</span></tt></a>. Both render the title tag and
+description met tag, while the latter also renders a full set of social meta
+tags used by Facebook, Google+, and Twitter.</p>
+<p>Using any of the two classes, you normally instantiate an object passing it
+meta data as constructor arguments, and then simply use the objects as string
+values in the template. You can also call the <tt class="docutils literal"><span class="pre">render()</span></tt> method on the
+object, but that is redundant except in rare cases where <tt class="docutils literal"><span class="pre">str</span></tt> type is
+expected.</p>
+<p>Example usage is provided for both of the classes.</p>
+</div>
+<div class="section" id="module-bottle_utils.meta">
+<span id="classes"></span><h2>Classes<a class="headerlink" href="#module-bottle_utils.meta" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-bottle_utils.meta"></span><dl class="class">
+<dt id="bottle_utils.meta.MetaBase">
+<em class="property">class </em><tt class="descclassname">bottle_utils.meta.</tt><tt class="descname">MetaBase</tt><a class="reference internal" href="_modules/bottle_utils/meta.html#MetaBase"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.MetaBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base class for metadata. This class is a simple placeholder to collect base
+functionality for various subclasses.</p>
+<p>Currently, the only functionality this base class provides is calling
+<a class="reference internal" href="#bottle_utils.meta.MetaBase.render" title="bottle_utils.meta.MetaBase.render"><tt class="xref py py-meth docutils literal"><span class="pre">render()</span></tt></a> method when <tt class="docutils literal"><span class="pre">__str__()</span></tt>
+magic method is called on the class.</p>
+<dl class="method">
+<dt id="bottle_utils.meta.MetaBase.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#MetaBase.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.MetaBase.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the meta object into HTML. In the base class this method
+renders to empty string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">HTML representation of the object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bottle_utils.meta.Metadata">
+<em class="property">class </em><tt class="descclassname">bottle_utils.meta.</tt><tt class="descname">Metadata</tt><big>(</big><em>title=u''</em>, <em>description=u''</em>, <em>thumbnail=u''</em>, <em>url=u''</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bottle_utils.meta.SimpleMetadata" title="bottle_utils.meta.SimpleMetadata"><tt class="xref py py-class docutils literal"><span class="pre">bottle_utils.meta.SimpleMetadata</span></tt></a></p>
+<p>Complete set of social meta tags. This class renders a complete set of
+social meta tags including <a class="reference external" href="http://schema.org/">schema.org</a> properties,
+<cite>OpenGraph tags &lt;https://developers.facebook.com/docs/opengraph&gt;</cite>, and
+<cite>Twitter Cards markup
+&lt;https://dev.twitter.com/docs/cards/markup-reference&gt;</cite>.</p>
+<p>The meta tags are only rendered for the property that is specified (i.e.,
+one or more of the title, description, thumbnail, url). The properties have
+following meanings:</p>
+<ul class="simple">
+<li>title: page title</li>
+<li>description: page description (usually used as message shown next to the
+post on a social network)</li>
+<li>thumbnail: (also known as &#8216;image&#8217;) appears as a thumbnail or banner
+alongside the post on a social network</li>
+<li>url: canonical URL of the page (usually an URL that does not include any
+query parameters that change it&#8217;s appearance or generate unnecessary
+data, such as Google Analytics campaign tags, etc), which is used instead
+of the URL that was shared</li>
+</ul>
+<p>To render social tags, simply instantiate an object using meta data of your
+choosing and render the object in template.</p>
+<p>Here is an example of what it may look like in a handler function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.get</span><span class="p">(</span><span class="s">&#39;/my/shareable/page&#39;</span><span class="p">)</span>
+<span class="nd">@bottle.view</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">Metadata</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;My page&#39;</span><span class="p">,</span>
+                 <span class="n">description</span><span class="o">=</span><span class="s">&#39;A page about sharing&#39;</span><span class="p">,</span>
+                 <span class="n">thumbnail</span><span class="o">=</span><span class="s">&#39;/static/images/awesome.png&#39;</span><span class="p">,</span>
+                 <span class="n">url</span><span class="o">=</span><span class="n">bottle</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And here is a template:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        {{! meta }}
+    &lt;/head&gt;
+    &lt;body&gt;
+    ....
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<p>Don&#8217;t forget to prevent escaping of the rendered HTML by using <tt class="docutils literal"><span class="pre">{{!</span> <span class="pre">}}</span></tt>
+syntax instead of <tt class="docutils literal"><span class="pre">{{</span> <span class="pre">}}</span></tt>.</p>
+<p>This class does not render any of the other numerous tags (authorship tags,
+for instance). However, the instance methods it provides can be used to
+render them.</p>
+<p>For example, to render a Twitter creator tag in a template that has access
+to any instance of this class:</p>
+<div class="highlight-python"><div class="highlight"><pre>{{! meta.twitterprop(&#39;creator&#39;, &#39;@OuternetForAll&#39;) }}
+</pre></div>
+</div>
+<p>When it comes to thumbnails and canonical URLs, the social networks usually
+expect to see a full URL (including scheme and hostname). However, it may
+not feel right to hard-code these things. This class automatically converts
+paths to full URLs based on request data, so passing paths is fine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> &#8211; page title</li>
+<li><strong>description</strong> &#8211; page description</li>
+<li><strong>thumbnail</strong> &#8211; path or full URL to thumbnail image</li>
+<li><strong>url</strong> &#8211; path or full canonical URL of the page</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.itemprop">
+<tt class="descname">itemprop</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.itemprop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.itemprop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render schema.org itemprop meta tag. This method renders a schema.org
+itemprop meta tag which uses the <tt class="docutils literal"><span class="pre">itemprop</span></tt> attribute to designate
+the name of the tag.</p>
+<p>This form is used by Google, but it&#8217;s otherwise an open standard for
+semantic markup. This method only renders meta tags, and not every
+other kind of markup that schema.org uses.</p>
+<p>The arguments are rendered into the following markup:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta itemprop=$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; tag name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="bottle_utils.meta.Metadata.make_full">
+<em class="property">static </em><tt class="descname">make_full</tt><big>(</big><em>url</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.make_full"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.make_full" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert an input to full URL if not already a full URL. This static
+method will ensure that the specified url is a full URL.</p>
+<p>This method only checks if the provided URL starts with &#8216;http&#8217;, though,
+so it is possible to trick it using a path that looks like &#8216;httpfoo&#8217;:
+it is clearly not a full URL, but will be treated as one. If the input
+value is user-supplied, please perform a more through check.</p>
+<p>Under the hood, this method uses
+<a class="reference internal" href="common.html#bottle_utils.common.full_url" title="bottle_utils.common.full_url"><tt class="xref py py-func docutils literal"><span class="pre">bottle_utils.common.full_url()</span></tt></a> to convert paths to full URLs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>url</strong> &#8211; path or full URL</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">full URL as per request data</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.nameprop">
+<tt class="descname">nameprop</tt><big>(</big><em>namespace</em>, <em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.nameprop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.nameprop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a generic name property. This method renders a generic name
+property meta tag that uses <tt class="docutils literal"><span class="pre">name</span></tt> attribute to designate the tag
+name.</p>
+<p>Each tag name consist of namespace and name parts. Most notably,
+Twitter Card markup uses this form.</p>
+<p>The arguments are rendered like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta name=$namespace:$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>namespace</strong> &#8211; property namespace</li>
+<li><strong>name</strong> &#8211; property name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.ogprop">
+<tt class="descname">ogprop</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.ogprop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.ogprop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders OpenGraph meta tag. This method renders a property meta tag
+that uses &#8216;og&#8217; namespace.</p>
+<p>The arguments are rendered like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta property=og:$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; property name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.prop">
+<tt class="descname">prop</tt><big>(</big><em>namespace</em>, <em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.prop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a generic property meta tag. This method renders a generic
+property meta tags that uses <tt class="docutils literal"><span class="pre">property</span></tt> attribute to designate the
+tag name.</p>
+<p>Each tag name consists of two parts: namespace and name. Most notably,
+OpenGraph uses this form with &#8216;og&#8217; namespace.</p>
+<p>The arguments are rendered like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta property=$namespace:$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>namespace</strong> &#8211; property namespace</li>
+<li><strong>name</strong> &#8211; property name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the meta object into HTML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">HTML representation of the object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.Metadata.twitterprop">
+<tt class="descname">twitterprop</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#Metadata.twitterprop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.Metadata.twitterprop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Renders Twitter Card markup. This method renders Twitter Card markup
+meta data. That is a name property meta tag with &#8216;twitter&#8217; namespace.</p>
+<p>The arguments are rendered like so:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta name=twitter:$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; property name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bottle_utils.meta.SimpleMetadata">
+<em class="property">class </em><tt class="descclassname">bottle_utils.meta.</tt><tt class="descname">SimpleMetadata</tt><big>(</big><em>title=u''</em>, <em>description=u''</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#SimpleMetadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.SimpleMetadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#bottle_utils.meta.MetaBase" title="bottle_utils.meta.MetaBase"><tt class="xref py py-class docutils literal"><span class="pre">bottle_utils.meta.MetaBase</span></tt></a></p>
+<p>The basic (classic) metadata. This class is used to render title tag and
+description meta tag.</p>
+<p>Both title and description are option. If neither is supplied, it is
+rendered into empty string.</p>
+<p>Here is a simple example handler:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.get</span><span class="p">(</span><span class="s">&#39;/my/shareable/page&#39;</span><span class="p">)</span>
+<span class="nd">@bottle.view</span><span class="p">(</span><span class="s">&#39;page&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">handler</span><span class="p">():</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">SimpleMetadata</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;My page&#39;</span><span class="p">,</span>
+                       <span class="n">description</span><span class="o">=</span><span class="s">&#39;A page about sharing&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">meta</span><span class="o">=</span><span class="n">m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the template, simply render this object in <tt class="docutils literal"><span class="pre">&lt;head&gt;</span></tt> section where you
+would normally have the <tt class="docutils literal"><span class="pre">&lt;title&gt;</span></tt> tag.:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;html&gt;
+    &lt;head&gt;
+        &lt;meta charset=&quot;utf-8&quot;&gt;
+        {{! meta }}
+    &lt;/head&gt;
+    &lt;body&gt;
+    ...
+    &lt;/body&gt;
+&lt;/html&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>title</strong> &#8211; title</li>
+<li><strong>description</strong> &#8211; description</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="bottle_utils.meta.SimpleMetadata.meta">
+<em class="property">static </em><tt class="descname">meta</tt><big>(</big><em>attr</em>, <em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#SimpleMetadata.meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.SimpleMetadata.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a generic <tt class="docutils literal"><span class="pre">&lt;meta&gt;</span></tt> tag. This function is the basis for
+rendering most of the social meta tags.</p>
+<p>The arguments are rendered like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta $attr=$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>attr</strong> &#8211; attribute name used for tag name</li>
+<li><strong>name</strong> &#8211; tag name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">HTML markup for the meta tag</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.SimpleMetadata.render">
+<tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#SimpleMetadata.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.SimpleMetadata.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the meta object into HTML.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">HTML representation of the object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="bottle_utils.meta.SimpleMetadata.simple">
+<tt class="descname">simple</tt><big>(</big><em>name</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/meta.html#SimpleMetadata.simple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.meta.SimpleMetadata.simple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render a simple &#8216;name&#8217; meta tag. This function renders a meta tag that
+uses the &#8216;name&#8217; attribute.</p>
+<p>The arguments are rendered like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;meta name=$name content=$value&gt;
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> &#8211; tag name</li>
+<li><strong>value</strong> &#8211; tag value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Social metadta (<tt class="docutils literal"><span class="pre">bottle_utils.meta</span></tt>)</a><ul>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#module-bottle_utils.meta">Classes</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="lazy.html"
+                        title="previous chapter">Lazy evaluation (<tt class="docutils literal"><span class="pre">bottle_utils.lazy</span></tt>)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/meta.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="lazy.html" title="Lazy evaluation (bottle_utils.lazy)"
+             >previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
