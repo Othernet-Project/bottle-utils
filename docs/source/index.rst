@@ -38,6 +38,7 @@ The following functionality is available:
    http
    i18n
    lazy
+   meta
    ...
 
 Indices and tables

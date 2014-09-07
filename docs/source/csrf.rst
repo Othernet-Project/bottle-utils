@@ -21,7 +21,7 @@ Here is an example of file-based configuration::
 ``secret`` setting is the only setting you really must override. Not having
 this setting set will result in ``KeyError`` exception.
 
-When using dict-based configuration, prefix each key with ``'csrf.'``.
+When using dict-based configuration, prefix each key with ``csrf.``.
 
 The keys have following meaning:
 
