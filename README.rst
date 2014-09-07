@@ -36,7 +36,10 @@ The following modules are currently available:
 Separately, there is also a module that contains shared low-level functionality
 used by other modules: ``bottle_utils.common``.
 
-Documentation is currently not available.
+Documentation
+=============
+
+Detailed documentation is available online `on ReadTheDocs`_.
 
 Bugs
 ====
@@ -53,3 +56,6 @@ info.
 .. _Outernet: https://www.outernet.is/
 .. _GitHub issue tracker: https://github.com/Outernet-Project/bottle-utils/issues
 .. _LICENSE: LICENSE
+.. _on ReadTheDocs: http://bottle-utils.readthedocs.org/en/latest/
+Documentation is currently not available.
+
