@@ -39,7 +39,7 @@ used by other modules: ``bottle_utils.common``.
 Documentation
 =============
 
-Detailed documentation is available online `on ReadTheDocs`_.
+Detailed documentation is available online_.
 
 You can also generate offline documentation by cloning this repository and
 doing the following::
@@ -66,6 +66,5 @@ info.
 .. _Outernet: https://www.outernet.is/
 .. _GitHub issue tracker: https://github.com/Outernet-Project/bottle-utils/issues
 .. _LICENSE: LICENSE
-.. _on ReadTheDocs: http://bottle-utils.readthedocs.org/en/latest/
-Documentation is currently not available.
+.. _online: http://outernet-project.github.io/bottle-utils/
 
