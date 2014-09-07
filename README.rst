@@ -41,6 +41,16 @@ Documentation
 
 Detailed documentation is available online `on ReadTheDocs`_.
 
+You can also generate offline documentation by cloning this repository and
+doing the following::
+
+    cd /path/to/repo
+    cd docs
+    make html
+
+The ``docs/build/html`` directory should contain full HTML documentation. You
+can start from the ``index.html`` file.
+
 Bugs
 ====
 
