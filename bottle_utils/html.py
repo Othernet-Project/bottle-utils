@@ -1,11 +1,8 @@
 """
-helpers.py: helper function for use with templates and bottle framework
+.. module:: bottle_utils.html
+   :synopsis: Functions for use in HTML templates
 
-Bottle Utils
-2014 Outernet Inc <hello@outernet.is>
-All rights reserved
-
-Licensed under BSD license. See ``LICENSE`` file in the source directory.
+.. moduleauthor:: Outernet Inc <hello@outernet.is>
 """
 
 from __future__ import unicode_literals
@@ -26,24 +23,30 @@ FERR_ONE_CLS = 'form-error'
 ERR_CLS = 'field-error'
 
 
+# DATA FORMATTING
+
+
 def plur(word, n, plural=lambda n: n != 1,
          convert=lambda w, p: w + 's' if p else w):
-    """ Pluralize word based on number of items
+    """
+    Pluralize word based on number of items. This function provides rudimentary
+    pluralization support. It is quite flexible, but not a replacement for
+    functions like ``ngettext``.
 
-    This function takes two optional arguments, ``plural`` and ``convert``,
+    This function takes two optional arguments, ``plural()`` and ``convert()``,
     which can be customized to change the way plural form is derived from the
     original string. The default implementation is a naive version of English
     language plural, which uses plural form if number is not 1, and derives the
     plural form by simply adding 's' to the word. While this works in most
     cases, it doesn't always work even for English.
 
-    The ``plural`` function takes the value of the ``n`` argument and its
-    return value is fed into the ``convert`` function. The latter takes the
+    The ``plural(n)`` function takes the value of the ``n`` argument and its
+    return value is fed into the ``convert()`` function. The latter takes the
     source word as first argument, and return value of ``plural()`` call as
     second argument, and returns a string representing the pluralized word.
-    Return value of the ``convert()`` call is returned from this function.
+    Return value of the ``convert(w, p)`` call is returned from this function.
 
-    Example::
+    Here are some simple examples::
 
         >>> plur('book', 1)
         'book'
@@ -53,6 +56,20 @@ def plur(word, n, plural=lambda n: n != 1,
         # But it's a bit naive
         >>> plur('box', 2)
         'boxs'
+
+    The latter can be fixed like this::
+
+        >>> exceptions = ['box']
+        >>> def pluralize(word, is_plural):
+        ...    if not is_plural:
+        ...        return word
+        ...    if word in exceptions:
+        ...        return word + 'es'
+        ...    return word + 's'
+        >>> plur('book', 2)
+        'books'
+        >>> plur('box', 2, convert=pluralize)
+        'boxes'
 
     :param word:    string to pluralize
     :param n:       number of items from which to calculate plurals
@@ -65,7 +82,17 @@ def plur(word, n, plural=lambda n: n != 1,
 
 
 def hsize(size, unit='B', step=1024):
-    """ Given size in unit produce size with human-friendly units
+    """
+    Given size in unit produce size with human-friendly units. This is a simple
+    formatting function that takes a value, a unit in which the value is
+    expressed, and the size of multiple (kilo, mega, giga, etc).
+
+    This function rounds values to 2 decimal places and does not handle
+    fractions. It also uses metric prefixes (K, M, G, etc) and only goes up to
+    Peta (P, quadrillion) prefix.
+
+    The size multiple (``step`` parameter) is 1024 by default, suitable for
+    expressing values related to size of data on disk.
 
     Example::
 
@@ -80,7 +107,7 @@ def hsize(size, unit='B', step=1024):
 
     :param size:    size in base units
     :param unit:    base unit without prefix
-    :param step:    steps for next unit (e.g., 1000 for Kilo, or 1024 for Kilo)
+    :param step:    size of the multiple
     :returns:       appropriate units
     """
     size = Decimal(size)
@@ -93,11 +120,102 @@ def hsize(size, unit='B', step=1024):
     return '%.2f %s%s' % (round(size, 2), SIZES[order], unit)
 
 
+def trunc(s, chars):
+    """
+    Trucante string at ``n`` characters. This function hard-trucates a string
+    at specified number of characters and appends an elipsis to the end.
+
+    The truncating does not take into account words or markup. Elipsis is not
+    appended if the string is shorter than the specified number of characters.
+    ::
+
+        >>> trunc('foobarbaz', 6)
+        'foobar...'
+
+    .. note::
+
+       Keep in mind that the trucated string is always 3 characters longer than
+       ``n`` because of the appended elipsis.
+
+    :param s:       input string
+    :param chars:   number of characters
+    :returns:       truncated string
+    """
+    if len(s) <= chars:
+        return s
+    return s[:chars] + '...'
+
+
+def yesno(val, yes='yes', no='no'):
+    """
+    Return ``yes`` or ``no`` depending on value. This function takes the value
+    and returns either yes or no depending on whether the value evaluates to
+    ``True``.
+
+    Examples::
+
+        >>> yesno(True)
+        'yes'
+        >>> yesno(False)
+        'no'
+        >>> yesno(True, 'available', 'not available')
+        'available'
+
+    :param val:     value to test
+    :param yes:     string representation of 'yes'
+    :param no:      string representation of 'no'
+    :returns:       yes string or no string
+    """
+    return yes if val else no
+
+
+def strft(ts, fmt):
+    """
+    Reformat string datestamp/timestamp. This function parses a string
+    representation of a date and/or time and reformats it using specified
+    format.
+
+    The format is standard strftime format used in Python's
+    ``datetime.datetime.strftime()`` call.
+
+    Actual parsing of the input is delegated to
+    `python-dateutil <https://pypi.python.org/pypi/python-dateutil>`_ library.
+
+    :param ts:  input datestamp/timestamp
+    :param fmt: output format
+    :returns:   reformatted datestamp/timestamp
+    """
+    return parse(ts).strftime(fmt)
+
+
+# HTML
+
+
 def attr(name, value=None):
-    """ Render HTML attribute
+    """
+    Render HTML attribute. This function is used as part of
+    :py:func:`~bottle_utils.html.tag` function to render HTML attributes, but
+    can be used on its own as well. It converts the value into Unicode string
+    and sanitizes it before returning the markup.
+
+    Basic usage may look like this::
+
+        >>> attr('src': '/images?src=foo.png&w=12')
+        'src="/images?src=foo.png&amp;w=12"'
+
+    All attribute values are double-quoted and any double quotes found inside
+    the value are escaped. User-supplied values can be used reasonably safely.
 
     If the value is ``None``, only the attribute name is rendered, otherwise a
-    normal 'attribute="value"' pair is returned.
+    normal 'attribute="value"' pair is returned::
+
+        >>> attr('src', None)
+        'src'
+        >>> attr('src', '')
+        'src=""'
+
+    Therefore, to suppress attribute values completely (i.e., not even have the
+    ``=""`` part, use ``None`` as the value.
 
     :param name:    attribute name
     :param value:   optional attribute value
@@ -111,12 +229,54 @@ def attr(name, value=None):
 
 
 def tag(name, content='', nonclosing=False, **attrs):
-    """ Wraps content in a HTML tag with optional attributes
+    """
+    Wraps content in a HTML tag with optional attributes. This function
+    provides a Pythonic interface for writing HTML tags with a few bells and
+    whistles.
+
+    The basic usage looks like this::
+
+        >>> tag('p', 'content', _class="note", _id="note1")
+        '<p class="note" id="note1">content</p>'
 
     Any attribute names with any number of leading underscores (e.g., '_class')
     will have the underscores strpped away.
 
     If content is an iterable, the tag will be generated once per each member.
+
+        >>> tag('span', ['a', 'b', 'c'])
+        '<span>a</span><span>b</span><span>c</span>'
+
+    It does not sanitize the tag names, though, so it is possible to specify
+    invalid tag names::
+
+        >>> tag('not valid')
+        '<not valid></not valid>
+
+    Please ensure that ``name`` argument does not come from user-specified
+    data, or, if it does, that it is properly sanitized (best way is to use a
+    whitelist of allowed names).
+
+    Because attributes are specified using keyword arguments, which are then
+    treated as a dictionary, there is no guarantee of attribute order. If
+    attribute order is important, don't use this function.
+
+    This module contains a few partially applied aliases for this function.
+    These mostly have hard-wired first argument (tag name), and are all
+    uppercase:
+
+    - ``A`` - alias for ``<a>`` tag
+    - ``BUTTON`` - alias for ``<button>`` tag
+    - ``HIDDEN`` - alias for ``<input>`` tag with ``type="hidden"`` attribute
+    - ``INPUT`` - alias for ``<input>`` tag with ``nonclosing`` set to ``True``
+    - ``LI`` - alias for ``<li>`` tag
+    - ``OPTION`` - alias for ``<option>`` tag
+    - ``P`` - alias for ``<p>`` tag
+    - ``SELECT`` - alias for ``<select>`` tag
+    - ``SPAN`` - alias for ``<span>`` tag
+    - ``SUBMIT`` - alias for ``<button>`` tag with ``type="submit"`` attribute
+    - ``TEXTAREA`` - alias for ``<textarea>`` tag
+    - ``UL`` - alias for ``<ul>`` tag
 
     :param name:    tag name
     :param content: tag content
@@ -156,7 +316,37 @@ SELECT = functools.partial(tag, 'select')
 
 
 def vinput(name, values, **attrs):
-    """ Render input with value """
+    """
+    Render input with bound value. This function can be used to bind values to
+    form inputs. By default it will result in HTML markup for a generic input.
+    The generated input has a ``name`` attribute set to specified name, and
+    an ``id`` attribute that has the same value.
+    ::
+        >>> vinput('foo', {})
+        '<input name="foo" id="foo">'
+
+    If the supplied dictionary of field values contains a key that matches the
+    specified name (case-sensitive), the value of that key will be used as the
+    value of the input::
+
+        >>> vinput('foo', {'foo': 'bar'})
+        '<input name="foo" id="foo" value="bar">'
+
+    All values are properly sanitized before they are added to the markup.
+
+    Any additional keyword arguments that are passed to this function are
+    passed on the the :py:func:`~bottle_utils.html.tag` function. Since the
+    generated input markup is for generic text input, some of the other usual
+    input types can be specified using ``_type`` parameter::
+
+        >>> input('foo', {}, _type='email')
+        '<input name="foo" id="foo" type="email">'
+
+    :param name:    field name
+    :param values:  dictionary or dictionary-like object containing field
+                    values
+    :returns:       HTML markup for the field with bound value
+    """
     attrs.setdefault('_id', name)
     value = values.get(name)
     if value is None:
@@ -165,7 +355,23 @@ def vinput(name, values, **attrs):
 
 
 def varea(name, values, **attrs):
-    """ Render textarea with value """
+    """
+    Render textarea with bound value. Textareas use a somewhat different markup
+    to that of regular inputs, so a separate function is used for binding
+    values to this form control.::
+
+        >>> varea('foo', {'foo': 'bar'})
+        '<textarea name="foo" id="foo">bar</textarea>'
+
+    This function works the same way as :py:func:`~bottle_utils.html.vinput`
+    function, so please look at it for more information. The primary difference
+    is in the generated markup.
+
+    :param name:    field name
+    :param values:  dictionary or dictionary-like object containing field
+                    values
+    :returns:       HTML markup for the textarea with bound value
+    """
     attrs.setdefault('_id', name)
     value = values.get(name)
     if value is None:
@@ -174,7 +380,54 @@ def varea(name, values, **attrs):
 
 
 def vcheckbox(name, value, values, default=False, **attrs):
-    """ Render checkbox with value """
+    """
+    Render checkbox with bound value. This function renders a checkbox which is
+    checked or unchecked depending on whether its own name-value combination
+    appears in the provided form values dictionary.
+
+    Because there are many ways to think about checkboxes in general, this
+    particular function may or may not work for you. It treats checkboxes as a
+    list of alues which are all named the same.
+
+    Let's say we have markup that looks like this::
+
+        <input type="checkbox" name="foo" value="1">
+        <input type="checkbox" name="foo" value="2">
+        <input type="checkbox" name="foo" value="3">
+
+    If user checks all of them, we consider it a list ``foo=['1', '2', '3']``.
+    If user checks only the first and last, we have ``foo=['1', '3']``. And so
+    on.
+
+    This function assumes that you are using  this pattern.
+
+    The ``values`` map can either map the checkbox name to a single value, or a
+    list of multiple values. In the former case, if the single value matches
+    the value of the checkbox, the checkbox is checked. In the latter case, if
+    value of the checkbox is found in the list of values, the checkbox is
+    checked.::
+
+        >>> vcheckbox('foo', 'bar', {'foo': 'bar'})
+        '<input type="checkbox" name="foo" id="foo" value="bar" checked>'
+        >>> vcheckbox('foo', 'bar', {'foo': ['foo', 'bar', 'baz']})
+        '<input type="checkbox" name="foo" id="foo" value="bar" checked>'
+        >>> vcheckbox('foo', 'bar', {'foo': ['foo', 'baz']})
+        '<input type="checkbox" name="foo" id="foo" value="bar">'
+
+    When the field values dictionary doesn't contain a key that matches the
+    checkbox name, the value of ``default`` keyword argument determines whether
+    the checkbox should be checked::
+
+        >>> vcheckbox('foo', 'bar', {}, default=True)
+        '<input type="checkbox" name="foo" id="foo" value="bar" checked>'
+
+    :param name:    field name
+    :param value:   value of the checkbox
+    :param values:  dictionary or dictionary-like object containing field
+    :param default: default state when input is not bound (``True`` for
+                    checked)
+    :returns:       HTML markup for the checkbox with bound value
+    """
     if name in values:
         try:
             values = values.getall(name)
@@ -194,7 +447,38 @@ def vcheckbox(name, value, values, default=False, **attrs):
 
 
 def vselect(name, choices, values, **attrs):
-    """ Render select list with value preselected """
+    """
+    Render select list with bound value. This function renders the select list
+    with option elements with appropriate element selected based on field
+    values that are passed.
+
+    The values and labels for option elemnets are specified using an iterable
+    of two-tuples::
+
+        >>> vselect('foo', ((1, 'one'), (2, 'two'),), {})
+        '<select name="foo" id="foo"><option value="1">one</option><option...'
+
+    There is no mechanism for default value past what browsers support, so you
+    should generally assume that most browsers will render the select with
+    frist value preselected. Using an empty string or ``None`` as option value
+    will render an option element without value::
+
+        >>> vselect('foo', ((None, '---'), (1, 'one'),), {})
+        '<select name="foo" id="foo"><option value>---</option><option val...'
+        >>> vselect('foo', (('', '---'), (1, 'one'),), {})
+        '<select name="foo" id="foo"><option value="">---</option><option ...'
+
+    When specifying values, keep in mind that only ``None`` is special, in that
+    it will crete a ``value`` attribute without any value. All other Python
+    types become strings in the HTML markup, and are submitted as such. You
+    will need to convert the values back to their appropriate Python type
+    manually.
+
+    :param name:    field name
+    :param choices: iterable of select list choices
+    :param values:  dictionary or dictionary-like object containing field
+    :returns:       HTML markup for the select list with bound value
+    """
     value = values.get(name)
     options = []
     for val, label in choices:
@@ -205,8 +489,43 @@ def vselect(name, choices, values, **attrs):
     return SELECT(''.join(options), _id=name, _name=name, **attrs)
 
 
-def link_other(label, url, path, wrapper=None, **kwargs):
-    """ Only wrap label in anchor if given URL is not the path
+def link_other(label, url, path, wrapper=lambda l, *kw: l, **kwargs):
+    """
+    Only wrap label in anchor if given URL is not the path. Given a label, this
+    function will match the page URL against the path to which the label should
+    point, and generate the anchor element markup as necessary.
+
+    Any additional keyword arguments are passed to the function that generates
+    the anchor markup, which is ``A`` alias for
+    :py:func:`~bottle_utils.html.tag` function.
+
+    If the URLs match (meaning the page URL matches the target path), the label
+    will be passed to the wrapper function. The default behavior of the wrapper
+    function is to return the label as is. The label is thus returned as is if
+    the URLs match.
+    ::
+        >>> link_other('foo', '/here', '/there')
+        '<a href="/target">foo</a>'
+        >>> link_other('foo', '/there', '/there')
+        'foo'
+
+    You can customize the appearance of the label in the case URLs match by
+    customizing the wrapper::
+
+        >>> link_other('foo', '/there', '/there',
+        ...            wrapper=lambda l, **kw: l + 'bar')
+        'foobar'
+
+    Note that the wrapper lambda function has wild-card keyword arguments. The
+    wrapper function accepts the same extra keyword arguments that the anchor
+    function does, so if you have common classes and similar attributes, you
+    can specify them as extra keyword arguments and use any of the helper
+    functions in this module.::
+
+        >>> link_other('foo', '/here', '/there', wrapper=SPAN, _class='cls')
+        '<a class="cls" href="/target">foo</a>'
+        >>> link_other('foo', '/there', '/there', wrapper=SPAN, _class='cls')
+        '<span class="cls">foo</span>'
 
     :param label:   label of the link
     :param url:     URL to which label should be linked
@@ -215,60 +534,73 @@ def link_other(label, url, path, wrapper=None, **kwargs):
                     matches the path (i.e., anchor is not being rendered)
     """
     if url == path:
-        try:
-            return wrapper(label, **kwargs)
-        except TypeError:
-            return label
+        return wrapper(label, **kwargs)
     return A(label, href=url, **kwargs)
 
 
-def field_error(errors_dict, field_name):
-    """ Renders an error if error dict has one for the field
+def field_error(name, error):
+    """
+    Renders error message for single form field. This function renders a
+    standardized markup for individual form field errors.
 
-    :param errors_dict:     dict-like object containing field-name-message
-                            mappings
-    :param field_name:      name of the field to look up in the dict
-    :returns:               HTML of the error message if one is found,
-                            otherwise empty string
+    .. note::
+
+       This is not a generic helper function like the other ones. It's more of
+       an opinion on how error messages should be rendered, and it has no
+       particular rationale behind it rather than 'This is how I do things'.
+       The reason it is included here is that having consistent markup for form
+       errors tends to increase the speed at which we are able to implement
+       interfaces.
+
+    For the error messages the render, the error dictionary must contain a key
+    that matches the specified key. The key may map to a single string value or
+    an iterable containing strings. Depending on how many error messages there
+    are, one or more of span elements will be rendered. Every span will have
+    'field-error' class.
+
+    :param errors:  dict-like object containing field-name-message mappings
+    :param name:    name of the field to look up in the dict
+    :returns:       HTML of the error message if one is found, otherwise empty
+                    string
     """
     try:
-        return SPAN(html_escape(errors_dict[field_name]), _class=ERR_CLS)
+        return SPAN(html_escape(errors[name]), _class=ERR_CLS)
     except KeyError:
         return ''
 
 
-def form_errors(errors_dict):
-    """ Renders a form error if dict has one
+def form_errors(errors):
+    """
+    Renders a form error. This function renders a standardized markup for form
+    errors in your template.
 
-    Form errors must be contained within a special key '_'. The error messages
-    can be either an iterable or single string. If it is a single string, it
-    will be rendered as a ``span``. Otherwise, a series of ``li`` elements will
-    be rendered.
+    Please see notes for :py:func:`~bottle_utils.html.field_error` for the
+    reasoning behind this helper function.
+
+    Input dictionary must contain a special key '_' which is treated as key for
+    form-wide errors that are not specific to any field. The value can either
+    be a single string or an iterable of strings.
+
+    Errors are always rendered as unordered list with each error message as
+    list item, even when there is only one error. The list items always have
+    the 'form-error' class, and the unordered list has the 'form-errors' class.
+
+    For example::
+
+        >>> form_errors({'_': 'Ouch!'})
+        '<ul class="form-errors"><li class="form-error">Ouch!</li></ul>'
+        >>> form_errors({'_': ['Ouf!', 'Pain!']})
+        '<ul class="form-errors"><li class="form-error">Ouf!</li><li clas...'
+
+    :param errors:  dictionary or dictionary-like object containing field
+                    name-error mappings
     """
     try:
-        return UL(LI(html_escape(errors_dict['_']), _class=FERR_ONE_CLS),
+        return UL(LI(html_escape(errors['_']), _class=FERR_ONE_CLS),
                   _class=FERR_CLS)
     except KeyError:
         return ''
     except TypeError:
-        return P(SPAN(html_escape(errors_dict['_']), _class=FERR_ONE_CLS),
+        return P(SPAN(html_escape(errors['_']), _class=FERR_ONE_CLS),
                  _class=FERR_CLS)
-
-
-def trunc(s, n):
-    """ Trucante string at ``n`` characters """
-    if len(s) <= n:
-        return s
-    return s[:n] + '...'
-
-
-def yesno(val, yes='yes', no='no'):
-    """ Return ``yes`` or ``no`` depending on whether ``val`` is ``True`` """
-    return yes if val else no
-
-
-def strft(ts, fmt):
-    """ Format datetime object or timestamp as string using provided format """
-    return parse(ts).strftime(fmt)
-
 

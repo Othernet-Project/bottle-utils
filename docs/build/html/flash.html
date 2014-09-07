@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Flash messages (bottle_utils.flash) &mdash; Bottle Utils 0.1a1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Bottle Utils 0.1a1 documentation" href="index.html" />
+    <link rel="prev" title="CSRF protection (bottle_utils.csrf)" href="csrf.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="flash-messages-bottle-utils-flash">
+<h1>Flash messages (<tt class="docutils literal"><span class="pre">bottle_utils.flash</span></tt>)<a class="headerlink" href="#flash-messages-bottle-utils-flash" title="Permalink to this headline">¶</a></h1>
+<p>Flash messages are messages that are generated in one handler and displayed to
+the user in another. Commonly, this is done when you want to redirect to
+another path and still show the results of an operation performed in another.
+One example would be &#8220;You have logged out&#8221; message after logging the user out.</p>
+<p>Unicode strings are fully supported.</p>
+<p>There are several ways to do this, but storing the message in a cookie is the
+most straightforward. This module provides methods for doing just that.</p>
+<div class="section" id="how-it-works">
+<h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>In order to make flash messaging available to your app, install the
+<a class="reference internal" href="#bottle_utils.flash.message_plugin" title="bottle_utils.flash.message_plugin"><tt class="xref py py-func docutils literal"><span class="pre">message_plugin()</span></tt></a> plugin.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bottle</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">message_plugin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This makes <tt class="docutils literal"><span class="pre">bottle.request.message</span></tt> object and <tt class="docutils literal"><span class="pre">bottle.response.flash()</span></tt>
+method available to all request handlers. To set a message, use
+<tt class="docutils literal"><span class="pre">response.flash()</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">response</span><span class="o">.</span><span class="n">flash</span><span class="p">(</span><span class="s">&#39;This is my message&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To show the message in the interface, make the <tt class="docutils literal"><span class="pre">request.message</span></tt> object
+available to your template&#8217;s context and simply output it in your template:</p>
+<div class="highlight-python"><div class="highlight"><pre>&lt;p class=&quot;flash&quot;&gt;{{ message }}&lt;/p&gt;
+</pre></div>
+</div>
+<p>When a message is set, it is stored in a cookie in the user&#8217;s browser. When you
+use the message object, the value of the cookie is output, and the cookie is
+removed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">There is no mechanism of automatically clearign messages if they are not
+consumed. Therefore, it is important to consume it at the very next step
+user takes in your app. If your handler redirects to a few different paths
+depending on the results of processing user requests, all target handlers
+should be set to consume the message or the message may appear on an
+unpexpected page at unexpected time, taken out of context, and confuse the
+user.</p>
+</div>
+</div>
+<div class="section" id="module-bottle_utils.flash">
+<span id="functions-and-plugins"></span><h2>Functions and plugins<a class="headerlink" href="#module-bottle_utils.flash" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-bottle_utils.flash"></span><dl class="function">
+<dt id="bottle_utils.flash.get_message">
+<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">get_message</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#get_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.get_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return currently set message and delete the cookie. This function is lazily
+evaluated so it&#8217;s side effect of removing the cookie will only become
+effective when you actually use the message it returns.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">message</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.flash.message_plugin">
+<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">message_plugin</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#message_plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.message_plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages flash messages. This is a Bottle plugin that adds attributes to
+<tt class="docutils literal"><span class="pre">bottle.request</span></tt> and <tt class="docutils literal"><span class="pre">bottle.response</span></tt> objects for setting and
+consuming the flash messages.</p>
+<p>See <a class="reference internal" href="#how-it-works">How it works</a>.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">bottle</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">message_plugin</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.flash.set_message">
+<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">set_message</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#set_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.set_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a message and makes it available via <tt class="docutils literal"><span class="pre">request</span></tt> object. This function
+sets the message cookie and assigns the message to the
+<tt class="docutils literal"><span class="pre">bottle.request._message</span></tt> attribute.</p>
+<p>In Py2, the message is UTF-8 encoded.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>msg</strong> &#8211; message string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Flash messages (<tt class="docutils literal"><span class="pre">bottle_utils.flash</span></tt>)</a><ul>
+<li><a class="reference internal" href="#how-it-works">How it works</a></li>
+<li><a class="reference internal" href="#module-bottle_utils.flash">Functions and plugins</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="csrf.html"
+                        title="previous chapter">CSRF protection (<tt class="docutils literal"><span class="pre">bottle_utils.csrf</span></tt>)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/flash.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
+             >previous</a> |</li>
+        <li><a href="index.html">Bottle Utils 0.1a1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

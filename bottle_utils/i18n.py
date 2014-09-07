@@ -1,11 +1,8 @@
 """
-i18n.py: Localization support for bottle and SimpleTemplate
+.. module:: bottle_utils.i18n
+   :synopsis: Translation helpers and plugin
 
-Bottle Utils
-2014 Outernet Inc <hello@outernet.is>
-All rights reserved
-
-Licensed under BSD license. See ``LICENSE`` file in the source directory.
+.. moduleauthor:: Outernet Inc <hello@outernet.is>
 """
 
 import re
@@ -18,10 +15,33 @@ from .lazy import lazy, caching_lazy
 
 
 def dummy_gettext(message):
+    """
+    Mimic ``gettext()`` function. This is a passthrough function with the same
+    signature as ``gettext()``. It can be used to simulate translation for
+    applications that are untranslated, without the overhead of calling the
+    real ``gettext()``.
+
+    :param message:     message string
+    :returns:           unmodified input
+    """
     return message
 
 
 def dummy_ngettext(singular, plural, n):
+    """
+    Mimic ``ngettext()`` function. This is a passthrough function with the
+    same signature as ``ngettext()``. It can be used to simulate translation
+    for applications that are untranslated, without the overhead of calling the
+    real ``ngettext()``.
+
+    This function returns the verbatim singular message if ``n`` is 1,
+    otherwise the verbatim plural message.
+
+    :param singular:    singular message string
+    :param plural:      plural message string
+    :param n:           count
+    :returns:           unmodified singular or plural message
+    """
     if n == 1:
         return singular
     return plural
@@ -29,25 +49,69 @@ def dummy_ngettext(singular, plural, n):
 
 @lazy
 def lazy_gettext(message):
+    """
+    Lazily evaluated version of ``gettext()``.
+
+    This function uses the appropriate Gettext API object based on the value of
+    ``bottle.request.gettext`` set by the plugin. It will fail with
+    ``AttributeError`` exception if the plugin is not installed.
+
+    :param message:     translatable message
+    :returns:           lazy proxy object
+    """
     gettext = request.gettext.gettext
     return gettext(message)
 
 
 @lazy
 def lazy_ngettext(singular, plural, n):
+    """
+    Lazily evaluated version of ``ngettext()``.
+
+    This function uses the appropriate Gettext API object based on the value of
+    ``bottle.request.gettext`` set by the plugin. It will fail with
+    ``AttributeError`` exception if the plugin is not installed.
+
+    :param singular:    translatable singular message
+    :param plural:      translatable plural message
+    :param n:           count
+    :returns:           lazy proxy object
+    """
     ngettext = request.gettext.ngettext
     return ngettext(singular, plural, n)
 
 
 def full_path():
+    """
+    Calculate full path including query string for current request. This is a
+    helper function used by :py:func:`~bottle_utils.i18n.i18n_path`. It uses
+    the current request context to obtain information about the path.
+
+    :returns:   path with query string
+    """
     path = request.fullpath
     qs = request.query_string
     if qs:
         return '%s?%s' % (path, qs)
     return path
 
+
 @lazy
 def i18n_path(path=None, locale=None):
+    """
+    Return current request path or specified path for given or current locale.
+    This function can be used to obtain paths for different locales.
+
+    If no ``path`` argument is passed, the
+    :py:func:`~bottle_utils.i18n.full_path` is called to obtain the full path
+    for current request.
+
+    If ``locale`` argument is omitted, current locale is used.
+
+    :param path:    request path
+    :param locale:  locale
+    :returns:       locale-prefixed path
+    """
     path = path or full_path()
     locale = locale or request.locale
     return '/{}{}'.format(locale.lower(), path)
@@ -58,14 +122,15 @@ class I18NWarning(RuntimeWarning):
 
 
 class I18NPlugin(object):
-    """ Bottle plugin and WSGI middleware for handling i18n routes
-
-    This class is a middleware. However, if the ``app`` argument is a
-    ``Bottle`` object (bottle app), it will also install itself as a plugin.
-    The plugin follows the `version 2 API`_ and implements the ``apply()``
-    method which applies the plugin to all routes. The plugin and middleware
-    parts were merged into one class because they depend on each other and
-    can't really be used separately.
+    """
+    Bottle plugin and WSGI middleware for handling i18n routes.  This class is
+    a middleware. However, if the ``app`` argument is a ``Bottle`` object
+    (bottle app), it will also install itself as a plugin.  The plugin follows
+    the `version 2 API <http://bottlepy.org/docs/0.12/plugindev.html>`_ and
+    implements the :py:meth:`~bottle_utils.i18n.I18NPlugin.apply` method which
+    applies the plugin to all routes. The plugin and middleware parts were
+    merged into one class because they depend on each other and can't really be
+    used separately.
 
     During initialization, the class will set up references to locales,
     directory paths, and build a mapping between locale names and appropriate
@@ -108,41 +173,52 @@ class I18NPlugin(object):
     if you wish (e.g., you wish to apply the plugin yourself some other way).
 
     .. _gettext API: https://docs.python.org/3.4/library/gettext.html
+
+    The locale directory should be in a format which ``gettext.translations()``
+    understands. This is a path that contains a subtree matching this format::
+
+        locale_dir/LANG/LC_MESSAGES/DOMAIN.mo
+
+    The ``LANG`` should match any of the supported languages, and ``DOMAIN``
+    should match the specified domain.
+
+    :param app:             ``Bottle`` object
+    :param langs:           iterable containing languages as ``(locale,
+                            name)`` tuples
+    :param default_locale:  default locale
+    :param locale_dir:      directory containing translations
+    :param domain:          the gettext domain
+    :param noplugin:
     """
 
+    #: Bottle plugin name
     name = 'i18n'
-    api = 2
 
     def __init__(self, app, langs, default_locale, locale_dir,
                  domain='messages', noplugin=False):
-        """
-        The locale directory should be in a format which
-        ``gettext.translations()`` understands. This is a path that contains a
-        subtree matching this format:
-
-            locale_dir/LANG/LC_MESSAGES/DOMAIN.mo
-
-        The ``LANG`` should match any of the supported languages, and
-        ``DOMAIN`` should match the specified domain.
-
-        .. _version 2 API: http://bottlepy.org/docs/0.12/plugindev.html
-
-        :param app:             ``Bottle`` object
-        :param langs:           iterable containing languages as ``(locale,
-                                name)`` tuples
-        :param default_locale:  default locale
-        :param locale_dir:      directory containing translations
-        :param domain:          the gettext domain
-        :param noplugin:
-        """
+        #: The original bottle application object is accessible as ``app``
+        #: attribute after initialization.
         self.app = app
+
+        #: Supported languages as iterable of `(locale, native_name)` tuples.
         self.langs = langs
+
+        #: Supported locales (calculated based on ``langs`` iterable).
         self.locales = [lang[0] for lang in langs]
+
+        #: Default locale.
         self.default_locale = default_locale
+
+        #: Directory that stores ``.po`` and ``.mo`` files.
         self.locale_dir = locale_dir
+
+        #: Domain of the translation.
         self.domain = domain
 
+        #: A dictionary that maps locales to ``gettext.translation()`` objects
+        #: for each locale. Appropriate API object is selected from each
         self.gettext_apis = {}
+
         # Prepare gettext class-based APIs for consumption
         for locale in self.locales:
             try:
@@ -173,7 +249,6 @@ class I18NPlugin(object):
                              'plugin installation.'))
 
     def __call__(self, e, h):
-        """ Middleware """
         path = e['PATH_INFO']
         e['LOCALE'] = locale = self.match_locale(path)
         e['ORIGINAL_PATH'] = path
@@ -182,7 +257,6 @@ class I18NPlugin(object):
         return self.app(e, h)
 
     def apply(self, callback, route):
-        """ Bottle plugin """
         ignored = route.config.get('no_i18n', False)
         def wrapper(*args, **kwargs):
             request.original_path = request.environ.get('ORIGINAL_PATH',
@@ -198,6 +272,18 @@ class I18NPlugin(object):
         return wrapper
 
     def match_locale(self, path):
+        """
+        Matches the locale based on prefix in request path. You can customize
+        this method for a different way of obtaining locale information. Note
+        that ``None`` return value generally means 'use default'.
+
+        The return value of this method is stored in the environment dictionary
+        as ``LOCALE`` key. It is then used by the plugin part of this class to
+        provide translation methods to the rest of the app.
+
+        :param path:    request path
+        :returns:       locale or None
+        """
         path_prefix = path.split('/')[1].lower()
         for locale in self.locales:
             if path_prefix == locale.lower():
@@ -206,5 +292,16 @@ class I18NPlugin(object):
 
     @staticmethod
     def strip_prefix(path, locale):
+        """
+        Strips the locale prefix from the path. This static method is used to
+        recalculate the request path that should be passed to Bottle. The
+        return value of this method replaces the ``PATH_INFO`` key in the
+        environment dictionary, and the original path is saved in
+        ``ORIGINAL_PATH`` key.
+
+        :param path:    request path
+        :param locale:  selected locale
+        :returns:       request path without the locale prefix
+        """
         return path[len(locale) + 1:]
 

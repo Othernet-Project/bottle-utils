@@ -1,30 +1,8 @@
 """
-csrf.py: Utility functions CSRF protection
+.. module:: bottle_utils.csrf
+   :synopsis: CSRF-protection decorators
 
-Application configuration options:
-
-    [csrf]
-    secret =
-    token_name = _csrf_token
-    path = /
-    expires = 600
-
-The ``secret`` setting is the only setting you really must override. Not having
-this setting set will result in ``KeyError`` exception. It is the secret value
-that is used to
-
-The ``token_name`` setting is the name of the cookie and form field that
-contain the token.
-
-The ``path`` setting is the path of the cookie.
-
-The ``expires`` setting is in seconds and sets the cookie's max-age.
-
-Bottle Utils
-2014 Outernet Inc <hello@outernet.is>
-All rights reserved
-
-Licensed under BSD license. See ``LICENSE`` file in the source directory.
+.. moduleauthor:: Outernet Inc <hello@outernet.is>
 """
 
 from __future__ import unicode_literals
@@ -45,6 +23,14 @@ ENCODING = 'latin1'
 
 
 def get_conf():
+    """
+    Return parsed configruation options. This function obtains
+
+    This function raises ``KeyError`` if configuration misses
+
+    :raises: KeyError
+    :returns: tuple of secret, token name, path, and cookie timeout
+    """
     conf = request.app.config
     csrf_secret = conf['csrf.secret']
     csrf_token_name = str(conf.get('csrf.token_name', CSRF_TOKEN))
@@ -57,10 +43,17 @@ def get_conf():
 
 
 def generate_csrf_token():
-    """ Generate and set new CSRF token in cookie
+    """
+    Generate and set new CSRF token in cookie. The generated token is set to
+    ``request.csrf_token`` attribute for easier access by other functions.
 
-    The generated token is set to ``request.csrf_token`` attribute for easier
-    access by other functions.
+    It is generally not necessary to use this function directly.
+
+    .. warning::
+
+       This function uses ``os.urandom()`` call to obtain 8 random bytes when
+       generating the token. It is possible to deplete the randomness pool and
+       make the random token predictable.
     """
     secret, token_name, path, expires = get_conf()
     sha256 = hashlib.sha256()
@@ -68,22 +61,37 @@ def generate_csrf_token():
     token = sha256.hexdigest().encode(ENCODING)
     response.set_cookie(token_name, token, path=path,
                         secret=secret, max_age=expires)
-    request.csrf_token = token
+    request.csrf_token = token.decode(ENCODING)
 
 
 def csrf_token(func):
-    """ CSRF token management
+    """
+    Create and set CSRF token in preparation for subsequent POST request. This
+    decorator is used to set the token. It also sets the ``'Cache-Control'``
+    header in order to prevent caching of the page on which the token appears.
 
-    When an existing token is found, it is automatically reused. A new cookie
-    is also set to extend the expiration time of the existing token each time.
+    When an existing token cookie is found, it is reused. The existing token is
+    reset so that the expiration time is extended each time it is reused.
 
-    If no tokens are found in cookies, a new one is automatically generated.
+    The POST handler must use the :py:func:`~bottle_utils.csrf.csrf_protect`
+    decotrator for the token to be used in any way.
 
-    Any response from handlers decorated with this decorator will have caching
-    disabled to prevent the browser from caching the token form field.
+    The token is available in the ``bottle.request`` object as ``csrf_token``
+    attribute::
 
-    The POST handler must use the ``csrf_protect`` decotrator for the token to
-    be used in any way.
+        @app.get('/')
+        @bottle.view('myform')
+        @csrf_token
+        def put_token_in_form():
+            return dict(token=request.csrf_token)
+
+    In a view, you can render this token as a hidden field inside the form. The
+    hidden field must have a name ``_csrf_token``::
+
+        <form method="POST">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            ....
+        </form>
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -103,11 +111,29 @@ def csrf_token(func):
 
 
 def csrf_protect(func):
-    """ CSRF protection
+    """
+    Perform CSRF protection checks. Performs checks to determine if submitted
+    form data matches the token in the cookie. It is assumed that the GET
+    request handler successfully set the token for the request and that the
+    form was instrumented with a CSRF token field. Use the
+    :py:func:`~bottle_utils.csrf.csrf_token` decorator to do this.
 
-    Performs checks for CSRF protection. It is assumed that the GET request
-    handler used the ``csrf_token`` middleware to supply the user with
-    appropriate cookies and form data.
+    If the handler function returns (i.e., it is not interrupted with
+    ``bottle.abort()``, ``bottle.redirect()``, and similar functions that throw
+    an exception, a new token is set and response is returned to the requester.
+    It is therefore recommended to perform a reidrect on successful POST.
+
+    Generally, the handler does not need to do anything
+    CSRF-protection-specific. All it needs is the decorator::
+
+        @app.post('/')
+        @bottle.view('myform')
+        @csrf_protect
+        def protected_post_handler():
+            if successful:
+                redirect('/someplace')
+            return dict(errors="There were some errors")
+
     """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -126,6 +152,17 @@ def csrf_protect(func):
 
 
 def csrf_tag():
+    """
+    Generte HTML for hidden form field. This is a convenience function to
+    generate a simple hidden input field. It does not accept any arguments
+    since it uses the ``bottle.request`` object to obtain the token.
+
+    If the handler in which this function is invoked is not decorated with
+    :py:func:`~bottle_utils.csrf.csrf_token`, an ``AttributeError`` will be
+    raised.
+
+    :returns:   HTML markup for hidden CSRF token field
+    """
     _, token_name, _, _ = get_conf()
     token = request.csrf_token
     try:

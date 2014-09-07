@@ -1,11 +1,8 @@
 """
-ajax.py: Utility functions for handling ajax
+.. module:: bottle_utils.ajax
+   :synopsis: Utility functions for handling ajax
 
-Bottle Utils
-2014 Outernet Inc <hello@outernet.is>
-All rights reserved
-
-Licensed under BSD license. See ``LICENSE`` file in the source directory.
+.. moduleauthor:: Outernet Inc <hello@outernet.is>
 """
 
 from __future__ import unicode_literals
@@ -16,7 +13,22 @@ from bottle import request, abort
 
 
 def ajax_only(func):
-    """ Aborts a request that is not made using AJAX """
+    """
+    This decorator simply tests if request ``is_xhr`` and aborts any requests
+    that are not XHR with an HTTP 400 status code. Keep in mind, though, that
+    AJAX header ('X-Requested-With') can be faked, so don't use this decorator
+    as a security measure of any kind.
+
+    Example::
+
+        @ajax_only
+        def hidden_from_non_xhr():
+            return "Foo!"
+
+    :param func:    request handler
+    :raises:        ``bottle.HTTPResponse``
+    :returns:       wrapped function
+    """
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if not request.is_xhr:

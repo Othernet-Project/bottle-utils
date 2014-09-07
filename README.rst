@@ -31,6 +31,10 @@ The following modules are currently available:
 - ``bottle_utils.i18n`` - Support for internationalization
 - ``bottle_utils.lazy`` - Provides functionality for lazy evaluation of 
   callables
+- ``bottle_utils.meta`` - Classes for handling page metadata
+
+Separately, there is also a module that contains shared low-level functionality
+used by other modules: ``bottle_utils.common``.
 
 Documentation is currently not available.
 
