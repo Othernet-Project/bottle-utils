@@ -3,3 +3,4 @@
 /.tox
 /*.egg-info
 /dist
+/docs/build
