@@ -16,7 +16,7 @@ setup(
                    'framework'),
     license = 'BSD',
     keywords = 'bottle utils i18n http lazy csrf ajax',
-    url = 'https://github.com/Outernet-Project/bottle-utils',
+    url = 'http://outernet-project.github.io/bottle-utils/',
     packages=find_packages(),
     long_description="""
     bottle-utils is a collection of code regularly used in various projects at
