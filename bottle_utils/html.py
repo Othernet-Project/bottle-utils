@@ -12,38 +12,18 @@ from __future__ import unicode_literals
 
 import types
 import functools
+
 from decimal import Decimal
-
-try:
-    from urllib.parse import quote
-except ImportError:
-    from urllib import quote
-
 from bottle import request, html_escape
 from dateutil.parser import parse
+
+from .common import *
 
 
 SIZES = 'KMGTP'
 FERR_CLS = 'form-errors'
 FERR_ONE_CLS = 'form-error'
 ERR_CLS = 'field-error'
-
-ATTR_ESC_PAIRS = (
-    ('&', '&amp;'),
-    ('"', '&quot;')
-)
-
-try:
-    STRTYPE = basestring
-except:
-    STRTYPE = str  # Python 3
-
-
-def to_unicode(v):
-    try:
-        return unicode(v)
-    except NameError:
-        return str(v)
 
 
 def plur(word, n, plural=lambda n: n != 1,
@@ -125,8 +105,7 @@ def attr(name, value=None):
     """
     if value is not None:
         value = to_unicode(value)
-        for orig, dest in ATTR_ESC_PAIRS:
-            value = value.replace(orig, dest)
+        value = attr_escape(value)
         return '%s="%s"' % (name, value)
     return name
 
@@ -152,7 +131,7 @@ def tag(name, content='', nonclosing=False, **attrs):
     if nonclosing:
         content = ''
         close_tag = ''
-    if not isinstance(content, STRTYPE):
+    if not isinstance(content, basestring):
         try:
             return ''.join(['%s%s%s' % (open_tag, c, close_tag)
                             for c in content])
@@ -201,7 +180,7 @@ def vcheckbox(name, value, values, default=False, **attrs):
             values = values.getall(name)
         except AttributeError:
             values = values.get(name, [])
-        if isinstance(values, STRTYPE):
+        if isinstance(values, basestring):
             if value == values:
                 attrs['checked'] = None
         elif value in values:
@@ -293,15 +272,3 @@ def strft(ts, fmt):
     return parse(ts).strftime(fmt)
 
 
-def full_url(path='/'):
-    parts = request.urlparts
-    url = parts.scheme + '://' + parts.hostname
-    if parts.port:
-        url += ':' + str(parts.port)
-    return url + path
-
-
-def urlquote(s):
-    if isinstance(s, unicode):
-        s = s.encode('utf8', errors='ignore')
-    return quote(s)
