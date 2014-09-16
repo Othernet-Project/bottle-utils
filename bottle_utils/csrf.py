@@ -105,7 +105,7 @@ def csrf_token(func):
         else:
             generate_csrf_token()
         # Pages with CSRF tokens should not be cached
-        response.headers['Cache-Control'] = 'private no-cache'
+        response.headers[str('Cache-Control')] = 'private no-cache'
         return func(*args, **kwargs)
     return wrapper
 
