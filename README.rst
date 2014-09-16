@@ -5,7 +5,7 @@ Bottle utils
 Assortment of frequently used utilities for Bottle.
 
 This package contains utilities for developing web sites and web applications
-using Bottle_ framework. It is divided into 5 modules of
+using Bottle_ framework. It is divided into several modules of
 which the ``lazy`` module is not Bottle-specific.
 
 The bottle-utils are created from a bunch of unrelated modules we frequently
