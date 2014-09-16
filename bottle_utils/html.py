@@ -538,7 +538,7 @@ def link_other(label, url, path, wrapper=lambda l, *kw: l, **kwargs):
     return A(label, href=url, **kwargs)
 
 
-def field_error(name, error):
+def field_error(name, errors):
     """
     Renders error message for single form field. This function renders a
     standardized markup for individual form field errors.
@@ -558,8 +558,8 @@ def field_error(name, error):
     are, one or more of span elements will be rendered. Every span will have
     'field-error' class.
 
-    :param errors:  dict-like object containing field-name-message mappings
     :param name:    name of the field to look up in the dict
+    :param errors:  dict-like object containing field-name-message mappings
     :returns:       HTML of the error message if one is found, otherwise empty
                     string
     """
