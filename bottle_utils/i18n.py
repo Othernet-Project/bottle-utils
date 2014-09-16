@@ -193,6 +193,8 @@ class I18NPlugin(object):
 
     #: Bottle plugin name
     name = 'i18n'
+    #: Bottle plugin API version
+    api = 2
 
     def __init__(self, app, langs, default_locale, locale_dir,
                  domain='messages', noplugin=False):
@@ -257,7 +259,10 @@ class I18NPlugin(object):
         return self.app(e, h)
 
     def apply(self, callback, route):
-        ignored = route.config.get('no_i18n', False)
+        try:
+            ignored = route.config.get('no_i18n', False)
+        except AttributeError:
+            ignored = False
         def wrapper(*args, **kwargs):
             request.original_path = request.environ.get('ORIGINAL_PATH',
                                                         request.fullpath)
