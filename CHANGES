@@ -3,6 +3,8 @@ MASTER : dev : Latest development version
   - Fixed I18NPlugin not handling case where route has no config
   - Fixed I18NPlugin not having API version property
   - Fixed wrong parameter name in field_error helper
+  - html.vselect helper now has empty parameter for specifying placeholder
+  - Added add_qparam helper to html module
 
 2014-08-27 : v0.1a1 : Initial release
   - Imported code from various Outernet Inc projects and cleaned it up to
