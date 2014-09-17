@@ -43,3 +43,8 @@ HTML rendering
 .. autofunction:: vselect
 .. autofunction:: field_error
 .. autofunction:: form_errors
+
+URL handling
+------------
+
+.. autofunction:: add_qparam
