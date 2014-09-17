@@ -154,7 +154,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">generate_csrf_token</span><span class="p">()</span>
         <span class="c"># Pages with CSRF tokens should not be cached</span>
-        <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">&#39;Cache-Control&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;private no-cache&#39;</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="s">&#39;Cache-Control&#39;</span><span class="p">)]</span> <span class="o">=</span> <span class="s">&#39;private no-cache&#39;</span>
         <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">wrapper</span>
 

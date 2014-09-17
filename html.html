@@ -116,7 +116,7 @@ expressing values related to size of data on disk.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.plur">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">plur</tt><big>(</big><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x0387ABB0&gt;</em>, <em>convert=&lt;function &lt;lambda&gt; at 0x0388CAB0&gt;</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">plur</tt><big>(</big><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x0372F8F0&gt;</em>, <em>convert=&lt;function &lt;lambda&gt; at 0x0372F930&gt;</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pluralize word based on number of items. This function provides rudimentary
 pluralization support. It is quite flexible, but not a replacement for
 functions like <tt class="docutils literal"><span class="pre">ngettext</span></tt>.</p>
@@ -528,7 +528,7 @@ checked)</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.vselect">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">vselect</tt><big>(</big><em>name</em>, <em>choices</em>, <em>values</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#vselect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vselect" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">vselect</tt><big>(</big><em>name</em>, <em>choices</em>, <em>values</em>, <em>empty=None</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#vselect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vselect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render select list with bound value. This function renders the select list
 with option elements with appropriate element selected based on field
 values that are passed.</p>
@@ -553,6 +553,10 @@ it will crete a <tt class="docutils literal"><span class="pre">value</span></tt>
 types become strings in the HTML markup, and are submitted as such. You
 will need to convert the values back to their appropriate Python type
 manually.</p>
+<p>If the choices iterable does not contain an element representing the empty
+value (<tt class="docutils literal"><span class="pre">None</span></tt>), you can specify it using the <tt class="docutils literal"><span class="pre">empty</span></tt> parameter. The
+argument for <tt class="docutils literal"><span class="pre">empty</span></tt> should be a label, and the matching value is
+<tt class="docutils literal"><span class="pre">None</span></tt>. The emtpy value is always inseted at the beginning of the list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -561,6 +565,7 @@ manually.</p>
 <li><strong>name</strong> &#8211; field name</li>
 <li><strong>choices</strong> &#8211; iterable of select list choices</li>
 <li><strong>values</strong> &#8211; dictionary or dictionary-like object containing field</li>
+<li><strong>empty</strong> &#8211; label for empty value</li>
 </ul>
 </td>
 </tr>
@@ -573,7 +578,7 @@ manually.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.field_error">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">field_error</tt><big>(</big><em>name</em>, <em>error</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#field_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.field_error" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">field_error</tt><big>(</big><em>name</em>, <em>errors</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#field_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.field_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders error message for single form field. This function renders a
 standardized markup for individual form field errors.</p>
 <div class="admonition note">
@@ -595,8 +600,8 @@ are, one or more of span elements will be rendered. Every span will have
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>errors</strong> &#8211; dict-like object containing field-name-message mappings</li>
 <li><strong>name</strong> &#8211; name of the field to look up in the dict</li>
+<li><strong>errors</strong> &#8211; dict-like object containing field-name-message mappings</li>
 </ul>
 </td>
 </tr>

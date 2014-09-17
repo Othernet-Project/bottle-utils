@@ -59,6 +59,12 @@
 <span class="kn">import</span> <span class="nn">types</span>
 <span class="kn">import</span> <span class="nn">functools</span>
 
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">quote</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote</span>
+
+
 <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
 <span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">request</span><span class="p">,</span> <span class="n">html_escape</span>
 <span class="kn">from</span> <span class="nn">dateutil.parser</span> <span class="kn">import</span> <span class="n">parse</span>
@@ -495,7 +501,7 @@
     <span class="k">return</span> <span class="n">INPUT</span><span class="p">(</span><span class="n">_type</span><span class="o">=</span><span class="s">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">_id</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="vselect"><a class="viewcode-back" href="../../html.html#bottle_utils.html.vselect">[docs]</a><span class="k">def</span> <span class="nf">vselect</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+<div class="viewcode-block" id="vselect"><a class="viewcode-back" href="../../html.html#bottle_utils.html.vselect">[docs]</a><span class="k">def</span> <span class="nf">vselect</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">empty</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Render select list with bound value. This function renders the select list</span>
 <span class="sd">    with option elements with appropriate element selected based on field</span>
@@ -523,9 +529,15 @@
 <span class="sd">    will need to convert the values back to their appropriate Python type</span>
 <span class="sd">    manually.</span>
 
+<span class="sd">    If the choices iterable does not contain an element representing the empty</span>
+<span class="sd">    value (``None``), you can specify it using the ``empty`` parameter. The</span>
+<span class="sd">    argument for ``empty`` should be a label, and the matching value is</span>
+<span class="sd">    ``None``. The emtpy value is always inseted at the beginning of the list.</span>
+
 <span class="sd">    :param name:    field name</span>
 <span class="sd">    :param choices: iterable of select list choices</span>
 <span class="sd">    :param values:  dictionary or dictionary-like object containing field</span>
+<span class="sd">    :param empty:   label for empty value</span>
 <span class="sd">    :returns:       HTML markup for the select list with bound value</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
@@ -535,6 +547,8 @@
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OPTION</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">val</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OPTION</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">val</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">empty</span><span class="p">:</span>
+        <span class="n">options</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">OPTION</span><span class="p">(</span><span class="n">empty</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">SELECT</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">_id</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
 </div>
@@ -587,7 +601,7 @@
     <span class="k">return</span> <span class="n">A</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">href</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="field_error"><a class="viewcode-back" href="../../html.html#bottle_utils.html.field_error">[docs]</a><span class="k">def</span> <span class="nf">field_error</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+<div class="viewcode-block" id="field_error"><a class="viewcode-back" href="../../html.html#bottle_utils.html.field_error">[docs]</a><span class="k">def</span> <span class="nf">field_error</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">errors</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Renders error message for single form field. This function renders a</span>
 <span class="sd">    standardized markup for individual form field errors.</span>
@@ -607,8 +621,8 @@
 <span class="sd">    are, one or more of span elements will be rendered. Every span will have</span>
 <span class="sd">    &#39;field-error&#39; class.</span>
 
-<span class="sd">    :param errors:  dict-like object containing field-name-message mappings</span>
 <span class="sd">    :param name:    name of the field to look up in the dict</span>
+<span class="sd">    :param errors:  dict-like object containing field-name-message mappings</span>
 <span class="sd">    :returns:       HTML of the error message if one is found, otherwise empty</span>
 <span class="sd">                    string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -652,7 +666,32 @@
     <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">P</span><span class="p">(</span><span class="n">SPAN</span><span class="p">(</span><span class="n">html_escape</span><span class="p">(</span><span class="n">errors</span><span class="p">[</span><span class="s">&#39;_&#39;</span><span class="p">]),</span> <span class="n">_class</span><span class="o">=</span><span class="n">FERR_ONE_CLS</span><span class="p">),</span>
                  <span class="n">_class</span><span class="o">=</span><span class="n">FERR_CLS</span><span class="p">)</span>
-</pre></div></div>
+
+</div>
+<span class="k">def</span> <span class="nf">add_qparam</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add query string parameter to current path in request context.</span>
+
+<span class="sd">    This function will overwrite existing parameters. If an existing parameter</span>
+<span class="sd">    has multiple values (e.g., ``?q=1&amp;q=2``) only the first one is overwritten,</span>
+<span class="sd">    but the order in which the values are added to the params dictionary may</span>
+<span class="sd">    not necessarily match the order in which they appear in the URL, so this</span>
+<span class="sd">    should be avoided.</span>
+
+<span class="sd">    The return value of this function is current request path with parameter</span>
+<span class="sd">    appended.</span>
+
+<span class="sd">    :param param:   parameter name</span>
+<span class="sd">    :param value:   value for the parameter</span>
+<span class="sd">    :returns:       path with query string parameter added</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">params</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)))</span>
+         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">allitems</span><span class="p">()]</span>
+    <span class="p">)</span>
+</pre></div>
 
           </div>
         </div>

@@ -242,6 +242,8 @@
 
     <span class="c">#: Bottle plugin name</span>
     <span class="n">name</span> <span class="o">=</span> <span class="s">&#39;i18n&#39;</span>
+    <span class="c">#: Bottle plugin API version</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">app</span><span class="p">,</span> <span class="n">langs</span><span class="p">,</span> <span class="n">default_locale</span><span class="p">,</span> <span class="n">locale_dir</span><span class="p">,</span>
                  <span class="n">domain</span><span class="o">=</span><span class="s">&#39;messages&#39;</span><span class="p">,</span> <span class="n">noplugin</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
@@ -306,7 +308,10 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">route</span><span class="p">):</span>
-        <span class="n">ignored</span> <span class="o">=</span> <span class="n">route</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;no_i18n&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ignored</span> <span class="o">=</span> <span class="n">route</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;no_i18n&#39;</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">ignored</span> <span class="o">=</span> <span class="bp">False</span>
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">request</span><span class="o">.</span><span class="n">original_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;ORIGINAL_PATH&#39;</span><span class="p">,</span>
                                                         <span class="n">request</span><span class="o">.</span><span class="n">fullpath</span><span class="p">)</span>
