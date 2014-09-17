@@ -1,4 +1,6 @@
-MASTER : dev : Latest development version
+0000-00-00 : MASTER : Latest development version
+
+2014-09-17 : v0.1a2 : Bufixes and minor updates
   - Fixed bug where CSRF decorator used Unicode value for header name in Py2
   - Fixed I18NPlugin not handling case where route has no config
   - Fixed I18NPlugin not having API version property
