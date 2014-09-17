@@ -446,7 +446,7 @@ def vcheckbox(name, value, values, default=False, **attrs):
     return INPUT(_type='checkbox', _id=name, _name=name, value=value, **attrs)
 
 
-def vselect(name, choices, values, **attrs):
+def vselect(name, choices, values, empty=None, **attrs):
     """
     Render select list with bound value. This function renders the select list
     with option elements with appropriate element selected based on field
@@ -474,9 +474,15 @@ def vselect(name, choices, values, **attrs):
     will need to convert the values back to their appropriate Python type
     manually.
 
+    If the choices iterable does not contain an element representing the empty
+    value (``None``), you can specify it using the ``empty`` parameter. The
+    argument for ``empty`` should be a label, and the matching value is
+    ``None``. The emtpy value is always inseted at the beginning of the list.
+
     :param name:    field name
     :param choices: iterable of select list choices
     :param values:  dictionary or dictionary-like object containing field
+    :param empty:   label for empty value
     :returns:       HTML markup for the select list with bound value
     """
     value = values.get(name)
@@ -486,6 +492,8 @@ def vselect(name, choices, values, **attrs):
             options.append(OPTION(label, value=val, selected=None))
         else:
             options.append(OPTION(label, value=val))
+    if empty:
+        options.insert(0, OPTION(empty, value=None))
     return SELECT(''.join(options), _id=name, _name=name, **attrs)
 
 

@@ -207,6 +207,12 @@ def test_vselect_value():
     assert tag('option', 'baz', value=2, selected=None) in s
 
 
+def test_vselect_empty():
+    s = vselect('foo', ((1, 'bar'),), {}, empty='foo')
+    assert tag('option', 'foo', value=None) in s
+    assert tag('option', 'bar', value=1) in s
+
+
 def test_link_other():
     s = link_other('foo', '/bar', '/baz')
     assert_tag(s, 'a')
