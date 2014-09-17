@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 test_html.py: Unit tests for ``bottle_utils.html`` module
 
@@ -16,6 +17,8 @@ try:
     from unittest import mock
 except ImportError:
     import mock
+
+from bottle import FormsDict
 
 from bottle_utils.html import *
 
@@ -247,4 +250,31 @@ def test_yesno():
 def test_yesno_custom_yes_no():
     assert yesno(True, 'available', 'not available') == 'available'
     assert yesno(False, 'available', 'not available') == 'not available'
+
+
+@mock.patch(MOD + 'request')
+def test_add_qparam(request):
+    request.path = '/'
+    request.query = FormsDict([('a', '1'), ('a', '2'), ('b', '3'), ('c', '4')])
+    ret = add_qparam('a', '0')
+    print(ret)
+    assert 'a=0' in ret
+    assert 'a=1' not in ret
+    assert 'a=2' in ret
+
+
+@mock.patch(MOD + 'request')
+def test_add_qparam_blank(request):
+    request.path = '/'
+    request.query = FormsDict()
+    ret = add_qparam('a', '0')
+    assert ret == '/?a=0'
+
+
+@mock.patch(MOD + 'request')
+def test_add_qparam_unicode(request):
+    request.path = '/'
+    request.query = FormsDict()
+    ret = add_qparam('a', 'јуникод')
+    assert ret == '/?a=%D1%98%D1%83%D0%BD%D0%B8%D0%BA%D0%BE%D0%B4'
 

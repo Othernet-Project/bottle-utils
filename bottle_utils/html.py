@@ -10,6 +10,12 @@ from __future__ import unicode_literals
 import types
 import functools
 
+try:
+    from urllib import quote
+except ImportError:
+    from urllib.parse import quote
+
+
 from decimal import Decimal
 from bottle import request, html_escape
 from dateutil.parser import parse
@@ -611,4 +617,29 @@ def form_errors(errors):
     except TypeError:
         return P(SPAN(html_escape(errors['_']), _class=FERR_ONE_CLS),
                  _class=FERR_CLS)
+
+
+def add_qparam(param, value):
+    """
+    Add query string parameter to current path in request context.
+
+    This function will overwrite existing parameters. If an existing parameter
+    has multiple values (e.g., ``?q=1&q=2``) only the first one is overwritten,
+    but the order in which the values are added to the params dictionary may
+    not necessarily match the order in which they appear in the URL, so this
+    should be avoided.
+
+    The return value of this function is current request path with parameter
+    appended.
+
+    :param param:   parameter name
+    :param value:   value for the parameter
+    :returns:       path with query string parameter added
+    """
+    params = request.query.decode()
+    params[param] = value
+    return request.path + '?' + '&'.join(
+        ['%s=%s' % (k, quote(v.encode('utf8')))
+         for k, v in params.allitems()]
+    )
 
