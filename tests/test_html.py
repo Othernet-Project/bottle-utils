@@ -253,28 +253,52 @@ def test_yesno_custom_yes_no():
 
 
 @mock.patch(MOD + 'request')
+def test_to_qs(request):
+    request.path = '/'
+    query = FormsDict([('a', '1'), ('b', '3')])
+    ret = to_qs(query)
+    assert 'a=1' in ret
+    assert 'b=3' in ret
+
+
+@mock.patch(MOD + 'request')
+def test_to_qs_dict(request):
+    request.path = '/'
+    query = {'a': '1', 'b': '3'}
+    ret = to_qs(query)
+    assert 'a=1' in ret
+    assert 'b=3' in ret
+
+
+@mock.patch(MOD + 'request')
+def test_to_qs_unicode(request):
+    request.path = '/'
+    query = {'a': 'јуникод'}
+    assert to_qs(query) == '/?a=%D1%98%D1%83%D0%BD%D0%B8%D0%BA%D0%BE%D0%B4'
+
+
+@mock.patch(MOD + 'request')
 def test_add_qparam(request):
     request.path = '/'
-    request.query = FormsDict([('a', '1'), ('a', '2'), ('b', '3'), ('c', '4')])
+    request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
     ret = add_qparam('a', '0')
-    print(ret)
+    assert 'a=0' in ret
+    assert 'a=1' in ret
+
+
+@mock.patch(MOD + 'request')
+def test_set_qparam(request):
+    request.path = '/'
+    request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
+    ret = set_qparam('a', '0')
     assert 'a=0' in ret
     assert 'a=1' not in ret
-    assert 'a=2' in ret
 
 
 @mock.patch(MOD + 'request')
-def test_add_qparam_blank(request):
+def test_del_qparam(request):
     request.path = '/'
-    request.query = FormsDict()
-    ret = add_qparam('a', '0')
-    assert ret == '/?a=0'
-
-
-@mock.patch(MOD + 'request')
-def test_add_qparam_unicode(request):
-    request.path = '/'
-    request.query = FormsDict()
-    ret = add_qparam('a', 'јуникод')
-    assert ret == '/?a=%D1%98%D1%83%D0%BD%D0%B8%D0%BA%D0%BE%D0%B4'
+    request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
+    ret = set_qparam('a', '0')
+    assert 'a=1' not in ret
 
