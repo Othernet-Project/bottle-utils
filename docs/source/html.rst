@@ -47,4 +47,7 @@ HTML rendering
 URL handling
 ------------
 
+.. autofunction:: to_qs
 .. autofunction:: add_qparam
+.. autofunction:: set_qparam
+.. autofunction:: del_qparam
