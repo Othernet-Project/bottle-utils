@@ -434,6 +434,7 @@ def vcheckbox(name, value, values, default=False, **attrs):
                     checked)
     :returns:       HTML markup for the checkbox with bound value
     """
+    attrs.setdefault('_id', name)
     if name in values:
         try:
             values = values.getall(name)
@@ -449,7 +450,7 @@ def vcheckbox(name, value, values, default=False, **attrs):
             attrs['checked'] = None
     elif 'checked' in attrs:
         del attrs['checked']
-    return INPUT(_type='checkbox', _id=name, _name=name, value=value, **attrs)
+    return INPUT(_type='checkbox', _name=name, value=value, **attrs)
 
 
 def vselect(name, choices, values, empty=None, **attrs):
@@ -491,6 +492,7 @@ def vselect(name, choices, values, empty=None, **attrs):
     :param empty:   label for empty value
     :returns:       HTML markup for the select list with bound value
     """
+    attrs.setdefault('_id', name)
     value = values.get(name)
     options = []
     for val, label in choices:
@@ -500,7 +502,7 @@ def vselect(name, choices, values, empty=None, **attrs):
             options.append(OPTION(label, value=val))
     if empty:
         options.insert(0, OPTION(empty, value=None))
-    return SELECT(''.join(options), _id=name, _name=name, **attrs)
+    return SELECT(''.join(options), _name=name, **attrs)
 
 
 def link_other(label, url, path, wrapper=lambda l, *kw: l, **kwargs):
