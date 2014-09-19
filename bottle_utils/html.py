@@ -441,9 +441,9 @@ def vcheckbox(name, value, values, default=False, **attrs):
         except AttributeError:
             values = values.get(name, [])
         if isinstance(values, basestring):
-            if value == values:
+            if unicode(value) == unicode(values):
                 attrs['checked'] = None
-        elif value in values:
+        elif unicode(value) in [unicode(v) for v in values]:
             attrs['checked'] = None
     elif default:
         if default:
@@ -496,7 +496,7 @@ def vselect(name, choices, values, empty=None, **attrs):
     value = values.get(name)
     options = []
     for val, label in choices:
-        if val == value:
+        if unicode(val) == unicode(value):
             options.append(OPTION(label, value=val, selected=None))
         else:
             options.append(OPTION(label, value=val))

@@ -169,6 +169,11 @@ def test_vcheckbox_value():
     assert 'checked' in s
 
 
+def test_vcheckbox_value_with_string_coertion():
+    s = vcheckbox('foo', 1, {'foo': '1'})
+    assert 'checked' in s
+
+
 def test_vcheckbox_value_no_partial_match():
     s = vcheckbox('foo', 'fooval', {'foo': 'foovaliant'})
     assert 'checked' not in s
@@ -202,6 +207,18 @@ def test_vselect_value():
     # FIXME: This test may fail in Python 3.4 because of HTML attribute
     # ordering.
     s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': 1})
+    assert tag('option', 'bar', value=1, selected=None) in s
+    assert tag('option', 'baz', value=2) in s
+
+    s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': 2})
+    assert tag('option', 'bar', value=1) in s
+    assert tag('option', 'baz', value=2, selected=None) in s
+
+
+def test_vselect_value_with_unicode_coertion():
+    # FIXME: This test may fail in Python 3.4 because of HTML attribute
+    # ordering.
+    s = vselect('foo', ((1, 'bar'), (2, 'baz')), {'foo': '1'})
     assert tag('option', 'bar', value=1, selected=None) in s
     assert tag('option', 'baz', value=2) in s
 
