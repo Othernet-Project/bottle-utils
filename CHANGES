@@ -1,6 +1,8 @@
 0000-00-00 : MASTER : Latest development version
   - Changed documentation to reflect actual behavior of add_qparam
   - Added set_qparam and del_qparam functions
+  - vcheckbox and vselect now compare values as strings
+  - add_qparam and set_qparam will always coerce values into unicode string
 
 2014-09-17 : v0.1a2 : Bufixes and minor updates
   - Fixed bug where CSRF decorator used Unicode value for header name in Py2
