@@ -653,7 +653,7 @@ def add_qparam(param, value):
     :returns:       path with query string parameter added
     """
     params = request.query.decode()
-    params.append(param, value)
+    params.append(param, unicode(value))
     return to_qs(params)
 
 
@@ -669,7 +669,7 @@ def set_qparam(param, value):
     :returns:       path with query string parameter replaced
     """
     params = request.query.decode()
-    params.replace(param, value)
+    params.replace(param, unicode(value))
     return to_qs(params)
 
 

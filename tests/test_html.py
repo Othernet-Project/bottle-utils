@@ -304,10 +304,28 @@ def test_add_qparam(request):
 
 
 @mock.patch(MOD + 'request')
+def test_add_qparam_unicode_coercion(request):
+    request.path = '/'
+    request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
+    ret = add_qparam('a', 0)
+    assert 'a=0' in ret
+    assert 'a=1' in ret
+
+
+@mock.patch(MOD + 'request')
 def test_set_qparam(request):
     request.path = '/'
     request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
     ret = set_qparam('a', '0')
+    assert 'a=0' in ret
+    assert 'a=1' not in ret
+
+
+@mock.patch(MOD + 'request')
+def test_set_qparam_unicode_coercion(request):
+    request.path = '/'
+    request.query = FormsDict([('a', '1'), ('b', '3'), ('c', '4')])
+    ret = set_qparam('a', 0)
     assert 'a=0' in ret
     assert 'a=1' not in ret
 
