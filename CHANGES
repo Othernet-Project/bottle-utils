@@ -1,4 +1,6 @@
 0000-00-00 : MASTER : Latest development version
+
+2014-09-19 : v0.1a3 : Bugfixes and minor updates
   - Changed documentation to reflect actual behavior of add_qparam
   - Added set_qparam and del_qparam functions
   - vcheckbox and vselect now compare values as strings
