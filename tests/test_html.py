@@ -233,6 +233,34 @@ def test_vselect_empty():
     assert tag('option', 'bar', value=1) in s
 
 
+def test_form_tag_default():
+    assert form() == '<form>'
+
+
+def test_form_tag_method():
+    assert form('POST') == '<form method="POST">'
+    assert form('GET') == '<form method="GET">'
+
+
+def test_form_tag_faux_method():
+    assert '<form method="POST">' in form('PUT')
+    assert HIDDEN('_method', 'PUT') in form('PUT')
+
+
+@mock.patch('bottle_utils.csrf.csrf_tag')
+def test_form_csrf(csrf_tag):
+    csrf_tag.return_value = 'foo'
+    assert 'foo' in form(csrf=True)
+
+
+def test_form_multipart():
+    assert form(multipart=True) == '<form enctype="multipart/form-data">'
+
+
+def test_form_other_attrs():
+    assert form(_id='foo') == '<form id="foo">'
+
+
 def test_link_other():
     s = link_other('foo', '/bar', '/baz')
     assert_tag(s, 'a')

@@ -505,6 +505,52 @@ def vselect(name, choices, values, empty=None, **attrs):
     return SELECT(''.join(options), _name=name, **attrs)
 
 
+def form(method=None, action=None, csrf=False, multipart=False, **attrs):
+    """
+    Render open form tag. This function renders the open form tag with
+    additional features, such as faux HTTP methods, CSRF token, and multipart
+    support.
+
+    All parameters are optional. Using this function without any argument has
+    the same effect as naked form tag without any attributes.
+
+    Method names can be either lowercase or uppercase.
+
+    The methods other than GET and POST are faked using a hidden input with
+    ``_method`` name and uppercase name of the HTTP method. The form will use
+    POST method in this case. Server-side support is required for this feature
+    to work.
+
+    Any additional keyword arguments will be used as attributes for the form
+    tag.
+
+    :param method:      HTTP method (GET, POST, PUT, DELETE, PATCH, etc)
+    :param action:      action attribute
+    :param csrf:        include CSRF protection token
+    :param multipart:   make the form multipart
+    """
+    method = method and method.upper()
+    if not method:
+        faux_method = False
+    elif method in ['GET', 'POST']:
+        attrs['method'] = method
+        faux_method = False
+    else:
+        attrs['method'] = 'POST'
+        faux_method = True
+    if multipart:
+        attrs['enctype'] = 'multipart/form-data'
+    s = tag('form', nonclosing=True, **attrs)
+    if faux_method:
+        s += HIDDEN('_method', method)
+    if csrf:
+        # Import csrf_tag here to avoid circular dependency, since the csrf
+        # module uses functions from this module
+        from .csrf import csrf_tag
+        s += csrf_tag()
+    return s
+
+
 def link_other(label, url, path, wrapper=lambda l, *kw: l, **kwargs):
     """
     Only wrap label in anchor if given URL is not the path. Given a label, this
