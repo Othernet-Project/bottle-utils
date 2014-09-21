@@ -1,4 +1,5 @@
 0000-00-00 : MASTER : Latest development version
+  - Added helper function for generating form tags
 
 2014-09-19 : v0.1a3 : Bugfixes and minor updates
   - Changed documentation to reflect actual behavior of add_qparam

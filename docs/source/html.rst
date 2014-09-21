@@ -41,6 +41,7 @@ HTML rendering
 .. autofunction:: varea
 .. autofunction:: vcheckbox
 .. autofunction:: vselect
+.. autofunction:: form
 .. autofunction:: field_error
 .. autofunction:: form_errors
 
