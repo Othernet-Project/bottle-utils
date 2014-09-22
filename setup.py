@@ -22,6 +22,8 @@ setup(
     bottle-utils is a collection of code regularly used in various projects at
     Outernet Inc (https://www.outernet.is/). It contains methods for working
     with AJAX, CSRF protection, i18n, and more.
+
+    Documentation can be found at http://outernet-project.github.io/bottle-utils/
     """,
     install_requires = [
         'bottle==0.12.7',
