@@ -18,6 +18,18 @@ Status
 
 bottle-utils is still in early development.
 
+Installation
+============
+
+Install using ``pip`` or ``easy_install``::
+
+    pip install bottle-utils
+
+To install the latest development version, install using the master zipball
+URL::
+
+    pip install https://github.com/Outernet-Project/bottle-utils/archive/master.zip
+
 Modules
 =======
 

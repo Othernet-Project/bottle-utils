@@ -16,6 +16,18 @@ Bottle Utils are compatible with Python 2.7, 3.3, and 3.4. Compatibility with
 other versions of Python is possible, but not tested. It targets latest stable 
 release of Bottle.
 
+Installation
+============
+
+Install using ``pip`` or ``easy_install``::
+
+    pip install bottle-utils
+
+To install the latest development version, install using the master zipball
+URL::
+
+    pip install https://github.com/Outernet-Project/bottle-utils/archive/master.zip
+
 Source code
 ===========
 
