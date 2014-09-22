@@ -540,6 +540,8 @@ def form(method=None, action=None, csrf=False, multipart=False, **attrs):
         faux_method = True
     if multipart:
         attrs['enctype'] = 'multipart/form-data'
+    if action is not None:
+        attrs['action'] = action
     s = tag('form', nonclosing=True, **attrs)
     if faux_method:
         s += HIDDEN('_method', method)

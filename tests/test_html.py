@@ -247,6 +247,10 @@ def test_form_tag_faux_method():
     assert HIDDEN('_method', 'PUT') in form('PUT')
 
 
+def test_form_action():
+    assert form(action='/foo') == '<form action="/foo">'
+
+
 @mock.patch('bottle_utils.csrf.csrf_tag')
 def test_form_csrf(csrf_tag):
     csrf_tag.return_value = 'foo'
