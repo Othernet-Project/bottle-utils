@@ -14,6 +14,9 @@ from bottle import request, redirect, BaseTemplate
 from .lazy import lazy, caching_lazy
 
 
+CONTEXT_SEPARATOR = '\x04'
+
+
 def dummy_gettext(message):
     """
     Mimic ``gettext()`` function. This is a passthrough function with the same
@@ -45,6 +48,35 @@ def dummy_ngettext(singular, plural, n):
     if n == 1:
         return singular
     return plural
+
+
+def dummy_pgettext(context, message):
+    """
+    Mimic ``pgettext()`` function. This is a passthrough function with the same
+    signature as ``pgettext()``. It can be used to simulate translation for
+    applications that are untranslated, without the overhead of calling the
+    real ``pgettext()`.
+
+    :param context:     message context (ignored)
+    :param message:     translatable message
+    :returns:           unmodified message
+    """
+    return dummy_gettext(message)
+
+
+def dummy_npgettext(context, singular, plural, n):
+    """
+    Mimic ``npgettext()`` function. This is a passthrough function with teh
+    same signature as ``npgettext()``. It can be used to simulate translation
+    for applications that are untranslated, without the overhead of calling the
+    real ``npgettext()`` function.
+
+    :param singular:    singular message string
+    :param plural:      plural message string
+    :param n:           count
+    :returns:           unmodified singular or plural message
+    """
+    return dummy_ngettext(singular, plural, n)
 
 
 @lazy
@@ -79,6 +111,50 @@ def lazy_ngettext(singular, plural, n):
     """
     ngettext = request.gettext.ngettext
     return ngettext(singular, plural, n)
+
+
+def lazy_pgettext(context, message):
+    """
+    :py:func:`bottle_utils.i18n.lazy_gettext` wrapper with message context.
+
+    This function is a wrapper around :py:func:`bottle_utils.i18n.lazy_gettext`
+    that provides message context. It is useful in situations where short
+    messages (usually one word) are used in several different contexts for
+    which separate translations may be needed in different languages.
+
+    The function itself is not lazily evaluated, but its return value comes
+    from ``lazy_gettext()`` call, and it is effectively lazy as a result.
+
+    :param context:     message context
+    :param message:     translatable message
+    :returns:           lazy proxy object
+    """
+    message = '%s%s%s' % (context, CONTEXT_SEPARATOR, message)
+    return lazy_gettext(message)
+
+
+def lazy_npgettext(context, singular, plural, n):
+    """
+    :py:func:`bottle_utils.i18n.lazy_ngettext` wrapper with message context.
+
+    This function is a wrapper around
+    :py:func:`bottle_utils.i18n.lazy_ngettext`
+    that provides message context. It is useful in situations where messages
+    are used in several different contexts for which separate translations may
+    be required for different languages.
+
+    The function itself is not lazy, but it returns the return value of
+    ``lazy_ngettext()``, and it is effectively lazy. Hence the name.
+
+    :param context:     message context
+    :param singular:    translatable singular message
+    :param plural:      translatable plural message
+    :param n:           count
+    :returns:           lazy proxy object
+    """
+    singular = '%s%s%s'  % (context, CONTEXT_SEPARATOR, singular)
+    plural = '%s%s%s' % (context, CONTEXT_SEPARATOR, plural)
+    return lazy_ngettext(singular, plural, n)
 
 
 def full_path():

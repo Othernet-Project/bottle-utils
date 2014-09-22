@@ -36,6 +36,15 @@ def test_dummy_ngettext():
     assert _('foo', 'foos', 2) == 'foos', "Should return 'foos'"
 
 
+def test_dummy_pgettext():
+    assert dummy_pgettext('foo', 'bar') == 'bar'
+
+
+def test_dummy_npgettext():
+    assert dummy_npgettext('foo', 'bar', 'baz', 1) == 'bar'
+    assert dummy_npgettext('foo', 'bar', 'baz', 2) == 'baz'
+
+
 def test_lazy_gettext():
     """ Gettext returns lazy object """
     _ = lazy_gettext
@@ -66,6 +75,24 @@ def test_lazy_ngettext_request(request):
     s = _('singular', 'plural', 1)
     s = s._eval()
     assert s == request.gettext.ngettext.return_value, "Should use ngettext"
+
+
+@mock.patch(MOD + 'lazy_gettext')
+def test_lazy_pgettext(lazy_gettext):
+    ret = lazy_pgettext('foo', 'bar')
+    lazy_gettext.assert_called_once_with(
+        '%s%s%s' % ('foo', CONTEXT_SEPARATOR, 'bar'))
+    assert ret == lazy_gettext.return_value
+
+
+@mock.patch(MOD + 'lazy_ngettext')
+def test_lazy_npgettext(lazy_ngettext):
+    ret = lazy_npgettext('foo', 'bar', 'baz', 1)
+    lazy_ngettext.assert_called_once_with(
+        '%s%s%s' % ('foo', CONTEXT_SEPARATOR, 'bar'),
+        '%s%s%s' % ('foo', CONTEXT_SEPARATOR, 'baz'),
+        1)
+    assert ret == lazy_ngettext.return_value
 
 
 @mock.patch(MOD + 'request')
