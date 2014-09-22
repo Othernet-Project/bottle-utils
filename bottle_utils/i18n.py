@@ -311,6 +311,8 @@ class I18NPlugin(object):
             '_': lazy_gettext,
             'gettext': lazy_gettext,
             'ngettext': lazy_ngettext,
+            'pgettext': lazy_pgettext,
+            'npgettext': lazy_npgettext,
             'i18n_path': i18n_path,
             'languages': langs,
         })
