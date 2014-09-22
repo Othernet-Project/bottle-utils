@@ -23,14 +23,12 @@ def is_lazy(obj):
 
 
 def test_dummy_gettext():
-    """ Dummy gettext simply parrots the input """
     _ = dummy_gettext
     assert _('foo') == 'foo', "Should parrot 'foo'"
     assert _('bar') == 'bar', "Should parrot 'bar'"
 
 
 def test_dummy_ngettext():
-    """ Dummy ngettext returns appropriate form """
     _ = dummy_ngettext
     assert _('foo', 'foos', 1) == 'foo', "Should return 'foo'"
     assert _('foo', 'foos', 2) == 'foos', "Should return 'foos'"
@@ -46,14 +44,12 @@ def test_dummy_npgettext():
 
 
 def test_lazy_gettext():
-    """ Gettext returns lazy object """
     _ = lazy_gettext
     s = _('foo')
     assert is_lazy(s), "Should be a lazy object"
 
 
 def test_gettext_string():
-    """ Lazy ngettext returns lazy object """
     _ = lazy_ngettext
     s = _('foo', 'foos', 1)
     assert is_lazy(s), "Should be a lazy object"
@@ -61,7 +57,6 @@ def test_gettext_string():
 
 @mock.patch(MOD + 'request')
 def test_lazy_gettext_request(request):
-    """ Lazy gettext uses ``request.gettext.gettext`` method """
     _ = lazy_gettext
     s = _('foo')
     s = s._eval()
@@ -70,7 +65,6 @@ def test_lazy_gettext_request(request):
 
 @mock.patch(MOD + 'request')
 def test_lazy_ngettext_request(request):
-    """ Lazy ngettext uses ``request.gettext.ngettext`` method """
     _ = lazy_ngettext
     s = _('singular', 'plural', 1)
     s = s._eval()
@@ -97,7 +91,6 @@ def test_lazy_npgettext(lazy_ngettext):
 
 @mock.patch(MOD + 'request')
 def test_full_path(request):
-    """ ``full_path()`` returns full path with query string """
     request.fullpath = '/'
     request.query_string = ''
     s = full_path()
@@ -113,14 +106,12 @@ def test_full_path(request):
 
 
 def test_i18n_returns_lazy():
-    """ ``i18n_path()`` returns a lazy object """
     s = i18n_path('/foo', 'en_US')
     assert is_lazy(s), "Should be a lazy object"
 
 
 @mock.patch(MOD + 'request')
 def test_i18n_path(request):
-    """ ``i18n_path()`` should use locale to prefix the path """
     request.locale = 'en_US'
     s = i18n_path('/foo')
     assert s == '/en_us/foo'
@@ -131,7 +122,6 @@ def test_i18n_path(request):
 
 @mock.patch(MOD + 'request')
 def test_i18n_custom_locale(request):
-    """ ``i18n_path()`` should use custom locale if provided """
     request.locale = 'en_US'
     s = i18n_path('/foo', locale='es_es')
     assert s == '/es_es/foo', "Should return specified locale instead"
@@ -139,7 +129,6 @@ def test_i18n_custom_locale(request):
 
 @mock.patch(MOD + 'request')
 def test_i18n_current_path(request):
-    """ ``i18n_path()`` uses current path if none is provided """
     request.fullpath = '/foo/bar/baz'
     request.query_string = 'foo=bar'
     s = i18n_path(locale='en_US')
@@ -153,7 +142,6 @@ def test_api_version():
 @mock.patch(MOD + 'gettext.translation')
 @mock.patch(MOD + 'BaseTemplate')
 def test_initialization_attrs(BaseTemplate, translation):
-    """ Should init with expected attrs """
     app = mock.Mock()
     langs = [('foo', 'bar')]
     ret = I18NPlugin(app, langs, default_locale='foo',
@@ -171,7 +159,6 @@ def test_initialization_attrs(BaseTemplate, translation):
 @mock.patch(MOD + 'gettext.translation')
 @mock.patch(MOD + 'BaseTemplate')
 def test_initialization_update_template_basics(BaseTemplate, translation):
-    """ Should update template defaults """
     app = mock.Mock()
     langs = [('foo', 'bar')]
     I18NPlugin(app, langs, default_locale='foo', locale_dir='nonexistent')
@@ -187,7 +174,6 @@ def test_initialization_update_template_basics(BaseTemplate, translation):
 @mock.patch(MOD + 'gettext.translation')
 @mock.patch(MOD + 'BaseTemplate')
 def test_initialization_install_plugin(BaseTemplate, translation):
-    """ Should init and install plugin """
     app = mock.Mock()
     langs = [('foo', 'bar')]
     ret = I18NPlugin(app, langs, default_locale='foo',
@@ -198,7 +184,6 @@ def test_initialization_install_plugin(BaseTemplate, translation):
 @mock.patch(MOD + 'gettext.translation')
 @mock.patch(MOD + 'BaseTemplate')
 def test_initialization_no_plugin(BaseTemplate, translation):
-    """ Should not install itself if ``noplugin`` arg is ``True`` """
     app = mock.Mock()
     langs = [('foo', 'bar')]
     ret = I18NPlugin(app, langs, default_locale='foo',
@@ -210,7 +195,6 @@ def test_initialization_no_plugin(BaseTemplate, translation):
 @mock.patch(MOD + 'BaseTemplate')
 @mock.patch(MOD + 'warn')
 def test_initialization_wanrn(warn, BaseTemplate, translation):
-    """ Should warn for each locale if gettext.translate() raises OSError """
     def raise_os_error(*args, **kwargs):
         raise OSError('lamma crapped itself')
     translation.side_effect = raise_os_error
