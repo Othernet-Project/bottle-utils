@@ -553,7 +553,7 @@ def form(method=None, action=None, csrf=False, multipart=False, **attrs):
     return s
 
 
-def link_other(label, url, path, wrapper=lambda l, *kw: l, **kwargs):
+def link_other(label, url, path, wrapper=SPAN, **kwargs):
     """
     Only wrap label in anchor if given URL is not the path. Given a label, this
     function will match the page URL against the path to which the label should
