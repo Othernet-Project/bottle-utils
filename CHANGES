@@ -2,6 +2,8 @@
   - Added helper function for generating form tags
   - Added pgettext and npgettext functions to i18n module
   - Fixed manifest to include the LICENSE file
+  - Fixed link_other to use SPAN as default wrapper
+  - Fixed unicode issue in to_unicode common function
 
 2014-09-19 : v0.1a3 : Bugfixes and minor updates
   - Changed documentation to reflect actual behavior of add_qparam
