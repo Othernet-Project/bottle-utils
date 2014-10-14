@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Template helpers (bottle_utils.html) &mdash; Bottle Utils 0.1a2 documentation</title>
+    <title>Template helpers (bottle_utils.html) &mdash; Bottle Utils 0.1a4 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1a2',
+        VERSION:     '0.1a4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Bottle Utils 0.1a2 documentation" href="index.html" />
+    <link rel="top" title="Bottle Utils 0.1a4 documentation" href="index.html" />
     <link rel="next" title="HTTP helpers (bottle_utils.http)" href="http.html" />
     <link rel="prev" title="Flash messages (bottle_utils.flash)" href="flash.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="flash.html" title="Flash messages (bottle_utils.flash)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -116,7 +116,7 @@ expressing values related to size of data on disk.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.plur">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">plur</tt><big>(</big><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x0380F8F0&gt;</em>, <em>convert=&lt;function &lt;lambda&gt; at 0x0380F930&gt;</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">plur</tt><big>(</big><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x0380E130&gt;</em>, <em>convert=&lt;function &lt;lambda&gt; at 0x03889030&gt;</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pluralize word based on number of items. This function provides rudimentary
 pluralization support. It is quite flexible, but not a replacement for
 functions like <tt class="docutils literal"><span class="pre">ngettext</span></tt>.</p>
@@ -347,13 +347,13 @@ point, and generate the anchor element markup as necessary.</p>
 the anchor markup, which is <tt class="docutils literal"><span class="pre">A</span></tt> alias for
 <a class="reference internal" href="#bottle_utils.html.tag" title="bottle_utils.html.tag"><tt class="xref py py-func docutils literal"><span class="pre">tag()</span></tt></a> function.</p>
 <p>If the URLs match (meaning the page URL matches the target path), the label
-will be passed to the wrapper function. The default behavior of the wrapper
-function is to return the label as is. The label is thus returned as is if
-the URLs match.</p>
+will be passed to the wrapper function. The default wrapper function is
+<tt class="xref py py-func docutils literal"><span class="pre">SPAN()</span></tt>, so the label is wrapped in SPAN tag
+when the URLs matches.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/here&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">)</span>
 <span class="go">&#39;&lt;a href=&quot;/target&quot;&gt;foo&lt;/a&gt;&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">)</span>
-<span class="go">&#39;foo&#39;</span>
+<span class="go">&#39;&lt;span&gt;foo&lt;/span&gt;&#39;</span>
 </pre></div>
 </div>
 <p>You can customize the appearance of the label in the case URLs match by
@@ -368,10 +368,10 @@ wrapper function accepts the same extra keyword arguments that the anchor
 function does, so if you have common classes and similar attributes, you
 can specify them as extra keyword arguments and use any of the helper
 functions in this module.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/here&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="n">SPAN</span><span class="p">,</span> <span class="n">_class</span><span class="o">=</span><span class="s">&#39;cls&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/here&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="n">BUTTON</span><span class="p">,</span> <span class="n">_class</span><span class="o">=</span><span class="s">&#39;cls&#39;</span><span class="p">)</span>
 <span class="go">&#39;&lt;a class=&quot;cls&quot; href=&quot;/target&quot;&gt;foo&lt;/a&gt;&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="n">SPAN</span><span class="p">,</span> <span class="n">_class</span><span class="o">=</span><span class="s">&#39;cls&#39;</span><span class="p">)</span>
-<span class="go">&#39;&lt;span class=&quot;cls&quot;&gt;foo&lt;/span&gt;&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="n">BUTTON</span><span class="p">,</span> <span class="n">_class</span><span class="o">=</span><span class="s">&#39;cls&#39;</span><span class="p">)</span>
+<span class="go">&#39;&lt;button class=&quot;cls&quot;&gt;foo&lt;/button&gt;&#39;</span>
 </pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
@@ -577,6 +577,37 @@ argument for <tt class="docutils literal"><span class="pre">empty</span></tt> sh
 </dd></dl>
 
 <dl class="function">
+<dt id="bottle_utils.html.form">
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">form</tt><big>(</big><em>method=None</em>, <em>action=None</em>, <em>csrf=False</em>, <em>multipart=False</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.form" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render open form tag. This function renders the open form tag with
+additional features, such as faux HTTP methods, CSRF token, and multipart
+support.</p>
+<p>All parameters are optional. Using this function without any argument has
+the same effect as naked form tag without any attributes.</p>
+<p>Method names can be either lowercase or uppercase.</p>
+<p>The methods other than GET and POST are faked using a hidden input with
+<tt class="docutils literal"><span class="pre">_method</span></tt> name and uppercase name of the HTTP method. The form will use
+POST method in this case. Server-side support is required for this feature
+to work.</p>
+<p>Any additional keyword arguments will be used as attributes for the form
+tag.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>method</strong> &#8211; HTTP method (GET, POST, PUT, DELETE, PATCH, etc)</li>
+<li><strong>action</strong> &#8211; action attribute</li>
+<li><strong>csrf</strong> &#8211; include CSRF protection token</li>
+<li><strong>multipart</strong> &#8211; make the form multipart</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="bottle_utils.html.field_error">
 <tt class="descclassname">bottle_utils.html.</tt><tt class="descname">field_error</tt><big>(</big><em>name</em>, <em>errors</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#field_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.field_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders error message for single form field. This function renders a
@@ -645,6 +676,93 @@ name-error mappings</td>
 </dd></dl>
 
 </div>
+<div class="section" id="url-handling">
+<h2>URL handling<a class="headerlink" href="#url-handling" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="bottle_utils.html.to_qs">
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">to_qs</tt><big>(</big><em>mapping</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#to_qs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.to_qs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a mapping object to query string appended to current path. This
+function takes a <tt class="docutils literal"><span class="pre">bottle.MultiDict</span></tt> object or a <tt class="docutils literal"><span class="pre">dict</span></tt>-like object that
+supports <tt class="docutils literal"><span class="pre">items()</span></tt> call, and converts it to a query string appeneded to
+the path in the current request context.</p>
+<p>The values for each parameter is encoded as UTF-8 and escaped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mapping</strong> &#8211; <tt class="docutils literal"><span class="pre">bottle.MultiDict</span></tt> or <tt class="docutils literal"><span class="pre">dict</span></tt>-like object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current path with query string built from given mapping</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.html.add_qparam">
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">add_qparam</tt><big>(</big><em>param</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#add_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.add_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add query string parameter on current path in request context.</p>
+<p>The return value of this function is current request path with parameter
+appended.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>param</strong> &#8211; parameter name</li>
+<li><strong>value</strong> &#8211; value for the parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">path with query string parameter added</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.html.set_qparam">
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">set_qparam</tt><big>(</big><em>param</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#set_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.set_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace query string parameter on current path in request context.</p>
+<p>The return value of this function is current request path with parameter
+replaced.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>param</strong> &#8211; parameter name</li>
+<li><strong>value</strong> &#8211; value for the parameter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">path with query string parameter replaced</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.html.del_qparam">
+<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">del_qparam</tt><big>(</big><em>param</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#del_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.del_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove query string parameter on current path in request context.</p>
+<p>The return value of this function is current request path with parameter
+appended.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>param</strong> &#8211; parameter name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path with query string parameter removed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -658,6 +776,7 @@ name-error mappings</td>
 <li><a class="reference internal" href="#">Template helpers (<tt class="docutils literal"><span class="pre">bottle_utils.html</span></tt>)</a><ul>
 <li><a class="reference internal" href="#module-bottle_utils.html">Data formatting</a></li>
 <li><a class="reference internal" href="#html-rendering">HTML rendering</a></li>
+<li><a class="reference internal" href="#url-handling">URL handling</a></li>
 </ul>
 </li>
 </ul>
@@ -705,7 +824,7 @@ name-error mappings</td>
         <li class="right" >
           <a href="flash.html" title="Flash messages (bottle_utils.flash)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

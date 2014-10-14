@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bottle_utils.common &mdash; Bottle Utils 0.1a2 documentation</title>
+    <title>bottle_utils.common &mdash; Bottle Utils 0.1a4 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1a2',
+        VERSION:     '0.1a4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Bottle Utils 0.1a2 documentation" href="../../index.html" />
+    <link rel="top" title="Bottle Utils 0.1a4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -99,11 +99,13 @@
 <span class="sd">    :param encoding:    character set for decoding bytestrings</span>
 <span class="sd">    :returns:           value as Unicode string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">v</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">encoding</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoding</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">UnicodeEncodeError</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
 
 </div>
@@ -204,7 +206,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

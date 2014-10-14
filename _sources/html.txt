@@ -41,5 +41,14 @@ HTML rendering
 .. autofunction:: varea
 .. autofunction:: vcheckbox
 .. autofunction:: vselect
+.. autofunction:: form
 .. autofunction:: field_error
 .. autofunction:: form_errors
+
+URL handling
+------------
+
+.. autofunction:: to_qs
+.. autofunction:: add_qparam
+.. autofunction:: set_qparam
+.. autofunction:: del_qparam

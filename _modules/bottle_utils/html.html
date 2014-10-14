@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bottle_utils.html &mdash; Bottle Utils 0.1a2 documentation</title>
+    <title>bottle_utils.html &mdash; Bottle Utils 0.1a4 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1a2',
+        VERSION:     '0.1a4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Bottle Utils 0.1a2 documentation" href="../../index.html" />
+    <link rel="top" title="Bottle Utils 0.1a4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -483,22 +483,23 @@
 <span class="sd">                    checked)</span>
 <span class="sd">    :returns:       HTML markup for the checkbox with bound value</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;_id&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">getall</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="n">values</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="p">[])</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
                 <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;checked&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="k">elif</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">unicode</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]:</span>
             <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;checked&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">elif</span> <span class="n">default</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">default</span><span class="p">:</span>
             <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;checked&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
     <span class="k">elif</span> <span class="s">&#39;checked&#39;</span> <span class="ow">in</span> <span class="n">attrs</span><span class="p">:</span>
         <span class="k">del</span> <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;checked&#39;</span><span class="p">]</span>
-    <span class="k">return</span> <span class="n">INPUT</span><span class="p">(</span><span class="n">_type</span><span class="o">=</span><span class="s">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">_id</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">INPUT</span><span class="p">(</span><span class="n">_type</span><span class="o">=</span><span class="s">&#39;checkbox&#39;</span><span class="p">,</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="vselect"><a class="viewcode-back" href="../../html.html#bottle_utils.html.vselect">[docs]</a><span class="k">def</span> <span class="nf">vselect</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">choices</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">empty</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
@@ -540,19 +541,68 @@
 <span class="sd">    :param empty:   label for empty value</span>
 <span class="sd">    :returns:       HTML markup for the select list with bound value</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">&#39;_id&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
     <span class="n">options</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">val</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">choices</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">val</span> <span class="o">==</span> <span class="n">value</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">==</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OPTION</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">val</span><span class="p">,</span> <span class="n">selected</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">options</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">OPTION</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">val</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">empty</span><span class="p">:</span>
         <span class="n">options</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">OPTION</span><span class="p">(</span><span class="n">empty</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="bp">None</span><span class="p">))</span>
-    <span class="k">return</span> <span class="n">SELECT</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">_id</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">SELECT</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">options</span><span class="p">),</span> <span class="n">_name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="link_other"><a class="viewcode-back" href="../../html.html#bottle_utils.html.link_other">[docs]</a><span class="k">def</span> <span class="nf">link_other</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="o">*</span><span class="n">kw</span><span class="p">:</span> <span class="n">l</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="form"><a class="viewcode-back" href="../../html.html#bottle_utils.html.form">[docs]</a><span class="k">def</span> <span class="nf">form</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">csrf</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Render open form tag. This function renders the open form tag with</span>
+<span class="sd">    additional features, such as faux HTTP methods, CSRF token, and multipart</span>
+<span class="sd">    support.</span>
+
+<span class="sd">    All parameters are optional. Using this function without any argument has</span>
+<span class="sd">    the same effect as naked form tag without any attributes.</span>
+
+<span class="sd">    Method names can be either lowercase or uppercase.</span>
+
+<span class="sd">    The methods other than GET and POST are faked using a hidden input with</span>
+<span class="sd">    ``_method`` name and uppercase name of the HTTP method. The form will use</span>
+<span class="sd">    POST method in this case. Server-side support is required for this feature</span>
+<span class="sd">    to work.</span>
+
+<span class="sd">    Any additional keyword arguments will be used as attributes for the form</span>
+<span class="sd">    tag.</span>
+
+<span class="sd">    :param method:      HTTP method (GET, POST, PUT, DELETE, PATCH, etc)</span>
+<span class="sd">    :param action:      action attribute</span>
+<span class="sd">    :param csrf:        include CSRF protection token</span>
+<span class="sd">    :param multipart:   make the form multipart</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">method</span> <span class="o">=</span> <span class="n">method</span> <span class="ow">and</span> <span class="n">method</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">method</span><span class="p">:</span>
+        <span class="n">faux_method</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;GET&#39;</span><span class="p">,</span> <span class="s">&#39;POST&#39;</span><span class="p">]:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">method</span>
+        <span class="n">faux_method</span> <span class="o">=</span> <span class="bp">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;method&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;POST&#39;</span>
+        <span class="n">faux_method</span> <span class="o">=</span> <span class="bp">True</span>
+    <span class="k">if</span> <span class="n">multipart</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;enctype&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&#39;multipart/form-data&#39;</span>
+    <span class="k">if</span> <span class="n">action</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">attrs</span><span class="p">[</span><span class="s">&#39;action&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">tag</span><span class="p">(</span><span class="s">&#39;form&#39;</span><span class="p">,</span> <span class="n">nonclosing</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">faux_method</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">HIDDEN</span><span class="p">(</span><span class="s">&#39;_method&#39;</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">csrf</span><span class="p">:</span>
+        <span class="c"># Import csrf_tag here to avoid circular dependency, since the csrf</span>
+        <span class="c"># module uses functions from this module</span>
+        <span class="kn">from</span> <span class="nn">.csrf</span> <span class="kn">import</span> <span class="n">csrf_tag</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">csrf_tag</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+</div>
+<div class="viewcode-block" id="link_other"><a class="viewcode-back" href="../../html.html#bottle_utils.html.link_other">[docs]</a><span class="k">def</span> <span class="nf">link_other</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">wrapper</span><span class="o">=</span><span class="n">SPAN</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Only wrap label in anchor if given URL is not the path. Given a label, this</span>
 <span class="sd">    function will match the page URL against the path to which the label should</span>
@@ -563,14 +613,14 @@
 <span class="sd">    :py:func:`~bottle_utils.html.tag` function.</span>
 
 <span class="sd">    If the URLs match (meaning the page URL matches the target path), the label</span>
-<span class="sd">    will be passed to the wrapper function. The default behavior of the wrapper</span>
-<span class="sd">    function is to return the label as is. The label is thus returned as is if</span>
-<span class="sd">    the URLs match.</span>
-<span class="sd">    ::</span>
+<span class="sd">    will be passed to the wrapper function. The default wrapper function is</span>
+<span class="sd">    :py:func:`~bottle_utils.html.SPAN`, so the label is wrapped in SPAN tag</span>
+<span class="sd">    when the URLs matches.::</span>
+
 <span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/here&#39;, &#39;/there&#39;)</span>
 <span class="sd">        &#39;&lt;a href=&quot;/target&quot;&gt;foo&lt;/a&gt;&#39;</span>
 <span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/there&#39;, &#39;/there&#39;)</span>
-<span class="sd">        &#39;foo&#39;</span>
+<span class="sd">        &#39;&lt;span&gt;foo&lt;/span&gt;&#39;</span>
 
 <span class="sd">    You can customize the appearance of the label in the case URLs match by</span>
 <span class="sd">    customizing the wrapper::</span>
@@ -585,10 +635,10 @@
 <span class="sd">    can specify them as extra keyword arguments and use any of the helper</span>
 <span class="sd">    functions in this module.::</span>
 
-<span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/here&#39;, &#39;/there&#39;, wrapper=SPAN, _class=&#39;cls&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/here&#39;, &#39;/there&#39;, wrapper=BUTTON, _class=&#39;cls&#39;)</span>
 <span class="sd">        &#39;&lt;a class=&quot;cls&quot; href=&quot;/target&quot;&gt;foo&lt;/a&gt;&#39;</span>
-<span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/there&#39;, &#39;/there&#39;, wrapper=SPAN, _class=&#39;cls&#39;)</span>
-<span class="sd">        &#39;&lt;span class=&quot;cls&quot;&gt;foo&lt;/span&gt;&#39;</span>
+<span class="sd">        &gt;&gt;&gt; link_other(&#39;foo&#39;, &#39;/there&#39;, &#39;/there&#39;, wrapper=BUTTON, _class=&#39;cls&#39;)</span>
+<span class="sd">        &#39;&lt;button class=&quot;cls&quot;&gt;foo&lt;/button&gt;&#39;</span>
 
 <span class="sd">    :param label:   label of the link</span>
 <span class="sd">    :param url:     URL to which label should be linked</span>
@@ -668,15 +718,29 @@
                  <span class="n">_class</span><span class="o">=</span><span class="n">FERR_CLS</span><span class="p">)</span>
 
 </div>
-<span class="k">def</span> <span class="nf">add_qparam</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<div class="viewcode-block" id="to_qs"><a class="viewcode-back" href="../../html.html#bottle_utils.html.to_qs">[docs]</a><span class="k">def</span> <span class="nf">to_qs</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Add query string parameter to current path in request context.</span>
+<span class="sd">    Convert a mapping object to query string appended to current path. This</span>
+<span class="sd">    function takes a ``bottle.MultiDict`` object or a ``dict``-like object that</span>
+<span class="sd">    supports ``items()`` call, and converts it to a query string appeneded to</span>
+<span class="sd">    the path in the current request context.</span>
 
-<span class="sd">    This function will overwrite existing parameters. If an existing parameter</span>
-<span class="sd">    has multiple values (e.g., ``?q=1&amp;q=2``) only the first one is overwritten,</span>
-<span class="sd">    but the order in which the values are added to the params dictionary may</span>
-<span class="sd">    not necessarily match the order in which they appear in the URL, so this</span>
-<span class="sd">    should be avoided.</span>
+<span class="sd">    The values for each parameter is encoded as UTF-8 and escaped.</span>
+
+<span class="sd">    :param mapping:     ``bottle.MultiDict`` or ``dict``-like object</span>
+<span class="sd">    :returns:           current path with query string built from given mapping</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="n">mapping</span><span class="o">.</span><span class="n">allitems</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="n">mapping</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">])</span>
+
+</div>
+<div class="viewcode-block" id="add_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.add_qparam">[docs]</a><span class="k">def</span> <span class="nf">add_qparam</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add query string parameter on current path in request context.</span>
 
 <span class="sd">    The return value of this function is current request path with parameter</span>
 <span class="sd">    appended.</span>
@@ -686,12 +750,43 @@
 <span class="sd">    :returns:       path with query string parameter added</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
-    <span class="n">params</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-    <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)))</span>
-         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">allitems</span><span class="p">()]</span>
-    <span class="p">)</span>
-</pre></div>
+    <span class="n">params</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">to_qs</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="set_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.set_qparam">[docs]</a><span class="k">def</span> <span class="nf">set_qparam</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Replace query string parameter on current path in request context.</span>
+
+<span class="sd">    The return value of this function is current request path with parameter</span>
+<span class="sd">    replaced.</span>
+
+<span class="sd">    :param param:   parameter name</span>
+<span class="sd">    :param value:   value for the parameter</span>
+<span class="sd">    :returns:       path with query string parameter replaced</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="n">params</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">to_qs</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="del_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.del_qparam">[docs]</a><span class="k">def</span> <span class="nf">del_qparam</span><span class="p">(</span><span class="n">param</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Remove query string parameter on current path in request context.</span>
+
+<span class="sd">    The return value of this function is current request path with parameter</span>
+<span class="sd">    appended.</span>
+
+<span class="sd">    :param param:   parameter name</span>
+<span class="sd">    :returns:       path with query string parameter removed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">params</span><span class="p">[</span><span class="n">param</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">return</span> <span class="n">to_qs</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</pre></div></div>
 
           </div>
         </div>
@@ -724,7 +819,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bottle_utils.i18n &mdash; Bottle Utils 0.1a2 documentation</title>
+    <title>bottle_utils.i18n &mdash; Bottle Utils 0.1a4 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1a2',
+        VERSION:     '0.1a4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="Bottle Utils 0.1a2 documentation" href="../../index.html" />
+    <link rel="top" title="Bottle Utils 0.1a4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -61,6 +61,9 @@
 <span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">request</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">BaseTemplate</span>
 
 <span class="kn">from</span> <span class="nn">.lazy</span> <span class="kn">import</span> <span class="n">lazy</span><span class="p">,</span> <span class="n">caching_lazy</span>
+
+
+<span class="n">CONTEXT_SEPARATOR</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\x04</span><span class="s">&#39;</span>
 
 
 <div class="viewcode-block" id="dummy_gettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.dummy_gettext">[docs]</a><span class="k">def</span> <span class="nf">dummy_gettext</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
@@ -96,6 +99,35 @@
     <span class="k">return</span> <span class="n">plural</span>
 
 </div>
+<div class="viewcode-block" id="dummy_pgettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.dummy_pgettext">[docs]</a><span class="k">def</span> <span class="nf">dummy_pgettext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mimic ``pgettext()`` function. This is a passthrough function with the same</span>
+<span class="sd">    signature as ``pgettext()``. It can be used to simulate translation for</span>
+<span class="sd">    applications that are untranslated, without the overhead of calling the</span>
+<span class="sd">    real ``pgettext()`.</span>
+
+<span class="sd">    :param context:     message context (ignored)</span>
+<span class="sd">    :param message:     translatable message</span>
+<span class="sd">    :returns:           unmodified message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dummy_gettext</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="dummy_npgettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.dummy_npgettext">[docs]</a><span class="k">def</span> <span class="nf">dummy_npgettext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">singular</span><span class="p">,</span> <span class="n">plural</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Mimic ``npgettext()`` function. This is a passthrough function with teh</span>
+<span class="sd">    same signature as ``npgettext()``. It can be used to simulate translation</span>
+<span class="sd">    for applications that are untranslated, without the overhead of calling the</span>
+<span class="sd">    real ``npgettext()`` function.</span>
+
+<span class="sd">    :param singular:    singular message string</span>
+<span class="sd">    :param plural:      plural message string</span>
+<span class="sd">    :param n:           count</span>
+<span class="sd">    :returns:           unmodified singular or plural message</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dummy_ngettext</span><span class="p">(</span><span class="n">singular</span><span class="p">,</span> <span class="n">plural</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+</div>
 <span class="nd">@lazy</span>
 <div class="viewcode-block" id="lazy_gettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.lazy_gettext">[docs]</a><span class="k">def</span> <span class="nf">lazy_gettext</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -128,6 +160,50 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">ngettext</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">gettext</span><span class="o">.</span><span class="n">ngettext</span>
     <span class="k">return</span> <span class="n">ngettext</span><span class="p">(</span><span class="n">singular</span><span class="p">,</span> <span class="n">plural</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="lazy_pgettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.lazy_pgettext">[docs]</a><span class="k">def</span> <span class="nf">lazy_pgettext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :py:func:`bottle_utils.i18n.lazy_gettext` wrapper with message context.</span>
+
+<span class="sd">    This function is a wrapper around :py:func:`bottle_utils.i18n.lazy_gettext`</span>
+<span class="sd">    that provides message context. It is useful in situations where short</span>
+<span class="sd">    messages (usually one word) are used in several different contexts for</span>
+<span class="sd">    which separate translations may be needed in different languages.</span>
+
+<span class="sd">    The function itself is not lazily evaluated, but its return value comes</span>
+<span class="sd">    from ``lazy_gettext()`` call, and it is effectively lazy as a result.</span>
+
+<span class="sd">    :param context:     message context</span>
+<span class="sd">    :param message:     translatable message</span>
+<span class="sd">    :returns:           lazy proxy object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s%s%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">CONTEXT_SEPARATOR</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lazy_gettext</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="lazy_npgettext"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.lazy_npgettext">[docs]</a><span class="k">def</span> <span class="nf">lazy_npgettext</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">singular</span><span class="p">,</span> <span class="n">plural</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :py:func:`bottle_utils.i18n.lazy_ngettext` wrapper with message context.</span>
+
+<span class="sd">    This function is a wrapper around</span>
+<span class="sd">    :py:func:`bottle_utils.i18n.lazy_ngettext`</span>
+<span class="sd">    that provides message context. It is useful in situations where messages</span>
+<span class="sd">    are used in several different contexts for which separate translations may</span>
+<span class="sd">    be required for different languages.</span>
+
+<span class="sd">    The function itself is not lazy, but it returns the return value of</span>
+<span class="sd">    ``lazy_ngettext()``, and it is effectively lazy. Hence the name.</span>
+
+<span class="sd">    :param context:     message context</span>
+<span class="sd">    :param singular:    translatable singular message</span>
+<span class="sd">    :param plural:      translatable plural message</span>
+<span class="sd">    :param n:           count</span>
+<span class="sd">    :returns:           lazy proxy object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">singular</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s%s%s</span><span class="s">&#39;</span>  <span class="o">%</span> <span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">CONTEXT_SEPARATOR</span><span class="p">,</span> <span class="n">singular</span><span class="p">)</span>
+    <span class="n">plural</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s%s%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">CONTEXT_SEPARATOR</span><span class="p">,</span> <span class="n">plural</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">lazy_ngettext</span><span class="p">(</span><span class="n">singular</span><span class="p">,</span> <span class="n">plural</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="full_path"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.full_path">[docs]</a><span class="k">def</span> <span class="nf">full_path</span><span class="p">():</span>
@@ -197,6 +273,8 @@
 <span class="sd">    - ``_``: alias for ``lazy_gettext``</span>
 <span class="sd">    - ``gettext``: alias for ``lazy_gettext``</span>
 <span class="sd">    - ``ngettext``: alias for ``lazy_ngettext``</span>
+<span class="sd">    - ``pgettext``: alias for ``lazy_pgettext``</span>
+<span class="sd">    - ``pngettext``: alias for ``lazy_pngettext``</span>
 <span class="sd">    - ``i18n_path``</span>
 <span class="sd">    - ``languages``: iterable containing available languages as ``(locale,</span>
 <span class="sd">      name)`` tuples</span>
@@ -284,6 +362,8 @@
             <span class="s">&#39;_&#39;</span><span class="p">:</span> <span class="n">lazy_gettext</span><span class="p">,</span>
             <span class="s">&#39;gettext&#39;</span><span class="p">:</span> <span class="n">lazy_gettext</span><span class="p">,</span>
             <span class="s">&#39;ngettext&#39;</span><span class="p">:</span> <span class="n">lazy_ngettext</span><span class="p">,</span>
+            <span class="s">&#39;pgettext&#39;</span><span class="p">:</span> <span class="n">lazy_pgettext</span><span class="p">,</span>
+            <span class="s">&#39;npgettext&#39;</span><span class="p">:</span> <span class="n">lazy_npgettext</span><span class="p">,</span>
             <span class="s">&#39;i18n_path&#39;</span><span class="p">:</span> <span class="n">i18n_path</span><span class="p">,</span>
             <span class="s">&#39;languages&#39;</span><span class="p">:</span> <span class="n">langs</span><span class="p">,</span>
         <span class="p">})</span>
@@ -316,6 +396,7 @@
             <span class="n">request</span><span class="o">.</span><span class="n">original_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;ORIGINAL_PATH&#39;</span><span class="p">,</span>
                                                         <span class="n">request</span><span class="o">.</span><span class="n">fullpath</span><span class="p">)</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">ignored</span><span class="p">:</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_locale</span>
                 <span class="n">request</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;LOCALE&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">locale</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locales</span><span class="p">:</span>
                     <span class="c"># If no locale had been specified, redirect to default one</span>
@@ -391,7 +472,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

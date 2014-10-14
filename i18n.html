@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Translation support (bottle_utils.i18n) &mdash; Bottle Utils 0.1a2 documentation</title>
+    <title>Translation support (bottle_utils.i18n) &mdash; Bottle Utils 0.1a4 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1a2',
+        VERSION:     '0.1a4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Bottle Utils 0.1a2 documentation" href="index.html" />
+    <link rel="top" title="Bottle Utils 0.1a4 documentation" href="index.html" />
     <link rel="next" title="Lazy evaluation (bottle_utils.lazy)" href="lazy.html" />
     <link rel="prev" title="HTTP helpers (bottle_utils.http)" href="http.html" /> 
   </head>
@@ -43,7 +43,7 @@
         <li class="right" >
           <a href="http.html" title="HTTP helpers (bottle_utils.http)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -169,6 +169,8 @@ become available in all templates:</p>
 <li><tt class="docutils literal"><span class="pre">_</span></tt>: alias for <tt class="docutils literal"><span class="pre">lazy_gettext</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">gettext</span></tt>: alias for <tt class="docutils literal"><span class="pre">lazy_gettext</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">ngettext</span></tt>: alias for <tt class="docutils literal"><span class="pre">lazy_ngettext</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">pgettext</span></tt>: alias for <tt class="docutils literal"><span class="pre">lazy_pgettext</span></tt></li>
+<li><tt class="docutils literal"><span class="pre">pngettext</span></tt>: alias for <tt class="docutils literal"><span class="pre">lazy_pngettext</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">i18n_path</span></tt></li>
 <li><tt class="docutils literal"><span class="pre">languages</span></tt>: iterable containing available languages as <tt class="docutils literal"><span class="pre">(locale,</span>
 <span class="pre">name)</span></tt> tuples</li>
@@ -364,6 +366,55 @@ otherwise the verbatim plural message.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="bottle_utils.i18n.dummy_npgettext">
+<tt class="descclassname">bottle_utils.i18n.</tt><tt class="descname">dummy_npgettext</tt><big>(</big><em>context</em>, <em>singular</em>, <em>plural</em>, <em>n</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/i18n.html#dummy_npgettext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.i18n.dummy_npgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic <tt class="docutils literal"><span class="pre">npgettext()</span></tt> function. This is a passthrough function with teh
+same signature as <tt class="docutils literal"><span class="pre">npgettext()</span></tt>. It can be used to simulate translation
+for applications that are untranslated, without the overhead of calling the
+real <tt class="docutils literal"><span class="pre">npgettext()</span></tt> function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>singular</strong> &#8211; singular message string</li>
+<li><strong>plural</strong> &#8211; plural message string</li>
+<li><strong>n</strong> &#8211; count</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">unmodified singular or plural message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.i18n.dummy_pgettext">
+<tt class="descclassname">bottle_utils.i18n.</tt><tt class="descname">dummy_pgettext</tt><big>(</big><em>context</em>, <em>message</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/i18n.html#dummy_pgettext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.i18n.dummy_pgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mimic <tt class="docutils literal"><span class="pre">pgettext()</span></tt> function. This is a passthrough function with the same
+signature as <tt class="docutils literal"><span class="pre">pgettext()</span></tt>. It can be used to simulate translation for
+applications that are untranslated, without the overhead of calling the
+real <a href="#id1"><span class="problematic" id="id2">``</span></a>pgettext()`.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>context</strong> &#8211; message context (ignored)</li>
+<li><strong>message</strong> &#8211; translatable message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">unmodified message</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="bottle_utils.i18n.full_path">
 <tt class="descclassname">bottle_utils.i18n.</tt><tt class="descname">full_path</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/i18n.html#full_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.i18n.full_path" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate full path including query string for current request. This is a
@@ -449,6 +500,63 @@ for current request.</p>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="bottle_utils.i18n.lazy_npgettext">
+<tt class="descclassname">bottle_utils.i18n.</tt><tt class="descname">lazy_npgettext</tt><big>(</big><em>context</em>, <em>singular</em>, <em>plural</em>, <em>n</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/i18n.html#lazy_npgettext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.i18n.lazy_npgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#bottle_utils.i18n.lazy_ngettext" title="bottle_utils.i18n.lazy_ngettext"><tt class="xref py py-func docutils literal"><span class="pre">bottle_utils.i18n.lazy_ngettext()</span></tt></a> wrapper with message context.</p>
+<p>This function is a wrapper around
+<a class="reference internal" href="#bottle_utils.i18n.lazy_ngettext" title="bottle_utils.i18n.lazy_ngettext"><tt class="xref py py-func docutils literal"><span class="pre">bottle_utils.i18n.lazy_ngettext()</span></tt></a>
+that provides message context. It is useful in situations where messages
+are used in several different contexts for which separate translations may
+be required for different languages.</p>
+<p>The function itself is not lazy, but it returns the return value of
+<tt class="docutils literal"><span class="pre">lazy_ngettext()</span></tt>, and it is effectively lazy. Hence the name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>context</strong> &#8211; message context</li>
+<li><strong>singular</strong> &#8211; translatable singular message</li>
+<li><strong>plural</strong> &#8211; translatable plural message</li>
+<li><strong>n</strong> &#8211; count</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">lazy proxy object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.i18n.lazy_pgettext">
+<tt class="descclassname">bottle_utils.i18n.</tt><tt class="descname">lazy_pgettext</tt><big>(</big><em>context</em>, <em>message</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/i18n.html#lazy_pgettext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.i18n.lazy_pgettext" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#bottle_utils.i18n.lazy_gettext" title="bottle_utils.i18n.lazy_gettext"><tt class="xref py py-func docutils literal"><span class="pre">bottle_utils.i18n.lazy_gettext()</span></tt></a> wrapper with message context.</p>
+<p>This function is a wrapper around <a class="reference internal" href="#bottle_utils.i18n.lazy_gettext" title="bottle_utils.i18n.lazy_gettext"><tt class="xref py py-func docutils literal"><span class="pre">bottle_utils.i18n.lazy_gettext()</span></tt></a>
+that provides message context. It is useful in situations where short
+messages (usually one word) are used in several different contexts for
+which separate translations may be needed in different languages.</p>
+<p>The function itself is not lazily evaluated, but its return value comes
+from <tt class="docutils literal"><span class="pre">lazy_gettext()</span></tt> call, and it is effectively lazy as a result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>context</strong> &#8211; message context</li>
+<li><strong>message</strong> &#8211; translatable message</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">lazy proxy object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -513,7 +621,7 @@ for current request.</p>
         <li class="right" >
           <a href="http.html" title="HTTP helpers (bottle_utils.http)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a2 documentation</a> &raquo;</li> 
+        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
