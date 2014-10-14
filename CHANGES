@@ -4,6 +4,7 @@
   - Fixed manifest to include the LICENSE file
   - Fixed link_other to use SPAN as default wrapper
   - Fixed unicode issue in to_unicode common function
+  - Default locale is now available on request object
 
 2014-09-19 : v0.1a3 : Bugfixes and minor updates
   - Changed documentation to reflect actual behavior of add_qparam
