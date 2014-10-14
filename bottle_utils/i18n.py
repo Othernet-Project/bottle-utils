@@ -224,6 +224,8 @@ class I18NPlugin(object):
     - ``_``: alias for ``lazy_gettext``
     - ``gettext``: alias for ``lazy_gettext``
     - ``ngettext``: alias for ``lazy_ngettext``
+    - ``pgettext``: alias for ``lazy_pgettext``
+    - ``pngettext``: alias for ``lazy_pngettext``
     - ``i18n_path``
     - ``languages``: iterable containing available languages as ``(locale,
       name)`` tuples
