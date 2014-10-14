@@ -1,4 +1,6 @@
 0000-00-00 : MASTER : Latest development version
+
+2014-10-14 : v0.1a4 : Bugfixes and minor updates
   - Added helper function for generating form tags
   - Added pgettext and npgettext functions to i18n module
   - Fixed manifest to include the LICENSE file
