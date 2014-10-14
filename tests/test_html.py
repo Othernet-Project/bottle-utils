@@ -270,7 +270,7 @@ def test_link_other():
     assert_tag(s, 'a')
     assert_attr(s, 'href', '/bar')
     s = link_other('foo', '/bar', '/bar')
-    assert s == 'foo'
+    assert s == '<span>foo</span>'
 
 
 def test_link_other_alternative_wrapper():
