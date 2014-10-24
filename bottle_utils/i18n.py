@@ -190,6 +190,9 @@ def i18n_path(path=None, locale=None):
     """
     path = path or full_path()
     locale = locale or request.locale
+    if not locale:
+        # This is a bit unexpected, but it obviously can happen
+        return path
     return '/{}{}'.format(locale.lower(), path)
 
 
@@ -225,7 +228,7 @@ class I18NPlugin(object):
     - ``gettext``: alias for ``lazy_gettext``
     - ``ngettext``: alias for ``lazy_ngettext``
     - ``pgettext``: alias for ``lazy_pgettext``
-    - ``pngettext``: alias for ``lazy_pngettext``
+    - ``npgettext``: alias for ``lazy_pngettext``
     - ``i18n_path``
     - ``languages``: iterable containing available languages as ``(locale,
       name)`` tuples
@@ -353,7 +356,8 @@ class I18NPlugin(object):
                     # If no locale had been specified, redirect to default one
                     path = request.original_path
                     redirect(i18n_path(path, self.default_locale))
-                request.gettext = self.gettext_apis[locale]
+                else:
+                    request.gettext = self.gettext_apis[locale]
             return callback(*args, **kwargs)
         return wrapper
 
