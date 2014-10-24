@@ -355,7 +355,7 @@ class I18NPlugin(object):
                 if locale not in self.locales:
                     # If no locale had been specified, redirect to default one
                     path = request.original_path
-                    redirect(i18n_path(path, self.default_locale))
+                    redirect(unicode(i18n_path(path, self.default_locale)))
                 else:
                     request.gettext = self.gettext_apis[locale]
             return callback(*args, **kwargs)
