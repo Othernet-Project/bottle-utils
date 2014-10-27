@@ -9,7 +9,7 @@ import re
 import gettext
 from warnings import warn
 
-from bottle import request, redirect, BaseTemplate
+from bottle import request, redirect, BaseTemplate, template
 
 from .lazy import lazy, caching_lazy
 
@@ -194,6 +194,44 @@ def i18n_path(path=None, locale=None):
         # This is a bit unexpected, but it obviously can happen
         return path
     return '/{}{}'.format(locale.lower(), path)
+
+
+def i18n_view(tpl_base_name=None, **defaults):
+    """
+    Renders a template with locale name as suffix. Unlike the normal view
+    decorator, the template name should not have an extension. The locale names
+    are appended to the base template name using underscore ('_') as separator,
+    and lower-case locale identifier.
+
+    Any additional keyword arguments are used as default template variables.
+
+    For example::
+
+        @i18n_view('foo')
+        def render_foo():
+            # Renders 'foo_en' for English locale, 'foo_fr' for French, etc.
+            return
+
+    :param tpl_base_name:   base template name
+    """
+    def decorator(func):
+        @functools.wrap(func)
+        def wrapper(*args, **kwargs):
+            try:
+                locale = request.locale
+                tpl_name = '%s_%s' % (tpl_base_name, locale.lower())
+            except AttributeError:
+                tpl_name = tpl_base_name
+            tplvars = defaults.copy()
+            result = func(*args, **kwargs)
+            if isinstance(result, (dict, DictMixin)):
+                tplvars.update(result)
+                return template(tpl_name, **tplvars)
+            elif result is None:
+                return template(tpl_name, **tplvars)
+            return result
+        return wrapper
+    return decorator
 
 
 class I18NWarning(RuntimeWarning):
