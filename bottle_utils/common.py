@@ -55,7 +55,7 @@ def to_unicode(v, encoding=None):
     try:
         if encoding:
             return v.decode(encoding)
-        return v.decode()
+        return v.decode('utf8')
     except (AttributeError, UnicodeEncodeError):
         return unicode(v)
 
