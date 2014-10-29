@@ -7,9 +7,10 @@
 
 import re
 import gettext
+import functools
 from warnings import warn
 
-from bottle import request, redirect, BaseTemplate, template
+from bottle import request, redirect, BaseTemplate, template, DictMixin
 
 from .lazy import lazy, caching_lazy
 
@@ -215,12 +216,12 @@ def i18n_view(tpl_base_name=None, **defaults):
     :param tpl_base_name:   base template name
     """
     def decorator(func):
-        @functools.wrap(func)
+        @functools.wraps(func)
         def wrapper(*args, **kwargs):
             try:
                 locale = request.locale
                 tpl_name = '%s_%s' % (tpl_base_name, locale.lower())
-            except AttributeError:
+            except AttributeError as err:
                 tpl_name = tpl_base_name
             tplvars = defaults.copy()
             result = func(*args, **kwargs)
