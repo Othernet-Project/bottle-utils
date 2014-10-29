@@ -1,5 +1,6 @@
 0000-00-00 : MASTER : Latest development version
   - Minor i18n-related fix.
+  - Decorator to automatically select templates based on locale
 
 2014-10-14 : v0.1a4 : Bugfixes and minor updates
   - Added helper function for generating form tags
