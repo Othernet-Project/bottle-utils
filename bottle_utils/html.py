@@ -291,7 +291,7 @@ def tag(name, content='', nonclosing=False, **attrs):
     """
     open_tag = '<%s>' % name
     close_tag = '</%s>' % name
-    attrs = ' '.join([attr(k.lstrip('_'), v) for k, v in attrs.items()])
+    attrs = ' '.join([attr(k.lstrip('_'), to_unicode(v)) for k, v in attrs.items()])
     if attrs:
         open_tag = '<%s %s>' % (name, attrs)
     if nonclosing:
@@ -299,11 +299,11 @@ def tag(name, content='', nonclosing=False, **attrs):
         close_tag = ''
     if not isinstance(content, basestring):
         try:
-            return ''.join(['%s%s%s' % (open_tag, c, close_tag)
+            return ''.join(['%s%s%s' % (open_tag, to_unicode(c), close_tag)
                             for c in content])
         except TypeError:
             pass
-    return '%s%s%s' % (open_tag, content, close_tag)
+    return '%s%s%s' % (open_tag, to_unicode(content), close_tag)
 
 
 SPAN = functools.partial(tag, 'span')
