@@ -222,7 +222,7 @@ def i18n_view(tpl_base_name=None, **defaults):
             try:
                 locale = request.locale
                 tpl_name = '%s_%s' % (tpl_base_name, locale.lower())
-            except AttributeError:
+            except AttributeError as err:
                 tpl_name = tpl_base_name
             tplvars = defaults.copy()
             result = func(*args, **kwargs)
