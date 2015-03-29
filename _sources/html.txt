@@ -48,7 +48,8 @@ HTML rendering
 URL handling
 ------------
 
-.. autofunction:: to_qs
+.. autoclass:: QueryDict
+   :members: __init__, add_qparam, set_qparam, del_qparam
 .. autofunction:: add_qparam
 .. autofunction:: set_qparam
 .. autofunction:: del_qparam

@@ -76,55 +76,74 @@
 <span class="n">ERR_CLS</span> <span class="o">=</span> <span class="s">&#39;field-error&#39;</span>
 
 
-<span class="k">class</span> <span class="nc">QueryDict</span><span class="p">(</span><span class="n">FormsDict</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Represents a query string in ``bottle.FormsDict`` format &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="QueryDict"><a class="viewcode-back" href="../../html.html#bottle_utils.html.QueryDict">[docs]</a><span class="k">class</span> <span class="nc">QueryDict</span><span class="p">(</span><span class="n">FormsDict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Represents a query string in ``bottle.FormsDict`` format</span>
+
+<span class="sd">    This class differs from the base ``bottle.FormsDict`` class in two ways.</span>
+<span class="sd">    First, it is instantiated with raw query string, rather than a list of</span>
+<span class="sd">    two-tuples::</span>
+
+<span class="sd">        &gt;&gt;&gt; q = QueryDict(&#39;a=1&amp;b=2&#39;)</span>
+
+<span class="sd">    The query string is parsed and converted to ``FormsDict`` format. This</span>
+<span class="sd">    works exactly the same way as ``request.query``.</span>
+
+<span class="sd">    Second difference is the way string coercion is handled. ``QueryDict``</span>
+<span class="sd">    instances can be converted back into a query string by coercing them into</span>
+<span class="sd">    string or bytestring::</span>
+
+<span class="sd">        &gt;&gt;&gt; str(q)</span>
+<span class="sd">        &#39;a=1&amp;b=2&#39;</span>
+
+<span class="sd">    Note that the order of parameters in the resulting query string may differ</span>
+<span class="sd">    from the original.</span>
+
+<span class="sd">    Furthermore, additional methods have been added to provide chaining</span>
+<span class="sd">    capability in conjunction with ``*_qparam()`` functions in this module.</span>
+
+<span class="sd">    For instance::</span>
+
+<span class="sd">        &gt;&gt;&gt; q = QueryDict(&#39;a=1&amp;b=2&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; q.del_qparam(&#39;a&#39;).set_qparam(b=3).add_qparam(d=2, k=12)</span>
+<span class="sd">        &gt;&gt;&gt; str(s)</span>
+<span class="sd">        &#39;b=3&amp;d=2&amp;k=12&#39;</span>
+
+<span class="sd">    When used with functions like py:func:`~bottle_utils.html.add_qparam()`,</span>
+<span class="sd">    this provides a more intuitive API::</span>
+
+<span class="sd">        &gt;&gt;&gt; qs = &#39;a=1&amp;b=2&#39;</span>
+<span class="sd">        &gt;&gt;&gt; q = add_qparam(qs, c=2).set_qparam(a=2)</span>
+<span class="sd">        &gt;&gt;&gt; str(q)</span>
+<span class="sd">        &#39;a=2&amp;b=2&amp;c=2&#39;</span>
+
+<span class="sd">    Since this class is a ``bottle.FormsDict`` subclass, you can expect it to</span>
+<span class="sd">    behave the same way as a regular ``FormsDict`` object. You can assign</span>
+<span class="sd">    values to keys, get values by key, get all items as a list of key-value</span>
+<span class="sd">    tuples, and so on. Please consult the Bottle documentation for more</span>
+<span class="sd">    information on how ``FormsDict`` objects work.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="QueryDict.__init__"><a class="viewcode-back" href="../../html.html#bottle_utils.html.QueryDict.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qs</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        This class differs from the base ``bottle.FormsDict`` class in two</span>
-<span class="sd">        ways.  First, it is instantiated with q raw query string, rather than a</span>
-<span class="sd">        list of two-tuples::</span>
-
-<span class="sd">            &gt;&gt;&gt; q = QueryDict(&#39;a=1&amp;b=2&#39;)</span>
-
-<span class="sd">        The query string is parsed and converted to ``FormsDict`` format. This</span>
-<span class="sd">        works exactly the same way as ``request.query``.</span>
-
-<span class="sd">        Second difference is the way string coercion is handled. ``QueryDict``</span>
-<span class="sd">        instances can be converted back into a query string by coercing them</span>
-<span class="sd">        into string or bytestring::</span>
-
-<span class="sd">            &gt;&gt;&gt; str(q)</span>
-<span class="sd">            &#39;a=1&amp;b=2&#39;</span>
-
-<span class="sd">        Note that the order of parameters in the resulting query string may</span>
-<span class="sd">        differ from the original.</span>
-
-<span class="sd">        Further more, additional methods have been added to provide chaining</span>
-<span class="sd">        capability in conjunction with ``*_qparam()`` functions in this module.</span>
-
-<span class="sd">        Since this class is a ``bottle.FormsDict`` subclass, you can expect it</span>
-<span class="sd">        to behave the same way as a regular ``FormsDict`` object. You can</span>
-<span class="sd">        assign values to keys, get values by key, get all items as a list of</span>
-<span class="sd">        key-value tuples, and so on. Please consult the Bottle documentation</span>
-<span class="sd">        for more information on how ``FormsDict`` objects work.</span>
+<span class="sd">        :param qs:  raw query string</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">QueryDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">_parse_qsl</span><span class="p">(</span><span class="n">qs</span><span class="p">))</span>
-
-    <span class="k">def</span> <span class="nf">add_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="QueryDict.add_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.QueryDict.add_qparam">[docs]</a>    <span class="k">def</span> <span class="nf">add_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Add query parameter</span>
 
 <span class="sd">        Any keyword arguments passed to this function will be converted to</span>
 <span class="sd">        query parameters.</span>
 
-<span class="sd">        Returns the instance for further chainign.</span>
+<span class="sd">        Returns the instance for further chaining.</span>
 
 <span class="sd">        :returns:   this instance</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">set_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="QueryDict.set_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.QueryDict.set_qparam">[docs]</a>    <span class="k">def</span> <span class="nf">set_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Replace or add parameter</span>
 
 <span class="sd">        Any keyword arguments passed to this function will be converted to</span>
@@ -137,8 +156,8 @@
         <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="nb">unicode</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span>
-
-    <span class="k">def</span> <span class="nf">del_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">):</span>
+</div>
+<div class="viewcode-block" id="QueryDict.del_qparam"><a class="viewcode-back" href="../../html.html#bottle_utils.html.QueryDict.del_qparam">[docs]</a>    <span class="k">def</span> <span class="nf">del_qparam</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Replace or add parameter</span>
 
 <span class="sd">        Takes any number of parameter names to be removed.</span>
@@ -153,7 +172,7 @@
             <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="k">pass</span>
         <span class="k">return</span> <span class="bp">self</span>
-
+</div>
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;{}={}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)))</span>
                          <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">allitems</span><span class="p">()])</span>
@@ -162,7 +181,7 @@
 
 <span class="c"># DATA FORMATTING</span>
 
-
+</div>
 <div class="viewcode-block" id="plur"><a class="viewcode-back" href="../../html.html#bottle_utils.html.plur">[docs]</a><span class="k">def</span> <span class="nf">plur</span><span class="p">(</span><span class="n">word</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">plural</span><span class="o">=</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">,</span>
          <span class="n">convert</span><span class="o">=</span><span class="k">lambda</span> <span class="n">w</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="n">w</span> <span class="o">+</span> <span class="s">&#39;s&#39;</span> <span class="k">if</span> <span class="n">p</span> <span class="k">else</span> <span class="n">w</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -800,7 +819,7 @@
         <span class="k">return</span> <span class="n">P</span><span class="p">(</span><span class="n">SPAN</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">_class</span><span class="o">=</span><span class="n">FERR_ONE_CLS</span><span class="p">),</span> <span class="n">_class</span><span class="o">=</span><span class="n">FERR_CLS</span><span class="p">)</span>
 
 </div>
-<div class="viewcode-block" id="to_qs"><a class="viewcode-back" href="../../html.html#bottle_utils.html.to_qs">[docs]</a><span class="k">def</span> <span class="nf">to_qs</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">to_qs</span><span class="p">(</span><span class="n">mapping</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert a mapping object to query string appended to current path. This</span>
 <span class="sd">    function takes a ``bottle.MultiDict`` object or a ``dict``-like object that</span>
@@ -819,7 +838,7 @@
     <span class="k">return</span> <span class="n">request</span><span class="o">.</span><span class="n">path</span> <span class="o">+</span> <span class="s">&#39;?&#39;</span> <span class="o">+</span> <span class="s">&#39;&amp;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
         <span class="p">[</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">=</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">quote</span><span class="p">(</span><span class="n">v</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s">&#39;utf8&#39;</span><span class="p">)))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">pairs</span><span class="p">])</span>
 
-</div>
+
 <span class="n">_to_qdict</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">qs</span><span class="p">:</span> <span class="n">QueryDict</span><span class="p">(</span><span class="n">qs</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">qs</span><span class="p">,</span> <span class="nb">basestring</span><span class="p">)</span> <span class="k">else</span> <span class="n">qs</span>
 
 
