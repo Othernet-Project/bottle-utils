@@ -28,6 +28,7 @@ setup(
         'bottle-utils-http==%s' % VERSION,
         'bottle-utils-i18n==%s' % VERSION,
         'bottle-utils-lazy==%s' % VERSION,
+        'bottle-utils-meta==%s' % VERSION,
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
