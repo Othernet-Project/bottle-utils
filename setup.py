@@ -6,10 +6,11 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 VERSION = '0.3'
+RELEASE = '0.3.1'
 
 setup(
     name='bottle-utils',
-    version=VERSION,
+    version=RELEASE,
     author='Outernet Inc',
     author_email='branko@outernet.is',
     description=('Assortment of frequently used utilities for Bottle '
@@ -20,15 +21,15 @@ setup(
     packages=find_packages(),
     long_description=read('README.rst'),
     install_requires=[
-        'bottle-utils-common==%s' % VERSION,
-        'bottle-utils-ajax==%s' % VERSION,
-        'bottle-utils-csrf==%s' % VERSION,
-        'bottle-utils-flash==%s' % VERSION,
-        'bottle-utils-html==%s' % VERSION,
-        'bottle-utils-http==%s' % VERSION,
-        'bottle-utils-i18n==%s' % VERSION,
-        'bottle-utils-lazy==%s' % VERSION,
-        'bottle-utils-meta==%s' % VERSION,
+        'bottle-utils-common~=%s' % VERSION,
+        'bottle-utils-ajax~=%s' % VERSION,
+        'bottle-utils-csrf~=%s' % VERSION,
+        'bottle-utils-flash~=%s' % VERSION,
+        'bottle-utils-html~=%s' % VERSION,
+        'bottle-utils-http~=%s' % VERSION,
+        'bottle-utils-i18n~=%s' % VERSION,
+        'bottle-utils-lazy~=%s' % VERSION,
+        'bottle-utils-meta~=%s' % VERSION,
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
