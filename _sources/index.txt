@@ -19,14 +19,27 @@ release of Bottle.
 Installation
 ============
 
-Install using ``pip`` or ``easy_install``::
+The ``bottle-utils`` package is a virtual package that bundles togehter several
+related packages that, together, comprise Bottle Utils. You can install all
+related packages by installing this package::
 
     pip install bottle-utils
 
-To install the latest development version, install using the master zipball
-URL::
+    easy_install bottle-utils
 
-    pip install https://github.com/Outernet-Project/bottle-utils/archive/master.zip
+You can also install individual packages. Here is a list of all packages that
+are part of Bottle Utils:
+
+- ``bottle-utils-common`` - Common functionalities shared by other packages
+- ``bottle-utils-ajax`` - Decorators for AJAX-specific handlers
+- ``bottle-utils-csrf`` - Decorators for CSRF protection
+- ``bottle-utils-flash`` - Plugin and methods for flash messaging
+- ``bottle-utils-html`` - Functions for use in HTML templates
+- ``bottle-utils-http`` - Decorators for managing HTTP reponse headers
+- ``bottle-utils-i18n`` - Support for internationalization
+- ``bottle-utils-lazy`` - Provides functionality for lazy evaluation of 
+  callables
+- ``bottle-utils-meta`` - Classes for handling page/social metadata
 
 Source code
 ===========

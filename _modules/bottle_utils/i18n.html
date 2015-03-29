@@ -8,7 +8,7 @@
     
     <title>bottle_utils.i18n &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="Bottle Utils 0.1a4 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,15 +36,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for bottle_utils.i18n</h1><div class="highlight"><pre>
 <span class="sd">&quot;&quot;&quot;</span>
@@ -54,13 +54,13 @@
 <span class="sd">.. moduleauthor:: Outernet Inc &lt;hello@outernet.is&gt;</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">gettext</span>
+<span class="kn">import</span> <span class="nn">functools</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">request</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">BaseTemplate</span>
+<span class="kn">from</span> <span class="nn">bottle</span> <span class="kn">import</span> <span class="n">request</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">BaseTemplate</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">DictMixin</span>
 
-<span class="kn">from</span> <span class="nn">.lazy</span> <span class="kn">import</span> <span class="n">lazy</span><span class="p">,</span> <span class="n">caching_lazy</span>
+<span class="kn">from</span> <span class="nn">.lazy</span> <span class="kn">import</span> <span class="n">lazy</span>
 
 
 <span class="n">CONTEXT_SEPARATOR</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\x04</span><span class="s">&#39;</span>
@@ -239,7 +239,68 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">path</span> <span class="o">=</span> <span class="n">path</span> <span class="ow">or</span> <span class="n">full_path</span><span class="p">()</span>
     <span class="n">locale</span> <span class="o">=</span> <span class="n">locale</span> <span class="ow">or</span> <span class="n">request</span><span class="o">.</span><span class="n">locale</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">locale</span><span class="p">:</span>
+        <span class="c"># This is a bit unexpected, but it obviously can happen</span>
+        <span class="k">return</span> <span class="n">path</span>
     <span class="k">return</span> <span class="s">&#39;/{}{}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">locale</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">path</span><span class="p">)</span>
+
+</div>
+<span class="nd">@lazy</span>
+<div class="viewcode-block" id="i18n_url"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.i18n_url">[docs]</a><span class="k">def</span> <span class="nf">i18n_url</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a named route in localized form</span>
+
+<span class="sd">    This function is a light wrapper around Bottle&#39;s ``get_url()`` function. It</span>
+<span class="sd">    passes the result to :py:func:`~bottle_utils.i18n.i18n_path`.</span>
+
+<span class="sd">    If ``locale`` keyword argument is passed, it will be used instead of the</span>
+<span class="sd">    currently selected locale.</span>
+
+<span class="sd">    :param route:   name of the route</span>
+<span class="sd">    :returns:       localized path for the specified route</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">locale</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;locale&#39;</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">locale</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get_url</span><span class="p">(</span><span class="n">route</span><span class="p">,</span> <span class="o">**</span><span class="n">params</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">i18n_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">locale</span><span class="o">=</span><span class="n">locale</span><span class="p">)</span>
+
+
+</div>
+<div class="viewcode-block" id="i18n_view"><a class="viewcode-back" href="../../i18n.html#bottle_utils.i18n.i18n_view">[docs]</a><span class="k">def</span> <span class="nf">i18n_view</span><span class="p">(</span><span class="n">tpl_base_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Renders a template with locale name as suffix. Unlike the normal view</span>
+<span class="sd">    decorator, the template name should not have an extension. The locale names</span>
+<span class="sd">    are appended to the base template name using underscore (&#39;_&#39;) as separator,</span>
+<span class="sd">    and lower-case locale identifier.</span>
+
+<span class="sd">    Any additional keyword arguments are used as default template variables.</span>
+
+<span class="sd">    For example::</span>
+
+<span class="sd">        @i18n_view(&#39;foo&#39;)</span>
+<span class="sd">        def render_foo():</span>
+<span class="sd">            # Renders &#39;foo_en&#39; for English locale, &#39;foo_fr&#39; for French, etc.</span>
+<span class="sd">            return</span>
+
+<span class="sd">    :param tpl_base_name:   base template name</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="nd">@functools.wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">locale</span>
+                <span class="n">tpl_name</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s">_</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tpl_base_name</span><span class="p">,</span> <span class="n">locale</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">tpl_name</span> <span class="o">=</span> <span class="n">tpl_base_name</span>
+            <span class="n">tplvars</span> <span class="o">=</span> <span class="n">defaults</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">(</span><span class="nb">dict</span><span class="p">,</span> <span class="n">DictMixin</span><span class="p">)):</span>
+                <span class="n">tplvars</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">template</span><span class="p">(</span><span class="n">tpl_name</span><span class="p">,</span> <span class="o">**</span><span class="n">tplvars</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">result</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">template</span><span class="p">(</span><span class="n">tpl_name</span><span class="p">,</span> <span class="o">**</span><span class="n">tplvars</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span>
 
 </div>
 <span class="k">class</span> <span class="nc">I18NWarning</span><span class="p">(</span><span class="ne">RuntimeWarning</span><span class="p">):</span>
@@ -274,7 +335,7 @@
 <span class="sd">    - ``gettext``: alias for ``lazy_gettext``</span>
 <span class="sd">    - ``ngettext``: alias for ``lazy_ngettext``</span>
 <span class="sd">    - ``pgettext``: alias for ``lazy_pgettext``</span>
-<span class="sd">    - ``pngettext``: alias for ``lazy_pngettext``</span>
+<span class="sd">    - ``npgettext``: alias for ``lazy_pngettext``</span>
 <span class="sd">    - ``i18n_path``</span>
 <span class="sd">    - ``languages``: iterable containing available languages as ``(locale,</span>
 <span class="sd">      name)`` tuples</span>
@@ -358,6 +419,7 @@
                 <span class="n">warn</span><span class="p">(</span><span class="n">I18NWarning</span><span class="p">(</span><span class="s">&quot;No MO file found for &#39;</span><span class="si">%s</span><span class="s">&#39; locale&quot;</span> <span class="o">%</span> <span class="n">locale</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gettext_apis</span><span class="p">[</span><span class="n">locale</span><span class="p">]</span> <span class="o">=</span> <span class="n">api</span>
 
+        <span class="c"># Provide translation methods to templates</span>
         <span class="n">BaseTemplate</span><span class="o">.</span><span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
             <span class="s">&#39;_&#39;</span><span class="p">:</span> <span class="n">lazy_gettext</span><span class="p">,</span>
             <span class="s">&#39;gettext&#39;</span><span class="p">:</span> <span class="n">lazy_gettext</span><span class="p">,</span>
@@ -395,6 +457,11 @@
         <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="n">request</span><span class="o">.</span><span class="n">original_path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;ORIGINAL_PATH&#39;</span><span class="p">,</span>
                                                         <span class="n">request</span><span class="o">.</span><span class="n">fullpath</span><span class="p">)</span>
+            <span class="n">query_string</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;QUERY_STRING&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">query_string</span><span class="p">:</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">original_path</span> <span class="o">=</span> <span class="s">&#39;{0}?{1}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">original_path</span><span class="p">,</span>
+                                                         <span class="n">query_string</span><span class="p">)</span>
+
             <span class="k">if</span> <span class="ow">not</span> <span class="n">ignored</span><span class="p">:</span>
                 <span class="n">request</span><span class="o">.</span><span class="n">default_locale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_locale</span>
                 <span class="n">request</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="n">locale</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;LOCALE&#39;</span><span class="p">)</span>
@@ -402,7 +469,14 @@
                     <span class="c"># If no locale had been specified, redirect to default one</span>
                     <span class="n">path</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">original_path</span>
                     <span class="n">redirect</span><span class="p">(</span><span class="n">i18n_path</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_locale</span><span class="p">))</span>
-                <span class="n">request</span><span class="o">.</span><span class="n">gettext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gettext_apis</span><span class="p">[</span><span class="n">locale</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">request</span><span class="o">.</span><span class="n">gettext</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gettext_apis</span><span class="p">[</span><span class="n">locale</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c"># Dummy translation is used for paths which are excepted from</span>
+                <span class="c"># i18n plugin.</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">gettext</span> <span class="o">=</span> <span class="n">gettext</span><span class="o">.</span><span class="n">NullTranslations</span><span class="p">()</span>
+                <span class="n">request</span><span class="o">.</span><span class="n">locale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_locale</span>
+
             <span class="k">return</span> <span class="n">callback</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">wrapper</span>
 
@@ -444,9 +518,9 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -463,7 +537,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -472,13 +546,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

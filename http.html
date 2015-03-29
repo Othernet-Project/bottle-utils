@@ -8,7 +8,7 @@
     
     <title>HTTP helpers (bottle_utils.http) &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Translation support (bottle_utils.i18n)" href="i18n.html" />
     <link rel="prev" title="Template helpers (bottle_utils.html)" href="html.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,26 +43,84 @@
         <li class="right" >
           <a href="html.html" title="Template helpers (bottle_utils.html)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="http-helpers-bottle-utils-http">
-<h1>HTTP helpers (<tt class="docutils literal"><span class="pre">bottle_utils.http</span></tt>)<a class="headerlink" href="#http-helpers-bottle-utils-http" title="Permalink to this headline">¶</a></h1>
+<h1>HTTP helpers (<code class="docutils literal"><span class="pre">bottle_utils.http</span></code>)<a class="headerlink" href="#http-helpers-bottle-utils-http" title="Permalink to this headline">¶</a></h1>
 <p>This module provides decorators for working with HTTP headers and other aspects
 of HTTP.</p>
 <div class="section" id="module-bottle_utils.http">
 <span id="functions-and-decorators"></span><h2>Functions and decorators<a class="headerlink" href="#module-bottle_utils.http" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-bottle_utils.http"></span><dl class="function">
+<dt id="bottle_utils.http.format_ts">
+<code class="descclassname">bottle_utils.http.</code><code class="descname">format_ts</code><span class="sig-paren">(</span><em>seconds=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/http.html#format_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.format_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format timestamp expressed as seconds from epoch in RFC format</p>
+<p>If the <code class="docutils literal"><span class="pre">seconds</span></code> argument is omitted, or is <code class="docutils literal"><span class="pre">None</span></code>, the current time is
+used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>seconds</strong> &#8211; seconds since local system&#8217;s epoch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">formatted timestamp</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Private:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.http.get_mimetype">
+<code class="descclassname">bottle_utils.http.</code><code class="descname">get_mimetype</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/http.html#get_mimetype"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.get_mimetype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Guess mime-type based on file&#8217;s extension</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> &#8211; filename</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Private:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="bottle_utils.http.iter_read_range">
+<code class="descclassname">bottle_utils.http.</code><code class="descname">iter_read_range</code><span class="sig-paren">(</span><em>fd</em>, <em>offset</em>, <em>length</em>, <em>chunksize=1048576</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/http.html#iter_read_range"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.iter_read_range" title="Permalink to this definition">¶</a></dt>
+<dd><p>Like <code class="docutils literal"><span class="pre">bottle._file_iter_range</span></code> but does not fail on <code class="docutils literal"><span class="pre">seek()</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>fd</strong> &#8211; file-like object that may or may not support <code class="docutils literal"><span class="pre">seek()</span></code></li>
+<li><strong>offset</strong> &#8211; offset from the beginning in bytes</li>
+<li><strong>length</strong> &#8211; number of bytes to read</li>
+<li><strong>chunksize</strong> &#8211; maximum size of the chunk</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Private:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="bottle_utils.http.no_cache">
-<tt class="descclassname">bottle_utils.http.</tt><tt class="descname">no_cache</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/http.html#no_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.no_cache" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.http.</code><code class="descname">no_cache</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/http.html#no_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.no_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Disable caching on a handler. The decorated handler will have
-<tt class="docutils literal"><span class="pre">Cache-Control</span></tt> header set to <tt class="docutils literal"><span class="pre">private,</span> <span class="pre">no-cache</span></tt>.</p>
+<code class="docutils literal"><span class="pre">Cache-Control</span></code> header set to <code class="docutils literal"><span class="pre">private,</span> <span class="pre">no-cache</span></code>.</p>
 <p>This is useful for responses that contain data that cannot be reused.</p>
 <p>Simply deocrate a handler with it:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@app.get</span><span class="p">(</span><span class="s">&#39;/foo&#39;</span><span class="p">)</span>
@@ -73,6 +131,42 @@ of HTTP.</p>
 </div>
 </dd></dl>
 
+<dl class="function">
+<dt id="bottle_utils.http.send_file">
+<code class="descclassname">bottle_utils.http.</code><code class="descname">send_file</code><span class="sig-paren">(</span><em>content</em>, <em>filename</em>, <em>size</em>, <em>timestamp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/http.html#send_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.http.send_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a file represented by file object as HTTP response</p>
+<p>The code is partly based on <code class="docutils literal"><span class="pre">bottle.static_file</span></code>, with the main
+difference being the use of file-like objects instead of files on disk.</p>
+<p>This may be useful when you are generating file contents on the fly. The
+extra metadata must be supplied because we are not dealing with physical
+files here.</p>
+<p>Note that the returned response is a completely new response object.
+Modifying the reponse object in the current request context is not going to
+affect the object returned by this function. You should modify the object
+returned by this function instead.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">some_handler</span><span class="p">():</span>
+    <span class="kn">import</span> <span class="nn">StringIO</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">StringIO</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">send_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s">&#39;file.txt&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1293281312</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>content</strong> &#8211; file-like object</li>
+<li><strong>filename</strong> &#8211; filename to use</li>
+<li><strong>size</strong> &#8211; file size in bytes</li>
+<li><strong>timestamp</strong> &#8211; file&#8217;s timestamp seconds since epoch</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 </div>
 
@@ -80,11 +174,11 @@ of HTTP.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">HTTP helpers (<tt class="docutils literal"><span class="pre">bottle_utils.http</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">HTTP helpers (<code class="docutils literal"><span class="pre">bottle_utils.http</span></code>)</a><ul>
 <li><a class="reference internal" href="#module-bottle_utils.http">Functions and decorators</a></li>
 </ul>
 </li>
@@ -92,16 +186,18 @@ of HTTP.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="html.html"
-                        title="previous chapter">Template helpers (<tt class="docutils literal"><span class="pre">bottle_utils.html</span></tt>)</a></p>
+                        title="previous chapter">Template helpers (<code class="docutils literal"><span class="pre">bottle_utils.html</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="i18n.html"
-                        title="next chapter">Translation support (<tt class="docutils literal"><span class="pre">bottle_utils.i18n</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/http.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">Translation support (<code class="docutils literal"><span class="pre">bottle_utils.i18n</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/http.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -118,7 +214,7 @@ of HTTP.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -133,12 +229,12 @@ of HTTP.</p>
         <li class="right" >
           <a href="html.html" title="Template helpers (bottle_utils.html)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

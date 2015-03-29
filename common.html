@@ -8,7 +8,7 @@
     
     <title>Common utilities (bottle_utils.common) &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="AJAX (bottle_utils.ajax)" href="ajax.html" />
     <link rel="prev" title="Bottle Utils documentation" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,34 +43,34 @@
         <li class="right" >
           <a href="index.html" title="Bottle Utils documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="common-utilities-bottle-utils-common">
-<h1>Common utilities (<tt class="docutils literal"><span class="pre">bottle_utils.common</span></tt>)<a class="headerlink" href="#common-utilities-bottle-utils-common" title="Permalink to this headline">¶</a></h1>
-<p>The <tt class="docutils literal"><span class="pre">bottle_utils.common</span></tt> module contains functions and constants that are
+<h1>Common utilities (<code class="docutils literal"><span class="pre">bottle_utils.common</span></code>)<a class="headerlink" href="#common-utilities-bottle-utils-common" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">bottle_utils.common</span></code> module contains functions and constants that are
 used in other modules.</p>
 <p>This module also contains a few constants and variables that improve code that
 targets both Python 2.x and Python 3.x. Note, though, that this mostly works in
 the context of Bottle Utils and hasn&#8217;t been tested in too many different
 versions of Python. If you want a more comprehensive solution, you should look
 at <a class="reference external" href="https://pypi.python.org/pypi/six">six</a>.</p>
-<p><tt class="docutils literal"><span class="pre">bottle_utils.common.PY2</span></tt> is a constant that is set to <tt class="docutils literal"><span class="pre">True</span></tt> if Python
-version is 2.x. Conversely, <tt class="docutils literal"><span class="pre">bottle_utils.common.PY3</span></tt> is used to detect if
+<p><code class="docutils literal"><span class="pre">bottle_utils.common.PY2</span></code> is a constant that is set to <code class="docutils literal"><span class="pre">True</span></code> if Python
+version is 2.x. Conversely, <code class="docutils literal"><span class="pre">bottle_utils.common.PY3</span></code> is used to detect if
 Python version is 3.x.</p>
-<p>This module also contains names <tt class="docutils literal"><span class="pre">unicode</span></tt> and <tt class="docutils literal"><span class="pre">basestring</span></tt>, which work as
+<p>This module also contains names <code class="docutils literal"><span class="pre">unicode</span></code> and <code class="docutils literal"><span class="pre">basestring</span></code>, which work as
 expected in both Python 2.x and Python 3.x.</p>
 <div class="section" id="module-bottle_utils.common">
 <span id="functions"></span><h2>Functions<a class="headerlink" href="#module-bottle_utils.common" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-bottle_utils.common"></span><dl class="function">
 <dt id="bottle_utils.common.to_unicode">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">to_unicode</tt><big>(</big><em>v</em>, <em>encoding=None</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/common.html#to_unicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.to_unicode" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">to_unicode</code><span class="sig-paren">(</span><em>v</em>, <em>encoding=u'utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/common.html#to_unicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.to_unicode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a value to Unicode string (or just string in Py3). This function
 can be used to ensure string is a unicode string. This may be useful when
 input can be of different types (but meant to be used when input can be
@@ -95,7 +95,7 @@ string.</p>
 
 <dl class="function">
 <dt id="bottle_utils.common.to_bytes">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">to_bytes</tt><big>(</big><em>v</em>, <em>encoding=u'utf8'</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/common.html#to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.to_bytes" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">to_bytes</code><span class="sig-paren">(</span><em>v</em>, <em>encoding=u'utf8'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/common.html#to_bytes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.to_bytes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a value to bytestring (or just string in Py2). This function is
 useful when desired output is always a bytestring, and input can be any
 type (although it is intended to be used with strings and bytestrings).</p>
@@ -118,7 +118,7 @@ type (although it is intended to be used with strings and bytestrings).</p>
 
 <dl class="function">
 <dt id="bottle_utils.common.attr_escape">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">attr_escape</tt><big>(</big><em>attr</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/common.html#attr_escape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.attr_escape" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">attr_escape</code><span class="sig-paren">(</span><em>attr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/common.html#attr_escape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.attr_escape" title="Permalink to this definition">¶</a></dt>
 <dd><p>Escape HTML attribute values. This function escapes certain characters that
 are undesirable in HTML attributes. Functions that construct attribute
 values using user-supplied data should escape the values using this
@@ -137,17 +137,17 @@ function.</p>
 
 <dl class="function">
 <dt id="bottle_utils.common.html_escape">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">html_escape</tt><big>(</big><em>string</em><big>)</big><a class="headerlink" href="#bottle_utils.common.html_escape" title="Permalink to this definition">¶</a></dt>
-<dd><p>Escape HTML special characters <tt class="docutils literal"><span class="pre">&amp;&lt;&gt;</span></tt> and quotes <tt class="docutils literal"><span class="pre">'&quot;</span></tt>.</p>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">html_escape</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle.html#html_escape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.html_escape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Escape HTML special characters <code class="docutils literal"><span class="pre">&amp;&lt;&gt;</span></code> and quotes <code class="docutils literal"><span class="pre">'&quot;</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="bottle_utils.common.full_url">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">full_url</tt><big>(</big><em>path=u'/'</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/common.html#full_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.full_url" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">full_url</code><span class="sig-paren">(</span><em>path=u'/'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/common.html#full_url"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.full_url" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a specified path to full URL based on request data. This function
 uses the current request context information about the request URL to
 construct a full URL using specified path. In particular it uses
-<tt class="docutils literal"><span class="pre">bottle.request.urlparts</span></tt> to obtain information about scheme, hostname,
+<code class="docutils literal"><span class="pre">bottle.request.urlparts</span></code> to obtain information about scheme, hostname,
 and port (if any).</p>
 <p>Because it uses the request context, it cannot be called outside a request.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -164,9 +164,9 @@ and port (if any).</p>
 
 <dl class="function">
 <dt id="bottle_utils.common.urlquote">
-<tt class="descclassname">bottle_utils.common.</tt><tt class="descname">urlquote</tt><big>(</big><em>s</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/common.html#urlquote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.urlquote" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.common.</code><code class="descname">urlquote</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/common.html#urlquote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.common.urlquote" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quote (URL-encode) a string with Unicode support. This is a simple wrapper
-for <tt class="docutils literal"><span class="pre">urllib.quote</span></tt> (or <tt class="docutils literal"><span class="pre">urllib.parse.quote</span></tt>) that converts the input to
+for <code class="docutils literal"><span class="pre">urllib.quote</span></code> (or <code class="docutils literal"><span class="pre">urllib.parse.quote</span></code>) that converts the input to
 UTF-8-encoded bytestring before quoting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -187,11 +187,11 @@ UTF-8-encoded bytestring before quoting.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Common utilities (<tt class="docutils literal"><span class="pre">bottle_utils.common</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Common utilities (<code class="docutils literal"><span class="pre">bottle_utils.common</span></code>)</a><ul>
 <li><a class="reference internal" href="#module-bottle_utils.common">Functions</a></li>
 </ul>
 </li>
@@ -202,13 +202,15 @@ UTF-8-encoded bytestring before quoting.</p>
                         title="previous chapter">Bottle Utils documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ajax.html"
-                        title="next chapter">AJAX (<tt class="docutils literal"><span class="pre">bottle_utils.ajax</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/common.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">AJAX (<code class="docutils literal"><span class="pre">bottle_utils.ajax</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/common.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -225,7 +227,7 @@ UTF-8-encoded bytestring before quoting.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -240,12 +242,12 @@ UTF-8-encoded bytestring before quoting.</p>
         <li class="right" >
           <a href="index.html" title="Bottle Utils documentation"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>Flash messages (bottle_utils.flash) &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Template helpers (bottle_utils.html)" href="html.html" />
     <link rel="prev" title="CSRF protection (bottle_utils.csrf)" href="csrf.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,17 +43,17 @@
         <li class="right" >
           <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="flash-messages-bottle-utils-flash">
-<h1>Flash messages (<tt class="docutils literal"><span class="pre">bottle_utils.flash</span></tt>)<a class="headerlink" href="#flash-messages-bottle-utils-flash" title="Permalink to this headline">¶</a></h1>
+<h1>Flash messages (<code class="docutils literal"><span class="pre">bottle_utils.flash</span></code>)<a class="headerlink" href="#flash-messages-bottle-utils-flash" title="Permalink to this headline">¶</a></h1>
 <p>Flash messages are messages that are generated in one handler and displayed to
 the user in another. Commonly, this is done when you want to redirect to
 another path and still show the results of an operation performed in another.
@@ -64,17 +64,17 @@ most straightforward. This module provides methods for doing just that.</p>
 <div class="section" id="how-it-works">
 <h2>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
 <p>In order to make flash messaging available to your app, install the
-<a class="reference internal" href="#bottle_utils.flash.message_plugin" title="bottle_utils.flash.message_plugin"><tt class="xref py py-func docutils literal"><span class="pre">message_plugin()</span></tt></a> plugin.</p>
+<a class="reference internal" href="#bottle_utils.flash.message_plugin" title="bottle_utils.flash.message_plugin"><code class="xref py py-func docutils literal"><span class="pre">message_plugin()</span></code></a> plugin.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">bottle</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">message_plugin</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This makes <tt class="docutils literal"><span class="pre">bottle.request.message</span></tt> object and <tt class="docutils literal"><span class="pre">bottle.response.flash()</span></tt>
+<p>This makes <code class="docutils literal"><span class="pre">bottle.request.message</span></code> object and <code class="docutils literal"><span class="pre">bottle.response.flash()</span></code>
 method available to all request handlers. To set a message, use
-<tt class="docutils literal"><span class="pre">response.flash()</span></tt>:</p>
+<code class="docutils literal"><span class="pre">response.flash()</span></code>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">response</span><span class="o">.</span><span class="n">flash</span><span class="p">(</span><span class="s">&#39;This is my message&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>To show the message in the interface, make the <tt class="docutils literal"><span class="pre">request.message</span></tt> object
+<p>To show the message in the interface, make the <code class="docutils literal"><span class="pre">request.message</span></code> object
 available to your template&#8217;s context and simply output it in your template:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;p class=&quot;flash&quot;&gt;{{ message }}&lt;/p&gt;
 </pre></div>
@@ -97,7 +97,7 @@ user.</p>
 <span id="functions-and-plugins"></span><h2>Functions and plugins<a class="headerlink" href="#module-bottle_utils.flash" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-bottle_utils.flash"></span><dl class="function">
 <dt id="bottle_utils.flash.get_message">
-<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">get_message</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#get_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.get_message" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.flash.</code><code class="descname">get_message</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/flash.html#get_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.get_message" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return currently set message and delete the cookie. This function is lazily
 evaluated so it&#8217;s side effect of removing the cookie will only become
 effective when you actually use the message it returns.</p>
@@ -113,9 +113,9 @@ effective when you actually use the message it returns.</p>
 
 <dl class="function">
 <dt id="bottle_utils.flash.message_plugin">
-<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">message_plugin</tt><big>(</big><em>func</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#message_plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.message_plugin" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.flash.</code><code class="descname">message_plugin</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/flash.html#message_plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.message_plugin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manages flash messages. This is a Bottle plugin that adds attributes to
-<tt class="docutils literal"><span class="pre">bottle.request</span></tt> and <tt class="docutils literal"><span class="pre">bottle.response</span></tt> objects for setting and
+<code class="docutils literal"><span class="pre">bottle.request</span></code> and <code class="docutils literal"><span class="pre">bottle.response</span></code> objects for setting and
 consuming the flash messages.</p>
 <p>See <a class="reference internal" href="#how-it-works">How it works</a>.</p>
 <p>Example:</p>
@@ -126,10 +126,10 @@ consuming the flash messages.</p>
 
 <dl class="function">
 <dt id="bottle_utils.flash.set_message">
-<tt class="descclassname">bottle_utils.flash.</tt><tt class="descname">set_message</tt><big>(</big><em>msg</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/flash.html#set_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.set_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sets a message and makes it available via <tt class="docutils literal"><span class="pre">request</span></tt> object. This function
+<code class="descclassname">bottle_utils.flash.</code><code class="descname">set_message</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/flash.html#set_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.flash.set_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets a message and makes it available via <code class="docutils literal"><span class="pre">request</span></code> object. This function
 sets the message cookie and assigns the message to the
-<tt class="docutils literal"><span class="pre">bottle.request._message</span></tt> attribute.</p>
+<code class="docutils literal"><span class="pre">bottle.request._message</span></code> attribute.</p>
 <p>In Py2, the message is UTF-8 encoded.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,11 +148,11 @@ sets the message cookie and assigns the message to the
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Flash messages (<tt class="docutils literal"><span class="pre">bottle_utils.flash</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Flash messages (<code class="docutils literal"><span class="pre">bottle_utils.flash</span></code>)</a><ul>
 <li><a class="reference internal" href="#how-it-works">How it works</a></li>
 <li><a class="reference internal" href="#module-bottle_utils.flash">Functions and plugins</a></li>
 </ul>
@@ -161,16 +161,18 @@ sets the message cookie and assigns the message to the
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="csrf.html"
-                        title="previous chapter">CSRF protection (<tt class="docutils literal"><span class="pre">bottle_utils.csrf</span></tt>)</a></p>
+                        title="previous chapter">CSRF protection (<code class="docutils literal"><span class="pre">bottle_utils.csrf</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="html.html"
-                        title="next chapter">Template helpers (<tt class="docutils literal"><span class="pre">bottle_utils.html</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/flash.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">Template helpers (<code class="docutils literal"><span class="pre">bottle_utils.html</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/flash.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -187,7 +189,7 @@ sets the message cookie and assigns the message to the
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -202,12 +204,12 @@ sets the message cookie and assigns the message to the
         <li class="right" >
           <a href="csrf.html" title="CSRF protection (bottle_utils.csrf)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

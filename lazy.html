@@ -8,7 +8,7 @@
     
     <title>Lazy evaluation (bottle_utils.lazy) &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Social metadta (bottle_utils.meta)" href="meta.html" />
     <link rel="prev" title="Translation support (bottle_utils.i18n)" href="i18n.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,17 +43,17 @@
         <li class="right" >
           <a href="i18n.html" title="Translation support (bottle_utils.i18n)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="lazy-evaluation-bottle-utils-lazy">
-<h1>Lazy evaluation (<tt class="docutils literal"><span class="pre">bottle_utils.lazy</span></tt>)<a class="headerlink" href="#lazy-evaluation-bottle-utils-lazy" title="Permalink to this headline">¶</a></h1>
+<h1>Lazy evaluation (<code class="docutils literal"><span class="pre">bottle_utils.lazy</span></code>)<a class="headerlink" href="#lazy-evaluation-bottle-utils-lazy" title="Permalink to this headline">¶</a></h1>
 <p>This module provides classes and decorators for lazy evaluation of callables.</p>
 <p>The basic idea is that a decorated callable returns a proxy object instead of
 evaluating the callable immediately. This proxy object will then evaluate the
@@ -67,14 +67,14 @@ be a string return value. For most part, though, it works.</p>
 <span id="functions-and-classes"></span><h2>Functions and classes<a class="headerlink" href="#module-bottle_utils.lazy" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-bottle_utils.lazy"></span><dl class="class">
 <dt id="bottle_utils.lazy.Lazy">
-<em class="property">class </em><tt class="descclassname">bottle_utils.lazy.</tt><tt class="descname">Lazy</tt><big>(</big><em>func</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/lazy.html#Lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.Lazy" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">bottle_utils.lazy.</code><code class="descname">Lazy</code><span class="sig-paren">(</span><em>func</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/lazy.html#Lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.Lazy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Proxy object that evaluates a function when its value is needed. This
 object provides most of the magic methods found in Python <a class="reference external" href="https://docs.python.org/2/reference/datamodel.html">data model</a>, and wraps a
 callable waiting for any of them to be accessed. It evaluates the callable
 when the magic methods or any other attributes are accessed and returns the
 actual result of evaluation at that point.</p>
 <p>The proxy object always reevaluates the result. There is also a
-<tt class="xref py py-class docutils literal"><span class="pre">CachinLazy</span></tt> class which only evaluates once.</p>
+<code class="xref py py-class docutils literal"><span class="pre">CachinLazy</span></code> class which only evaluates once.</p>
 <p>A lazy object is instantiated with callable as first argument, followed by
 any arguments and keyword arguments that were originally passed to the
 callable.</p>
@@ -90,8 +90,8 @@ callable.</p>
 
 <dl class="class">
 <dt id="bottle_utils.lazy.CachingLazy">
-<em class="property">class </em><tt class="descclassname">bottle_utils.lazy.</tt><tt class="descname">CachingLazy</tt><big>(</big><em>func</em>, <em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/lazy.html#CachingLazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.CachingLazy" title="Permalink to this definition">¶</a></dt>
-<dd><p>Caching version of the <a class="reference internal" href="#bottle_utils.lazy.Lazy" title="bottle_utils.lazy.Lazy"><tt class="xref py py-class docutils literal"><span class="pre">Lazy</span></tt></a> class. The only
+<em class="property">class </em><code class="descclassname">bottle_utils.lazy.</code><code class="descname">CachingLazy</code><span class="sig-paren">(</span><em>func</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/lazy.html#CachingLazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.CachingLazy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Caching version of the <a class="reference internal" href="#bottle_utils.lazy.Lazy" title="bottle_utils.lazy.Lazy"><code class="xref py py-class docutils literal"><span class="pre">Lazy</span></code></a> class. The only
 difference is that this class caches the results of evaluation and
 evaluates only once.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -106,9 +106,9 @@ evaluates only once.</p>
 
 <dl class="function">
 <dt id="bottle_utils.lazy.lazy">
-<tt class="descclassname">bottle_utils.lazy.</tt><tt class="descname">lazy</tt><big>(</big><em>fn</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/lazy.html#lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.lazy" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.lazy.</code><code class="descname">lazy</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/lazy.html#lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.lazy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a function into lazily evaluated version. This decorator sets us a
-<a class="reference internal" href="#bottle_utils.lazy.Lazy" title="bottle_utils.lazy.Lazy"><tt class="xref py py-class docutils literal"><span class="pre">bottle_utils.lazy.Lazy</span></tt></a> proxy for decorated function.</p>
+<a class="reference internal" href="#bottle_utils.lazy.Lazy" title="bottle_utils.lazy.Lazy"><code class="xref py py-class docutils literal"><span class="pre">bottle_utils.lazy.Lazy</span></code></a> proxy for decorated function.</p>
 <p>Usage is simple:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@lazy</span>
 <span class="k">def</span> <span class="nf">my_lazy_func</span><span class="p">():</span>
@@ -119,9 +119,9 @@ evaluates only once.</p>
 
 <dl class="function">
 <dt id="bottle_utils.lazy.caching_lazy">
-<tt class="descclassname">bottle_utils.lazy.</tt><tt class="descname">caching_lazy</tt><big>(</big><em>fn</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/lazy.html#caching_lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.caching_lazy" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.lazy.</code><code class="descname">caching_lazy</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/lazy.html#caching_lazy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.lazy.caching_lazy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a function into lazily evaluated version. This decorator sets us a
-<a class="reference internal" href="#bottle_utils.lazy.CachingLazy" title="bottle_utils.lazy.CachingLazy"><tt class="xref py py-class docutils literal"><span class="pre">bottle_utils.lazy.CachingLazy</span></tt></a> proxy for decorated function.</p>
+<a class="reference internal" href="#bottle_utils.lazy.CachingLazy" title="bottle_utils.lazy.CachingLazy"><code class="xref py py-class docutils literal"><span class="pre">bottle_utils.lazy.CachingLazy</span></code></a> proxy for decorated function.</p>
 <p>This decorator has no arguments:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="nd">@caching_lazy</span>
 <span class="k">def</span> <span class="nf">my_lazy_func</span><span class="p">():</span>
@@ -137,11 +137,11 @@ evaluates only once.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Lazy evaluation (<tt class="docutils literal"><span class="pre">bottle_utils.lazy</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Lazy evaluation (<code class="docutils literal"><span class="pre">bottle_utils.lazy</span></code>)</a><ul>
 <li><a class="reference internal" href="#module-bottle_utils.lazy">Functions and classes</a></li>
 </ul>
 </li>
@@ -149,16 +149,18 @@ evaluates only once.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="i18n.html"
-                        title="previous chapter">Translation support (<tt class="docutils literal"><span class="pre">bottle_utils.i18n</span></tt>)</a></p>
+                        title="previous chapter">Translation support (<code class="docutils literal"><span class="pre">bottle_utils.i18n</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="meta.html"
-                        title="next chapter">Social metadta (<tt class="docutils literal"><span class="pre">bottle_utils.meta</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/lazy.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">Social metadta (<code class="docutils literal"><span class="pre">bottle_utils.meta</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lazy.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -175,7 +177,7 @@ evaluates only once.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -190,12 +192,12 @@ evaluates only once.</p>
         <li class="right" >
           <a href="i18n.html" title="Translation support (bottle_utils.i18n)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

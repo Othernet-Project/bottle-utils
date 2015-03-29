@@ -8,7 +8,7 @@
     
     <title>Template helpers (bottle_utils.html) &mdash; Bottle Utils 0.1a4 documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="HTTP helpers (bottle_utils.http)" href="http.html" />
     <link rel="prev" title="Flash messages (bottle_utils.flash)" href="flash.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,17 +43,17 @@
         <li class="right" >
           <a href="flash.html" title="Flash messages (bottle_utils.flash)"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="template-helpers-bottle-utils-html">
-<h1>Template helpers (<tt class="docutils literal"><span class="pre">bottle_utils.html</span></tt>)<a class="headerlink" href="#template-helpers-bottle-utils-html" title="Permalink to this headline">¶</a></h1>
+<h1>Template helpers (<code class="docutils literal"><span class="pre">bottle_utils.html</span></code>)<a class="headerlink" href="#template-helpers-bottle-utils-html" title="Permalink to this headline">¶</a></h1>
 <p>Contents of this module are mostly meant to be used inside the Bottle&#8217;s
 SimpleTemplate templates. It contains a few data-formatting functions as well
 as shortcuts for generating HTML snippets and binding data to form fields.</p>
@@ -64,26 +64,26 @@ itself as a default template variable.:</p>
 <span class="n">bottle</span><span class="o">.</span><span class="n">BaseTemplate</span><span class="o">.</span><span class="n">defaults</span><span class="p">[</span><span class="s">&#39;h&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">html</span>
 </pre></div>
 </div>
-<p>This allows you to use the module members by access the <tt class="docutils literal"><span class="pre">h</span></tt> variable in
+<p>This allows you to use the module members by access the <code class="docutils literal"><span class="pre">h</span></code> variable in
 templates:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;html {{! h.attr(&#39;lang&#39;, request.locale }}&gt;
 </pre></div>
 </div>
 <p>Note that, since some of these function generate HTML markup, you need to make
-sure they are not escaped by Bottle. Use the <tt class="docutils literal"><span class="pre">{{!</span> <span class="pre">}}</span></tt> syntax (with bang, !)
+sure they are not escaped by Bottle. Use the <code class="docutils literal"><span class="pre">{{!</span> <span class="pre">}}</span></code> syntax (with bang, !)
 to allow unescaped HTML markup.</p>
 <div class="section" id="module-bottle_utils.html">
 <span id="data-formatting"></span><h2>Data formatting<a class="headerlink" href="#module-bottle_utils.html" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-bottle_utils.html"></span><dl class="function">
 <dt id="bottle_utils.html.hsize">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">hsize</tt><big>(</big><em>size</em>, <em>unit=u'B'</em>, <em>step=1024</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#hsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.hsize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">hsize</code><span class="sig-paren">(</span><em>size</em>, <em>unit=u'B'</em>, <em>step=1024</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#hsize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.hsize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given size in unit produce size with human-friendly units. This is a simple
 formatting function that takes a value, a unit in which the value is
 expressed, and the size of multiple (kilo, mega, giga, etc).</p>
 <p>This function rounds values to 2 decimal places and does not handle
 fractions. It also uses metric prefixes (K, M, G, etc) and only goes up to
 Peta (P, quadrillion) prefix.</p>
-<p>The size multiple (<tt class="docutils literal"><span class="pre">step</span></tt> parameter) is 1024 by default, suitable for
+<p>The size multiple (<code class="docutils literal"><span class="pre">step</span></code> parameter) is 1024 by default, suitable for
 expressing values related to size of data on disk.</p>
 <p>Example:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">hsize</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
@@ -116,21 +116,21 @@ expressing values related to size of data on disk.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.plur">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">plur</tt><big>(</big><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x0380E130&gt;</em>, <em>convert=&lt;function &lt;lambda&gt; at 0x03889030&gt;</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">plur</code><span class="sig-paren">(</span><em>word</em>, <em>n</em>, <em>plural=&lt;function &lt;lambda&gt; at 0x037185F0&gt;</em>, <em>convert=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#plur"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.plur" title="Permalink to this definition">¶</a></dt>
 <dd><p>Pluralize word based on number of items. This function provides rudimentary
 pluralization support. It is quite flexible, but not a replacement for
-functions like <tt class="docutils literal"><span class="pre">ngettext</span></tt>.</p>
-<p>This function takes two optional arguments, <tt class="docutils literal"><span class="pre">plural()</span></tt> and <tt class="docutils literal"><span class="pre">convert()</span></tt>,
+functions like <code class="docutils literal"><span class="pre">ngettext</span></code>.</p>
+<p>This function takes two optional arguments, <code class="docutils literal"><span class="pre">plural()</span></code> and <code class="docutils literal"><span class="pre">convert()</span></code>,
 which can be customized to change the way plural form is derived from the
 original string. The default implementation is a naive version of English
 language plural, which uses plural form if number is not 1, and derives the
 plural form by simply adding &#8216;s&#8217; to the word. While this works in most
 cases, it doesn&#8217;t always work even for English.</p>
-<p>The <tt class="docutils literal"><span class="pre">plural(n)</span></tt> function takes the value of the <tt class="docutils literal"><span class="pre">n</span></tt> argument and its
-return value is fed into the <tt class="docutils literal"><span class="pre">convert()</span></tt> function. The latter takes the
-source word as first argument, and return value of <tt class="docutils literal"><span class="pre">plural()</span></tt> call as
+<p>The <code class="docutils literal"><span class="pre">plural(n)</span></code> function takes the value of the <code class="docutils literal"><span class="pre">n</span></code> argument and its
+return value is fed into the <code class="docutils literal"><span class="pre">convert()</span></code> function. The latter takes the
+source word as first argument, and return value of <code class="docutils literal"><span class="pre">plural()</span></code> call as
 second argument, and returns a string representing the pluralized word.
-Return value of the <tt class="docutils literal"><span class="pre">convert(w,</span> <span class="pre">p)</span></tt> call is returned from this function.</p>
+Return value of the <code class="docutils literal"><span class="pre">convert(w,</span> <span class="pre">p)</span></code> call is returned from this function.</p>
 <p>Here are some simple examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plur</span><span class="p">(</span><span class="s">&#39;book&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="go">&#39;book&#39;</span>
@@ -178,12 +178,12 @@ used</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.strft">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">strft</tt><big>(</big><em>ts</em>, <em>fmt</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#strft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.strft" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">strft</code><span class="sig-paren">(</span><em>ts</em>, <em>fmt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#strft"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.strft" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reformat string datestamp/timestamp. This function parses a string
 representation of a date and/or time and reformats it using specified
 format.</p>
 <p>The format is standard strftime format used in Python&#8217;s
-<tt class="docutils literal"><span class="pre">datetime.datetime.strftime()</span></tt> call.</p>
+<code class="docutils literal"><span class="pre">datetime.datetime.strftime()</span></code> call.</p>
 <p>Actual parsing of the input is delegated to
 <a class="reference external" href="https://pypi.python.org/pypi/python-dateutil">python-dateutil</a> library.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -205,8 +205,8 @@ format.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.trunc">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">trunc</tt><big>(</big><em>s</em>, <em>chars</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#trunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.trunc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Trucante string at <tt class="docutils literal"><span class="pre">n</span></tt> characters. This function hard-trucates a string
+<code class="descclassname">bottle_utils.html.</code><code class="descname">trunc</code><span class="sig-paren">(</span><em>s</em>, <em>chars</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#trunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.trunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trucante string at <code class="docutils literal"><span class="pre">n</span></code> characters. This function hard-trucates a string
 at specified number of characters and appends an elipsis to the end.</p>
 <p>The truncating does not take into account words or markup. Elipsis is not
 appended if the string is shorter than the specified number of characters.</p>
@@ -217,7 +217,7 @@ appended if the string is shorter than the specified number of characters.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Keep in mind that the trucated string is always 3 characters longer than
-<tt class="docutils literal"><span class="pre">n</span></tt> because of the appended elipsis.</p>
+<code class="docutils literal"><span class="pre">n</span></code> because of the appended elipsis.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -238,10 +238,10 @@ appended if the string is shorter than the specified number of characters.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.yesno">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">yesno</tt><big>(</big><em>val</em>, <em>yes=u'yes'</em>, <em>no=u'no'</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#yesno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.yesno" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return <tt class="docutils literal"><span class="pre">yes</span></tt> or <tt class="docutils literal"><span class="pre">no</span></tt> depending on value. This function takes the value
+<code class="descclassname">bottle_utils.html.</code><code class="descname">yesno</code><span class="sig-paren">(</span><em>val</em>, <em>yes=u'yes'</em>, <em>no=u'no'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#yesno"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.yesno" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return <code class="docutils literal"><span class="pre">yes</span></code> or <code class="docutils literal"><span class="pre">no</span></code> depending on value. This function takes the value
 and returns either yes or no depending on whether the value evaluates to
-<tt class="docutils literal"><span class="pre">True</span></tt>.</p>
+<code class="docutils literal"><span class="pre">True</span></code>.</p>
 <p>Examples:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">yesno</span><span class="p">(</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">&#39;yes&#39;</span>
@@ -274,7 +274,7 @@ and returns either yes or no depending on whether the value evaluates to
 <h2>HTML rendering<a class="headerlink" href="#html-rendering" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="bottle_utils.html.tag">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">tag</tt><big>(</big><em>name</em>, <em>content=u''</em>, <em>nonclosing=False</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.tag" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">tag</code><span class="sig-paren">(</span><em>name</em>, <em>content=u''</em>, <em>nonclosing=False</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#tag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.tag" title="Permalink to this definition">¶</a></dt>
 <dd><p>Wraps content in a HTML tag with optional attributes. This function
 provides a Pythonic interface for writing HTML tags with a few bells and
 whistles.</p>
@@ -296,7 +296,7 @@ invalid tag names:</p>
 <span class="go">&#39;&lt;not valid&gt;&lt;/not valid&gt;</span>
 </pre></div>
 </div>
-<p>Please ensure that <tt class="docutils literal"><span class="pre">name</span></tt> argument does not come from user-specified
+<p>Please ensure that <code class="docutils literal"><span class="pre">name</span></code> argument does not come from user-specified
 data, or, if it does, that it is properly sanitized (best way is to use a
 whitelist of allowed names).</p>
 <p>Because attributes are specified using keyword arguments, which are then
@@ -306,18 +306,18 @@ attribute order is important, don&#8217;t use this function.</p>
 These mostly have hard-wired first argument (tag name), and are all
 uppercase:</p>
 <ul class="simple">
-<li><tt class="docutils literal"><span class="pre">A</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;a&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">BUTTON</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;button&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">HIDDEN</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> tag with <tt class="docutils literal"><span class="pre">type=&quot;hidden&quot;</span></tt> attribute</li>
-<li><tt class="docutils literal"><span class="pre">INPUT</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;input&gt;</span></tt> tag with <tt class="docutils literal"><span class="pre">nonclosing</span></tt> set to <tt class="docutils literal"><span class="pre">True</span></tt></li>
-<li><tt class="docutils literal"><span class="pre">LI</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;li&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">OPTION</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;option&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">P</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;p&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">SELECT</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;select&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">SPAN</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;span&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">SUBMIT</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;button&gt;</span></tt> tag with <tt class="docutils literal"><span class="pre">type=&quot;submit&quot;</span></tt> attribute</li>
-<li><tt class="docutils literal"><span class="pre">TEXTAREA</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;textarea&gt;</span></tt> tag</li>
-<li><tt class="docutils literal"><span class="pre">UL</span></tt> - alias for <tt class="docutils literal"><span class="pre">&lt;ul&gt;</span></tt> tag</li>
+<li><code class="docutils literal"><span class="pre">A</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;a&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">BUTTON</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;button&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">HIDDEN</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tag with <code class="docutils literal"><span class="pre">type=&quot;hidden&quot;</span></code> attribute</li>
+<li><code class="docutils literal"><span class="pre">INPUT</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;input&gt;</span></code> tag with <code class="docutils literal"><span class="pre">nonclosing</span></code> set to <code class="docutils literal"><span class="pre">True</span></code></li>
+<li><code class="docutils literal"><span class="pre">LI</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;li&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">OPTION</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;option&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">P</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;p&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">SELECT</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;select&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">SPAN</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;span&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">SUBMIT</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;button&gt;</span></code> tag with <code class="docutils literal"><span class="pre">type=&quot;submit&quot;</span></code> attribute</li>
+<li><code class="docutils literal"><span class="pre">TEXTAREA</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;textarea&gt;</span></code> tag</li>
+<li><code class="docutils literal"><span class="pre">UL</span></code> - alias for <code class="docutils literal"><span class="pre">&lt;ul&gt;</span></code> tag</li>
 </ul>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -339,16 +339,16 @@ uppercase:</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.link_other">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">link_other</tt><big>(</big><em>label</em>, <em>url</em>, <em>path</em>, <em>wrapper=lambda l</em>, <em>*kw: l</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#link_other"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.link_other" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">link_other</code><span class="sig-paren">(</span><em>label</em>, <em>url</em>, <em>path</em>, <em>wrapper=lambda l</em>, <em>*kw: l</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#link_other"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.link_other" title="Permalink to this definition">¶</a></dt>
 <dd><p>Only wrap label in anchor if given URL is not the path. Given a label, this
 function will match the page URL against the path to which the label should
 point, and generate the anchor element markup as necessary.</p>
 <p>Any additional keyword arguments are passed to the function that generates
-the anchor markup, which is <tt class="docutils literal"><span class="pre">A</span></tt> alias for
-<a class="reference internal" href="#bottle_utils.html.tag" title="bottle_utils.html.tag"><tt class="xref py py-func docutils literal"><span class="pre">tag()</span></tt></a> function.</p>
+the anchor markup, which is <code class="docutils literal"><span class="pre">A</span></code> alias for
+<a class="reference internal" href="#bottle_utils.html.tag" title="bottle_utils.html.tag"><code class="xref py py-func docutils literal"><span class="pre">tag()</span></code></a> function.</p>
 <p>If the URLs match (meaning the page URL matches the target path), the label
 will be passed to the wrapper function. The default wrapper function is
-<tt class="xref py py-func docutils literal"><span class="pre">SPAN()</span></tt>, so the label is wrapped in SPAN tag
+<code class="xref py py-func docutils literal"><span class="pre">SPAN()</span></code>, so the label is wrapped in SPAN tag
 when the URLs matches.:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">link_other</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;/here&#39;</span><span class="p">,</span> <span class="s">&#39;/there&#39;</span><span class="p">)</span>
 <span class="go">&#39;&lt;a href=&quot;/target&quot;&gt;foo&lt;/a&gt;&#39;</span>
@@ -393,11 +393,11 @@ matches the path (i.e., anchor is not being rendered)</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.vinput">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">vinput</tt><big>(</big><em>name</em>, <em>values</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#vinput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vinput" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">vinput</code><span class="sig-paren">(</span><em>name</em>, <em>values</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#vinput"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vinput" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render input with bound value. This function can be used to bind values to
 form inputs. By default it will result in HTML markup for a generic input.
-The generated input has a <tt class="docutils literal"><span class="pre">name</span></tt> attribute set to specified name, and
-an <tt class="docutils literal"><span class="pre">id</span></tt> attribute that has the same value.</p>
+The generated input has a <code class="docutils literal"><span class="pre">name</span></code> attribute set to specified name, and
+an <code class="docutils literal"><span class="pre">id</span></code> attribute that has the same value.</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">vinput</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{})</span>
 <span class="go">&#39;&lt;input name=&quot;foo&quot; id=&quot;foo&quot;&gt;&#39;</span>
 </pre></div>
@@ -411,9 +411,9 @@ value of the input:</p>
 </div>
 <p>All values are properly sanitized before they are added to the markup.</p>
 <p>Any additional keyword arguments that are passed to this function are
-passed on the the <a class="reference internal" href="#bottle_utils.html.tag" title="bottle_utils.html.tag"><tt class="xref py py-func docutils literal"><span class="pre">tag()</span></tt></a> function. Since the
+passed on the the <a class="reference internal" href="#bottle_utils.html.tag" title="bottle_utils.html.tag"><code class="xref py py-func docutils literal"><span class="pre">tag()</span></code></a> function. Since the
 generated input markup is for generic text input, some of the other usual
-input types can be specified using <tt class="docutils literal"><span class="pre">_type</span></tt> parameter:</p>
+input types can be specified using <code class="docutils literal"><span class="pre">_type</span></code> parameter:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">input</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">_type</span><span class="o">=</span><span class="s">&#39;email&#39;</span><span class="p">)</span>
 <span class="go">&#39;&lt;input name=&quot;foo&quot; id=&quot;foo&quot; type=&quot;email&quot;&gt;&#39;</span>
 </pre></div>
@@ -438,7 +438,7 @@ values</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.varea">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">varea</tt><big>(</big><em>name</em>, <em>values</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#varea"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.varea" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">varea</code><span class="sig-paren">(</span><em>name</em>, <em>values</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#varea"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.varea" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render textarea with bound value. Textareas use a somewhat different markup
 to that of regular inputs, so a separate function is used for binding
 values to this form control.:</p>
@@ -446,7 +446,7 @@ values to this form control.:</p>
 <span class="go">&#39;&lt;textarea name=&quot;foo&quot; id=&quot;foo&quot;&gt;bar&lt;/textarea&gt;&#39;</span>
 </pre></div>
 </div>
-<p>This function works the same way as <a class="reference internal" href="#bottle_utils.html.vinput" title="bottle_utils.html.vinput"><tt class="xref py py-func docutils literal"><span class="pre">vinput()</span></tt></a>
+<p>This function works the same way as <a class="reference internal" href="#bottle_utils.html.vinput" title="bottle_utils.html.vinput"><code class="xref py py-func docutils literal"><span class="pre">vinput()</span></code></a>
 function, so please look at it for more information. The primary difference
 is in the generated markup.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -469,7 +469,7 @@ values</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.vcheckbox">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">vcheckbox</tt><big>(</big><em>name</em>, <em>value</em>, <em>values</em>, <em>default=False</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#vcheckbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vcheckbox" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">vcheckbox</code><span class="sig-paren">(</span><em>name</em>, <em>value</em>, <em>values</em>, <em>default=False</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#vcheckbox"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vcheckbox" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render checkbox with bound value. This function renders a checkbox which is
 checked or unchecked depending on whether its own name-value combination
 appears in the provided form values dictionary.</p>
@@ -482,11 +482,11 @@ list of alues which are all named the same.</p>
 &lt;input type=&quot;checkbox&quot; name=&quot;foo&quot; value=&quot;3&quot;&gt;
 </pre></div>
 </div>
-<p>If user checks all of them, we consider it a list <tt class="docutils literal"><span class="pre">foo=['1',</span> <span class="pre">'2',</span> <span class="pre">'3']</span></tt>.
-If user checks only the first and last, we have <tt class="docutils literal"><span class="pre">foo=['1',</span> <span class="pre">'3']</span></tt>. And so
+<p>If user checks all of them, we consider it a list <code class="docutils literal"><span class="pre">foo=['1',</span> <span class="pre">'2',</span> <span class="pre">'3']</span></code>.
+If user checks only the first and last, we have <code class="docutils literal"><span class="pre">foo=['1',</span> <span class="pre">'3']</span></code>. And so
 on.</p>
 <p>This function assumes that you are using  this pattern.</p>
-<p>The <tt class="docutils literal"><span class="pre">values</span></tt> map can either map the checkbox name to a single value, or a
+<p>The <code class="docutils literal"><span class="pre">values</span></code> map can either map the checkbox name to a single value, or a
 list of multiple values. In the former case, if the single value matches
 the value of the checkbox, the checkbox is checked. In the latter case, if
 value of the checkbox is found in the list of values, the checkbox is
@@ -500,7 +500,7 @@ checked.:</p>
 </pre></div>
 </div>
 <p>When the field values dictionary doesn&#8217;t contain a key that matches the
-checkbox name, the value of <tt class="docutils literal"><span class="pre">default</span></tt> keyword argument determines whether
+checkbox name, the value of <code class="docutils literal"><span class="pre">default</span></code> keyword argument determines whether
 the checkbox should be checked:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">vcheckbox</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="s">&#39;bar&#39;</span><span class="p">,</span> <span class="p">{},</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 <span class="go">&#39;&lt;input type=&quot;checkbox&quot; name=&quot;foo&quot; id=&quot;foo&quot; value=&quot;bar&quot; checked&gt;&#39;</span>
@@ -514,7 +514,7 @@ the checkbox should be checked:</p>
 <li><strong>name</strong> &#8211; field name</li>
 <li><strong>value</strong> &#8211; value of the checkbox</li>
 <li><strong>values</strong> &#8211; dictionary or dictionary-like object containing field</li>
-<li><strong>default</strong> &#8211; default state when input is not bound (<tt class="docutils literal"><span class="pre">True</span></tt> for
+<li><strong>default</strong> &#8211; default state when input is not bound (<code class="docutils literal"><span class="pre">True</span></code> for
 checked)</li>
 </ul>
 </td>
@@ -528,7 +528,7 @@ checked)</li>
 
 <dl class="function">
 <dt id="bottle_utils.html.vselect">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">vselect</tt><big>(</big><em>name</em>, <em>choices</em>, <em>values</em>, <em>empty=None</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#vselect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vselect" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">vselect</code><span class="sig-paren">(</span><em>name</em>, <em>choices</em>, <em>values</em>, <em>empty=None</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#vselect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.vselect" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render select list with bound value. This function renders the select list
 with option elements with appropriate element selected based on field
 values that are passed.</p>
@@ -540,7 +540,7 @@ of two-tuples:</p>
 </div>
 <p>There is no mechanism for default value past what browsers support, so you
 should generally assume that most browsers will render the select with
-frist value preselected. Using an empty string or <tt class="docutils literal"><span class="pre">None</span></tt> as option value
+frist value preselected. Using an empty string or <code class="docutils literal"><span class="pre">None</span></code> as option value
 will render an option element without value:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">vselect</span><span class="p">(</span><span class="s">&#39;foo&#39;</span><span class="p">,</span> <span class="p">((</span><span class="bp">None</span><span class="p">,</span> <span class="s">&#39;---&#39;</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s">&#39;one&#39;</span><span class="p">),),</span> <span class="p">{})</span>
 <span class="go">&#39;&lt;select name=&quot;foo&quot; id=&quot;foo&quot;&gt;&lt;option value&gt;---&lt;/option&gt;&lt;option val...&#39;</span>
@@ -548,15 +548,15 @@ will render an option element without value:</p>
 <span class="go">&#39;&lt;select name=&quot;foo&quot; id=&quot;foo&quot;&gt;&lt;option value=&quot;&quot;&gt;---&lt;/option&gt;&lt;option ...&#39;</span>
 </pre></div>
 </div>
-<p>When specifying values, keep in mind that only <tt class="docutils literal"><span class="pre">None</span></tt> is special, in that
-it will crete a <tt class="docutils literal"><span class="pre">value</span></tt> attribute without any value. All other Python
+<p>When specifying values, keep in mind that only <code class="docutils literal"><span class="pre">None</span></code> is special, in that
+it will crete a <code class="docutils literal"><span class="pre">value</span></code> attribute without any value. All other Python
 types become strings in the HTML markup, and are submitted as such. You
 will need to convert the values back to their appropriate Python type
 manually.</p>
 <p>If the choices iterable does not contain an element representing the empty
-value (<tt class="docutils literal"><span class="pre">None</span></tt>), you can specify it using the <tt class="docutils literal"><span class="pre">empty</span></tt> parameter. The
-argument for <tt class="docutils literal"><span class="pre">empty</span></tt> should be a label, and the matching value is
-<tt class="docutils literal"><span class="pre">None</span></tt>. The emtpy value is always inseted at the beginning of the list.</p>
+value (<code class="docutils literal"><span class="pre">None</span></code>), you can specify it using the <code class="docutils literal"><span class="pre">empty</span></code> parameter. The
+argument for <code class="docutils literal"><span class="pre">empty</span></code> should be a label, and the matching value is
+<code class="docutils literal"><span class="pre">None</span></code>. The emtpy value is always inseted at the beginning of the list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -578,7 +578,7 @@ argument for <tt class="docutils literal"><span class="pre">empty</span></tt> sh
 
 <dl class="function">
 <dt id="bottle_utils.html.form">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">form</tt><big>(</big><em>method=None</em>, <em>action=None</em>, <em>csrf=False</em>, <em>multipart=False</em>, <em>**attrs</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.form" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">form</code><span class="sig-paren">(</span><em>method=None</em>, <em>action=None</em>, <em>csrf=False</em>, <em>multipart=False</em>, <em>**attrs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#form"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.form" title="Permalink to this definition">¶</a></dt>
 <dd><p>Render open form tag. This function renders the open form tag with
 additional features, such as faux HTTP methods, CSRF token, and multipart
 support.</p>
@@ -586,7 +586,7 @@ support.</p>
 the same effect as naked form tag without any attributes.</p>
 <p>Method names can be either lowercase or uppercase.</p>
 <p>The methods other than GET and POST are faked using a hidden input with
-<tt class="docutils literal"><span class="pre">_method</span></tt> name and uppercase name of the HTTP method. The form will use
+<code class="docutils literal"><span class="pre">_method</span></code> name and uppercase name of the HTTP method. The form will use
 POST method in this case. Server-side support is required for this feature
 to work.</p>
 <p>Any additional keyword arguments will be used as attributes for the form
@@ -609,7 +609,7 @@ tag.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.field_error">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">field_error</tt><big>(</big><em>name</em>, <em>errors</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#field_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.field_error" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">field_error</code><span class="sig-paren">(</span><em>name</em>, <em>errors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#field_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.field_error" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders error message for single form field. This function renders a
 standardized markup for individual form field errors.</p>
 <div class="admonition note">
@@ -646,10 +646,10 @@ string</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.form_errors">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">form_errors</tt><big>(</big><em>errors</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#form_errors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.form_errors" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">form_errors</code><span class="sig-paren">(</span><em>errors</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#form_errors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.form_errors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders a form error. This function renders a standardized markup for form
 errors in your template.</p>
-<p>Please see notes for <a class="reference internal" href="#bottle_utils.html.field_error" title="bottle_utils.html.field_error"><tt class="xref py py-func docutils literal"><span class="pre">field_error()</span></tt></a> for the
+<p>Please see notes for <a class="reference internal" href="#bottle_utils.html.field_error" title="bottle_utils.html.field_error"><code class="xref py py-func docutils literal"><span class="pre">field_error()</span></code></a> for the
 reasoning behind this helper function.</p>
 <p>Input dictionary must contain a special key &#8216;_&#8217; which is treated as key for
 form-wide errors that are not specific to any field. The value can either
@@ -680,17 +680,17 @@ name-error mappings</td>
 <h2>URL handling<a class="headerlink" href="#url-handling" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="bottle_utils.html.to_qs">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">to_qs</tt><big>(</big><em>mapping</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#to_qs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.to_qs" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">to_qs</code><span class="sig-paren">(</span><em>mapping</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#to_qs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.to_qs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert a mapping object to query string appended to current path. This
-function takes a <tt class="docutils literal"><span class="pre">bottle.MultiDict</span></tt> object or a <tt class="docutils literal"><span class="pre">dict</span></tt>-like object that
-supports <tt class="docutils literal"><span class="pre">items()</span></tt> call, and converts it to a query string appeneded to
+function takes a <code class="docutils literal"><span class="pre">bottle.MultiDict</span></code> object or a <code class="docutils literal"><span class="pre">dict</span></code>-like object that
+supports <code class="docutils literal"><span class="pre">items()</span></code> call, and converts it to a query string appeneded to
 the path in the current request context.</p>
 <p>The values for each parameter is encoded as UTF-8 and escaped.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mapping</strong> &#8211; <tt class="docutils literal"><span class="pre">bottle.MultiDict</span></tt> or <tt class="docutils literal"><span class="pre">dict</span></tt>-like object</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mapping</strong> &#8211; <code class="docutils literal"><span class="pre">bottle.MultiDict</span></code> or <code class="docutils literal"><span class="pre">dict</span></code>-like object</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current path with query string built from given mapping</td>
 </tr>
@@ -700,22 +700,28 @@ the path in the current request context.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.add_qparam">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">add_qparam</tt><big>(</big><em>param</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#add_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.add_qparam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add query string parameter on current path in request context.</p>
-<p>The return value of this function is current request path with parameter
-appended.</p>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">add_qparam</code><span class="sig-paren">(</span><em>qs</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#add_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.add_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add parameter to query string</p>
+<p>Any keyword arguments passed to this function will be converted to query
+parameters.</p>
+<p>The returned object is a <code class="xref py py-func docutils literal"><span class="pre">QueryDict()</span></code> instance,
+which is a <code class="docutils literal"><span class="pre">bottle.FormsDict</span></code> subclass.</p>
+<p>Example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">q</span> <span class="o">=</span> <span class="n">add_qparam</span><span class="p">(</span><span class="s">&#39;a=1&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">&#39;a=1&amp;b=2&#39;</span>
+<span class="go">&gt;&gt; q = add_qparam(&#39;a=1&#39;, a=2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span>
+<span class="go">&#39;a=1&amp;a=2&#39;</span>
+</pre></div>
+</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>param</strong> &#8211; parameter name</li>
-<li><strong>value</strong> &#8211; value for the parameter</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qs</strong> &#8211; query string or QueryDict instance</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">path with query string parameter added</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">QueryDict object</td>
 </tr>
 </tbody>
 </table>
@@ -723,22 +729,19 @@ appended.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.set_qparam">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">set_qparam</tt><big>(</big><em>param</em>, <em>value</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#set_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.set_qparam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace query string parameter on current path in request context.</p>
-<p>The return value of this function is current request path with parameter
-replaced.</p>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">set_qparam</code><span class="sig-paren">(</span><em>qs</em>, <em>**params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#set_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.set_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replace or add parameters to query string</p>
+<p>Any keyword arguments passed to this function will be converted to query
+parameters.</p>
+<p>The returned object is a <code class="xref py py-func docutils literal"><span class="pre">QueryDict()</span></code> instance,
+which is a <code class="docutils literal"><span class="pre">bottle.FormsDict</span></code> subclass.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>param</strong> &#8211; parameter name</li>
-<li><strong>value</strong> &#8211; value for the parameter</li>
-</ul>
-</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qs</strong> &#8211; query string or QueryDict instance</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">path with query string parameter replaced</p>
-</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">QueryDict object</td>
 </tr>
 </tbody>
 </table>
@@ -746,17 +749,19 @@ replaced.</p>
 
 <dl class="function">
 <dt id="bottle_utils.html.del_qparam">
-<tt class="descclassname">bottle_utils.html.</tt><tt class="descname">del_qparam</tt><big>(</big><em>param</em><big>)</big><a class="reference internal" href="_modules/bottle_utils/html.html#del_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.del_qparam" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove query string parameter on current path in request context.</p>
-<p>The return value of this function is current request path with parameter
-appended.</p>
+<code class="descclassname">bottle_utils.html.</code><code class="descname">del_qparam</code><span class="sig-paren">(</span><em>qs</em>, <em>*params</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bottle_utils/html.html#del_qparam"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bottle_utils.html.del_qparam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove query string parameters</p>
+<p>Second and subsequent positional arguments are query parameter names to be
+removed from the query string.</p>
+<p>The returned object is a <code class="xref py py-func docutils literal"><span class="pre">QueryDict()</span></code> instance,
+which is a <code class="docutils literal"><span class="pre">bottle.FormsDict</span></code> subclass.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>param</strong> &#8211; parameter name</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>qs</strong> &#8211; query string or QueryDict instance</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">path with query string parameter removed</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">QueryDict object</td>
 </tr>
 </tbody>
 </table>
@@ -769,11 +774,11 @@ appended.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Template helpers (<tt class="docutils literal"><span class="pre">bottle_utils.html</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Template helpers (<code class="docutils literal"><span class="pre">bottle_utils.html</span></code>)</a><ul>
 <li><a class="reference internal" href="#module-bottle_utils.html">Data formatting</a></li>
 <li><a class="reference internal" href="#html-rendering">HTML rendering</a></li>
 <li><a class="reference internal" href="#url-handling">URL handling</a></li>
@@ -783,16 +788,18 @@ appended.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="flash.html"
-                        title="previous chapter">Flash messages (<tt class="docutils literal"><span class="pre">bottle_utils.flash</span></tt>)</a></p>
+                        title="previous chapter">Flash messages (<code class="docutils literal"><span class="pre">bottle_utils.flash</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="http.html"
-                        title="next chapter">HTTP helpers (<tt class="docutils literal"><span class="pre">bottle_utils.http</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/html.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">HTTP helpers (<code class="docutils literal"><span class="pre">bottle_utils.http</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/html.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
@@ -809,7 +816,7 @@ appended.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -824,12 +831,12 @@ appended.</p>
         <li class="right" >
           <a href="flash.html" title="Flash messages (bottle_utils.flash)"
              >previous</a> |</li>
-        <li><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">Bottle Utils 0.1a4 documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2014, Outernet Inc &lt;hello@outernet.is&gt;.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
