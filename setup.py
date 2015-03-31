@@ -1,35 +1,37 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(fname):
     """ Return content of specified file """
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-VERSION = '0.3'
-RELEASE = '0.3.1'
+
+MAJOR = '0.3'
+NEXT = '0.4'
 
 setup(
     name='bottle-utils',
-    version=RELEASE,
+    version='0.3.1',
     author='Outernet Inc',
     author_email='branko@outernet.is',
     description=('Assortment of frequently used utilities for Bottle '
-                   'framework'),
+                 'framework'),
     license='BSD',
     keywords='bottle utils i18n http lazy csrf ajax',
     url='http://outernet-project.github.io/bottle-utils/',
     packages=find_packages(),
     long_description=read('README.rst'),
     install_requires=[
-        'bottle-utils-common~=%s' % VERSION,
-        'bottle-utils-ajax~=%s' % VERSION,
-        'bottle-utils-csrf~=%s' % VERSION,
-        'bottle-utils-flash~=%s' % VERSION,
-        'bottle-utils-html~=%s' % VERSION,
-        'bottle-utils-http~=%s' % VERSION,
-        'bottle-utils-i18n~=%s' % VERSION,
-        'bottle-utils-lazy~=%s' % VERSION,
-        'bottle-utils-meta~=%s' % VERSION,
+        'bottle-utils-common >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-ajax >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-csrf >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-flash >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-html >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-http >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-i18n >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-lazy >=%s, <%s' % (MAJOR, NEXT),
+        'bottle-utils-meta >=%s, <%s' % (MAJOR, NEXT),
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
