@@ -12,7 +12,7 @@ NEXT = '0.4'
 
 setup(
     name='bottle-utils',
-    version='0.3.1',
+    version='0.3.2',
     author='Outernet Inc',
     author_email='branko@outernet.is',
     description=('Assortment of frequently used utilities for Bottle '
