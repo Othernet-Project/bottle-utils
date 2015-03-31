@@ -49,7 +49,7 @@ URL handling
 ------------
 
 .. autoclass:: QueryDict
-   :members: __init__, add_qparam, set_qparam, del_qparam
+   :members: __init__, add_qparam, set_qparam, del_qparam, to_qs
 .. autofunction:: add_qparam
 .. autofunction:: set_qparam
 .. autofunction:: del_qparam
