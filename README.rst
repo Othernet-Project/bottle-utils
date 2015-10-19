@@ -13,22 +13,10 @@ used at Outernet_. Some of the modules have been tested fairly thoroughly, and
 some have been used only in a handful of projects. Therefore, not all modules
 are of high quality. You should conisder this package Alpha quality.
 
-Each module is packaged in a separate package under the same ``bottle_utils``
-namespace, and this package in particular is simply a placeholder that depends
-on all other packages for simpler installation.
-
-The packages are:
-
-- ``bottle-utils-common`` - Common functionalities shared by other packages
-- ``bottle-utils-ajax`` - Decorators for AJAX-specific handlers
-- ``bottle-utils-csrf`` - Decorators for CSRF protection
-- ``bottle-utils-flash`` - Plugin and methods for flash messaging
-- ``bottle-utils-html`` - Functions for use in HTML templates
-- ``bottle-utils-http`` - Decorators for managing HTTP reponse headers
-- ``bottle-utils-i18n`` - Support for internationalization
-- ``bottle-utils-lazy`` - Provides functionality for lazy evaluation of 
-  callables
-- ``bottle-utils-meta`` - Classes for handling page/social metadata
+Between versions 0.3 and 0.4.dev1, bottle-utils have been split into multiple
+packages. Since 0.4.dev1, they have been remerged into a single packages as we
+normally use them together, and having them as separate packages causes various
+deployment issues.
 
 Installation
 ============
@@ -38,8 +26,6 @@ Install using ``pip`` or ``easy_install``::
     pip install bottle-utils
 
     easy_install bottle-utils
-
-You can also install individual packages listed in the introduction.
 
 Documentation
 =============
