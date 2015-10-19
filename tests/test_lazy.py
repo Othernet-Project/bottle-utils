@@ -108,9 +108,10 @@ def test_formatted():
 
 def test_boolean_coercion():
     """ Boolean coercion should work lazily """
+    # FIXME: This fails under Py2.7
     fn, lazy = get_lazy()
     bool(lazy)
-    fn.assert_called_once()
+    fn.assert_called_once_with()
 
 
 def test_comparison():
@@ -129,8 +130,11 @@ def test_comparison():
 def test_call():
     """ Calling the lazy object """
     fn, lazy = get_lazy()
-    lazy()
-    fn.return_value.assert_called_once()
+    ret = lazy()
+    assert fn.call_count == 1
+    fn.assert_called_once_with()
+    fn.return_value.assert_called_once_with()
+    assert ret == fn.return_value.return_value
 
 
 def test_caching():

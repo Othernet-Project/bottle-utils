@@ -50,22 +50,6 @@ class TestValidator(object):
 
 class TestField(object):
 
-    @mock.patch.object(mod.Field, 'render')
-    def test___str__(self, render):
-        field = mod.Field('label', name='alreadybound')
-        render.return_value = 'html'
-        assert str(field) == 'html'
-        render.assert_called_once_with()
-
-    @mock.patch.object(mod.Field, 'render')
-    def test___unicode__(self, render):
-        if 'unicode' not in globals():
-            unicode = str
-        field = mod.Field('label', name='alreadybound')
-        render.return_value = 'html'
-        assert unicode(field) == 'html'
-        render.assert_called_once_with()
-
     def test_bind(self):
         class CustomField(mod.Field):
             def __init__(self, label, validators, something, **kwargs):

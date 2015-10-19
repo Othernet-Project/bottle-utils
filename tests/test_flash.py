@@ -65,7 +65,7 @@ def test_plugin(request, response, get_message):
 
 # Integration tests
 
-from app import test_app
+from flash_app import test_app
 
 
 def test_getting_empty_message():

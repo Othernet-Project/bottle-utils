@@ -133,7 +133,8 @@ def test_cache_header(request, response, generate_csrf_token, get_conf):
     handler = csrf_token(handler)
     handler()
     assert 'Cache-Control' in response.headers
-    assert response.headers['Cache-Control'] == 'private no-cache'
+    assert response.headers['Cache-Control'] == (
+        'no-cache, max-age=0, must-revalidate, no-store')
 
 
 @mock.patch(MOD + 'get_conf')
@@ -228,7 +229,7 @@ def test_csrf_tag(request, get_conf):
 
 # Integration tests
 
-from app import test_app
+from csrf_app import test_app
 
 
 def test_csrf_token():
