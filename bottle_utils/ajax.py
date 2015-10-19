@@ -11,6 +11,8 @@ import functools
 
 from bottle import request, abort, template, DictMixin, response
 
+from bottle_utils.common import to_bytes
+
 
 def ajax_only(func):
     """
@@ -54,7 +56,8 @@ def roca_view(full, partial, **defaults):
                 # of the elements that were not returned as part of the
                 # response to the AJAX request.
                 # (see http://stackoverflow.com/a/11393281)
-                response.headers['Cache-Control'] = 'no-store'
+                response.headers[to_bytes('Cache-Control')] = to_bytes(
+                    'no-store')
             else:
                 tpl_name = full
             result = func(*args, **kwargs)
