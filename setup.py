@@ -6,13 +6,12 @@ def read(fname):
     """ Return content of specified file """
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+import bottle_utils
 
-MAJOR = '0.3'
-NEXT = '0.4'
 
 setup(
     name='bottle-utils',
-    version='0.3.2',
+    version=bottle_utils.__version__,
     author='Outernet Inc',
     author_email='branko@outernet.is',
     description=('Assortment of frequently used utilities for Bottle '
@@ -23,15 +22,8 @@ setup(
     packages=find_packages(),
     long_description=read('README.rst'),
     install_requires=[
-        'bottle-utils-common >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-ajax >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-csrf >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-flash >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-html >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-http >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-i18n >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-lazy >=%s, <%s' % (MAJOR, NEXT),
-        'bottle-utils-meta >=%s, <%s' % (MAJOR, NEXT),
+        'bottle>=0.12.7',
+        'python-dateutil>=2.2',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
