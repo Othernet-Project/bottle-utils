@@ -4,3 +4,4 @@
 /*.egg-info
 /dist
 /docs/build
+/.cache
