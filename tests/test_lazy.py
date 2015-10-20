@@ -97,7 +97,7 @@ def test_coercion_using_to_unicode():
         s = unicode(lazy)
     except Exception as err:
         assert False, "Should not raise, but raised '%s'" % err
-    assert s = 'foo'
+    assert s == 'foo'
 
 
 def test_interpolated():

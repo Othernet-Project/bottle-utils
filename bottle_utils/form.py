@@ -41,14 +41,19 @@ class Label(object):
 
     def __str__(self):
         """Calls renderer function"""
-        return self.text
+        return unicode(self.text)
 
     def __unicode__(self):
         """Calls renderer function"""
-        return self.text
+        return self.__str__()
 
     def __mod__(self, other):
-        return self.text % other
+        """ Provides string interpolation using % operator """
+        return self.__str__() % other
+
+    def format(self, *args, **kw):
+        """ Provides string interpolation with .format() method """
+        return self.__str__().format(*args, **kw)
 
 
 class Validator(object):

@@ -16,6 +16,24 @@ import mock
 import pytest
 
 import bottle_utils.form as mod
+from bottle_utils.lazy import Lazy
+
+
+class TestLabel(object):
+
+    def test_label_coerction(self):
+        lbl = mod.Label('foo', 'bar')
+        assert str(lbl) == 'foo'
+
+
+    def test_label_coercion_with_non_string(self):
+        lbl = mod.Label(12, 'bar')
+        assert str(lbl) == '12'
+
+
+    def test_label_coercion_with_lazy(self):
+        lbl = mod.Label(Lazy(lambda: "I'm a string"), 'bar')
+        assert str(lbl) == "I'm a string"
 
 
 class TestValidator(object):
