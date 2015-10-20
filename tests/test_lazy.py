@@ -90,6 +90,16 @@ def test_coercion_into_bytes():
     assert s == b'1'
 
 
+def test_coercion_using_to_unicode():
+    fn, lazy = get_lazy()
+    fn.return_value = b'foo'
+    try:
+        s = unicode(lazy)
+    except Exception as err:
+        assert False, "Should not raise, but raised '%s'" % err
+    assert s = 'foo'
+
+
 def test_interpolated():
     """ Should evaluate a function when interpolated into string """
     fn, lazy = get_lazy()
