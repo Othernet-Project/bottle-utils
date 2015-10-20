@@ -139,6 +139,7 @@ class Field(object):
     # not be translated.
     generic_error = _('Invalid value for this field')
     messages = {}
+    type = 'text'
 
     def __new__(cls, *args, **kwargs):
         if 'name' in kwargs:
@@ -209,6 +210,8 @@ class StringField(Field):
 
 class PasswordField(StringField):
 
+    type = 'password'
+
     def render(self):
         return html.vinput(self.name,
                            {},
@@ -218,7 +221,8 @@ class PasswordField(StringField):
 
 
 class HiddenField(StringField):
-    pass
+
+    type = 'hidden'
 
 
 class EmailField(StringField):
@@ -226,7 +230,8 @@ class EmailField(StringField):
 
 
 class TextAreaField(StringField):
-    pass
+
+    type = 'textarea'
 
 
 class DateField(StringField):
@@ -240,6 +245,8 @@ class DateField(StringField):
 
 
 class FileField(Field):
+
+    type = 'file'
 
     def parse(self, value):
         return value
@@ -271,6 +278,8 @@ class FloatField(Field):
 
 class BooleanField(Field):
 
+    type = 'checkbox'
+
     def __init__(self, label, validators=None, value=None, default=False,
                  **options):
         self.default = default
@@ -287,6 +296,8 @@ class BooleanField(Field):
 
 
 class SelectField(Field):
+
+    type = 'select'
 
     def __init__(self, label, validators=None, value=None, choices=None,
                  **options):
