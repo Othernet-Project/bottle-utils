@@ -119,7 +119,7 @@ def test_i18n_path(req):
     req.locale = 'en_US'
     s = mod.i18n_path('/foo')
     assert s == '/en_US/foo'
-    request.locale = 'es_ES'
+    req.locale = 'es_ES'
     s = mod.i18n_path('/foo')
     assert s == '/es_ES/foo'
 
