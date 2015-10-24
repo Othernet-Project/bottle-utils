@@ -56,8 +56,7 @@ def roca_view(full, partial, **defaults):
                 # of the elements that were not returned as part of the
                 # response to the AJAX request.
                 # (see http://stackoverflow.com/a/11393281)
-                response.headers[to_bytes('Cache-Control')] = to_bytes(
-                    'no-store')
+                response.headers[str('Cache-Control')] = str('no-store')
             else:
                 tpl_name = full
             result = func(*args, **kwargs)
