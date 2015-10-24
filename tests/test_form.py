@@ -18,6 +18,8 @@ import pytest
 import bottle_utils.form as mod
 from bottle_utils.lazy import Lazy
 
+MOD = mod.__name__
+
 
 class TestLabel(object):
 
@@ -351,9 +353,8 @@ class TestForm(object):
         }
 
 
-@mock.patch(mod, '_')
-def test_form_integration(gettext):
-    gettext.side_effect = labmda x: x
+@mock.patch('bottle_utils.i18n.request')
+def test_form_integration(request):
 
     class SomeForm(mod.Form):
         name = mod.StringField('Name', validators=[mod.Required()])
