@@ -12,7 +12,11 @@ Licensed under BSD license. See ``LICENSE`` file in the source directory.
 
 from __future__ import unicode_literals
 
-import mock
+try:
+    from unittest import mock
+except ImportError:
+    import mock
+
 import pytest
 
 import bottle_utils.form as mod
