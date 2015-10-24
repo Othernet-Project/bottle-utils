@@ -351,7 +351,9 @@ class TestForm(object):
         }
 
 
-def test_form_integration():
+@mock.patch(mod, '_')
+def test_form_integration(gettext):
+    gettext.side_effect = labmda x: x
 
     class SomeForm(mod.Form):
         name = mod.StringField('Name', validators=[mod.Required()])
