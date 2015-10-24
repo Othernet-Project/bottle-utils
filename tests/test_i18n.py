@@ -58,21 +58,21 @@ def test_gettext_string():
 
 @mock.patch(MOD + 'request')
 @mock.patch(MOD + 'to_unicode')
-def test_lazy_gettext_request(to_unicode, request):
+def test_lazy_gettext_request(to_unicode, req):
     _ = mod.lazy_gettext
     s = _('foo')
     s = s._eval()
-    to_unicode.assert_called_once_with(request.gettext.gettext.return_value)
+    to_unicode.assert_called_once_with(req.gettext.gettext.return_value)
     assert s == to_unicode.return_value
 
 
 @mock.patch(MOD + 'request')
 @mock.patch(MOD + 'to_unicode')
-def test_lazy_ngettext_request(to_unicode, request):
+def test_lazy_ngettext_request(to_unicode, req):
     _ = mod.lazy_ngettext
     s = _('singular', 'plural', 1)
     s = s._eval()
-    to_unicode.assert_called_once_with(request.gettext.ngettext.return_value)
+    to_unicode.assert_called_once_with(req.gettext.ngettext.return_value)
     assert s == to_unicode.return_value
 
 
@@ -95,17 +95,17 @@ def test_lazy_npgettext(lazy_ngettext):
 
 
 @mock.patch(MOD + 'request')
-def test_full_path(request):
-    request.fullpath = '/'
-    request.query_string = ''
+def test_full_path(req):
+    req.fullpath = '/'
+    req.query_string = ''
     s = mod.full_path()
     assert s == '/', "Should return '/', got '%s'" % s
-    request.fullpath = '/foo/bar'
-    request.query_string = ''
+    req.fullpath = '/foo/bar'
+    req.query_string = ''
     s = mod.full_path()
     assert s == '/foo/bar', "Should return '/foo/bar', got '%s'" % s
-    request.fullpath = '/foo/bar'
-    request.query_string = 'foo=bar'
+    req.fullpath = '/foo/bar'
+    req.query_string = 'foo=bar'
     s = mod.full_path()
     assert s == '/foo/bar?foo=bar', "Should return everything, got '%s'" % s
 
@@ -116,8 +116,8 @@ def test_i18n_returns_lazy():
 
 
 @mock.patch(MOD + 'request')
-def test_i18n_path(request):
-    request.locale = 'en_US'
+def test_i18n_path(req):
+    req.locale = 'en_US'
     s = mod.i18n_path('/foo')
     assert s == '/en_US/foo'
     request.locale = 'es_ES'
@@ -126,16 +126,16 @@ def test_i18n_path(request):
 
 
 @mock.patch(MOD + 'request')
-def test_i18n_custom_locale(request):
-    request.locale = 'en_US'
+def test_i18n_custom_locale(req):
+    req.locale = 'en_US'
     s = mod.i18n_path('/foo', locale='es_ES')
     assert s == '/es_ES/foo', "Should return specified locale instead"
 
 
 @mock.patch(MOD + 'request')
-def test_i18n_current_path(request):
-    request.fullpath = '/foo/bar/baz'
-    request.query_string = 'foo=bar'
+def test_i18n_current_path(req):
+    req.fullpath = '/foo/bar/baz'
+    req.query_string = 'foo=bar'
     s = mod.i18n_path(locale='en_US')
     assert s == '/en_US/foo/bar/baz?foo=bar', "Should return localized path"
 
@@ -147,24 +147,24 @@ def test_i18n_url_returns_lazy():
 
 @mock.patch(MOD + 'request')
 @mock.patch(MOD + 'i18n_path')
-def test_i18n_path_calls_get_url(i18n_path, request):
+def test_i18n_path_calls_get_url(i18n_path, req):
     s = mod.i18n_url('foo', bar=2)
     s._eval()
-    request.app.get_url.assert_called_once_with('foo', bar=2)
+    req.app.get_url.assert_called_once_with('foo', bar=2)
 
 
 @mock.patch(MOD + 'request')
-def test_i18n_url_prefixes_get_url_results(request):
-    request.app.get_url.return_value = '/foo/2/'
-    request.locale = 'en'
+def test_i18n_url_prefixes_get_url_results(req):
+    req.app.get_url.return_value = '/foo/2/'
+    req.locale = 'en'
     s = mod.i18n_url('foo', bar=2)
     assert s == '/en/foo/2/'
 
 
 @mock.patch(MOD + 'request')
-def test_i18n_url_locale_override(request):
-    request.app.get_url.return_value = '/foo/2/'
-    request.locale = 'en'
+def test_i18n_url_locale_override(req):
+    req.app.get_url.return_value = '/foo/2/'
+    req.locale = 'en'
     s = mod.i18n_url('foo', bar=2, locale='es')
     assert s == '/es/foo/2/'
 
