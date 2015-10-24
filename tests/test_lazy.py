@@ -17,7 +17,7 @@ except ImportError:
     import mock
 
 import bottle_utils.lazy as mod
-
+from bottle_utils.common import unicode
 
 PY2 = sys.version_info.major == 2
 
