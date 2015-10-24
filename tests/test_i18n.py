@@ -13,7 +13,6 @@ try:
 except ImportError:
     import mock
 
-import pytest
 import bottle_utils.i18n as mod
 
 MOD = 'bottle_utils.i18n.'
@@ -232,7 +231,7 @@ def test_initialization_no_plugin(BaseTemplate, translation):
 @mock.patch(MOD + 'gettext.translation')
 @mock.patch(MOD + 'BaseTemplate')
 @mock.patch(MOD + 'warn')
-def test_initialization_wanrn(warn, BaseTemplate, translation):
+def test_initialization_warn(warn, BaseTemplate, translation):
     def raise_os_error(*args, **kwargs):
         raise OSError('lamma crapped itself')
     translation.side_effect = raise_os_error
