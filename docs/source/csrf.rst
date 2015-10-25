@@ -1,14 +1,15 @@
 CSRF protection (``bottle_utils.csrf``)
 =======================================
 
-This module contains decorators and functions for facilitating CSRF_
-protection.
+This module contains decorators and functions for facilitating `CSRF 
+<http://en.wikipedia.org/wiki/Cross-site_request_forgery>`_ protection.
 
 App configuration
 -----------------
 
-Functions in this module require the Bottle application to be configured_ with
-CSRF-specific options.
+Functions in this module require the Bottle application to be `configured
+<http://bottlepy.org/docs/0.12/configuration.html>`_ with CSRF-specific
+options.
 
 Here is an example of file-based configuration::
 
@@ -25,12 +26,12 @@ When using dict-based configuration, prefix each key with ``csrf.``.
 
 The keys have following meaning:
 
-- ``secret`` setting is a secret key used for setting cookies; it should be
-  fairly random and difficult to guess
-- ``token_name`` setting is the name of the cookie and form field that contain
-  the token
-- ``path`` setting is the path of the cookie
-- ``expires`` setting is in seconds and sets the cookie's max-age
+- ``csrf.secret`` setting is a secret key used for setting cookies; it should
+  be fairly random and difficult to guess
+- ``csrf.token_name`` setting is the name of the cookie and form field that
+  contain the token
+- ``csrf.path`` setting is the path of the cookie
+- ``csrf.expires`` setting is in seconds and sets the cookie's max-age
 
 
 Caveat
@@ -51,6 +52,12 @@ You need to decide whether you can live with this behavior before using this
 module. In case of XHR, consolidating different forms into a single form or
 fetching tokens separately may be viable solutions.
 
+
+.. note::
+    A possible workaround for applications loading forms (and tokens) using XHR
+    would be to reload all tokens on the page whenever one of the forms is
+    submitted.
+
 Functions and decorators
 ------------------------
 
@@ -58,5 +65,4 @@ Functions and decorators
    :members:
    :exclude-members: get_conf
 
-.. _CSRF:: http://en.wikipedia.org/wiki/Cross-site_request_forgery
-.. _configured: http://bottlepy.org/docs/0.12/configuration.html
+
