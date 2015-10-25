@@ -16,16 +16,14 @@ class MetaBase(object):
     functionality for various subclasses.
 
     Currently, the only functionality this base class provides is calling
-    :py:meth:`~bottle_utils.meta.MetaBase.render` method when ``__str__()``
-    magic method is called on the class.
+    :py:meth:`~render` method when ``__str__()`` magic method is called on the
+    class.
     """
 
     def render(self):
         """
         Render the meta object into HTML. In the base class this method
         renders to empty string.
-
-        :returns:   HTML representation of the object
         """
         return ''
 
@@ -63,8 +61,16 @@ class SimpleMetadata(MetaBase):
             </body>
         </html>
 
-    :param title:           title
-    :param description:     description
+    This renders the following tags::
+
+        <title>My Page</title>
+        <meta name="description" content="A page about sharing">
+
+    .. note::
+        In template engines that support automatic escaping of HTML, you need
+        to suppress escaping. For instance, in SimpleTemplates, using ``{{!
+        }}`` instead of ``{{ }}`` accomplishes this.
+
     """
     def __init__(self, title='', description=''):
         self.title = title
@@ -78,12 +84,8 @@ class SimpleMetadata(MetaBase):
 
         The arguments are rendered like this::
 
-            <meta $attr=$name content=$value>
+            <meta $attr="$name" content="$value">
 
-        :param attr:    attribute name used for tag name
-        :param name:    tag name
-        :param value:   tag value
-        :returns:       HTML markup for the meta tag
         """
         return '<meta %s="%s" content="%s">' % (attr, attr_escape(name),
                                                 attr_escape(value))
@@ -95,19 +97,15 @@ class SimpleMetadata(MetaBase):
 
         The arguments are rendered like this::
 
-            <meta name=$name content=$value>
+            <meta name="$name" content="$value">
 
-        :param name:    tag name
-        :param value:   tag value
         """
         return self.meta('name', name, value)
 
 
     def render(self):
         """
-        Render the meta object into HTML.
-
-        :returns:   HTML representation of the object
+        Render the meta object as HTML.
         """
         s = ''
         if self.title:
@@ -121,13 +119,13 @@ class Metadata(SimpleMetadata):
     """
     Complete set of social meta tags. This class renders a complete set of
     social meta tags including `schema.org <http://schema.org/>`_ properties,
-    `OpenGraph tags <https://developers.facebook.com/docs/opengraph>`, and
+    `OpenGraph tags <https://developers.facebook.com/docs/opengraph>`_, and
     `Twitter Cards markup
-    <https://dev.twitter.com/docs/cards/markup-reference>`.
+    <https://dev.twitter.com/docs/cards/markup-reference>`_.
 
-    The meta tags are only rendered for the property that is specified (i.e.,
-    one or more of the title, description, thumbnail, url). The properties have
-    following meanings:
+    The meta tags are only rendered for the arguments that are specified (i.e.,
+    one or more of the ``title``, ``description``, ``thumbnail``, ``url``). The
+    arguments map to common properties that have the following meanings:
 
     - title: page title
     - description: page description (usually used as message shown next to the
@@ -140,7 +138,7 @@ class Metadata(SimpleMetadata):
       of the URL that was shared
 
     To render social tags, simply instantiate an object using meta data of your
-    choosing and render the object in template.
+    choosing and render the object in template (treat is as a string).
 
     Here is an example of what it may look like in a handler function::
 
@@ -165,8 +163,10 @@ class Metadata(SimpleMetadata):
             </body>
         </html>
 
-    Don't forget to prevent escaping of the rendered HTML by using ``{{! }}``
-    syntax instead of ``{{ }}``.
+    .. note::
+        In template engines that support automatic escaping of HTML, you need
+        to suppress escaping. For instance, in SimpleTemplates, using ``{{!
+        }}`` instead of ``{{ }}`` accomplishes this.
 
     This class does not render any of the other numerous tags (authorship tags,
     for instance). However, the instance methods it provides can be used to
@@ -177,15 +177,12 @@ class Metadata(SimpleMetadata):
 
         {{! meta.twitterprop('creator', '@OuternetForAll') }}
 
-    When it comes to thumbnails and canonical URLs, the social networks usually
-    expect to see a full URL (including scheme and hostname). However, it may
-    not feel right to hard-code these things. This class automatically converts
-    paths to full URLs based on request data, so passing paths is fine.
-
-    :param title:           page title
-    :param description:     page description
-    :param thumbnail:       path or full URL to thumbnail image
-    :param url:             path or full canonical URL of the page
+    .. note::
+        When it comes to thumbnails and canonical URLs, the social networks
+        usually expect to see a full URL (including scheme and hostname).
+        However, it may not feel right to hard-code these things. This class
+        automatically converts paths to full URLs based on request data, so
+        passing paths is fine.
     """
     def __init__(self, title='', description='', thumbnail='', url=''):
         super(Metadata, self).__init__(title, description)
@@ -226,11 +223,8 @@ class Metadata(SimpleMetadata):
 
         The arguments are rendered like this::
 
-            <meta property=$namespace:$name content=$value>
+            <meta property="$namespace:$name" content="$value">
 
-        :param namespace:   property namespace
-        :param name:        property name
-        :param value:       tag value
         """
         prop_name = '%s:%s' % (attr_escape(namespace), attr_escape(name))
         return self.meta('property', prop_name, value)
@@ -246,11 +240,8 @@ class Metadata(SimpleMetadata):
 
         The arguments are rendered like this::
 
-            <meta name=$namespace:$name content=$value>
+            <meta name="$namespace:$name" content="$value">
 
-        :param namespace:   property namespace
-        :param name:        property name
-        :param value:       tag value
         """
         prop_name = '%s:%s' % (attr_escape(namespace), attr_escape(name))
         return self.meta('name', prop_name, value)
@@ -267,10 +258,8 @@ class Metadata(SimpleMetadata):
 
         The arguments are rendered into the following markup::
 
-            <meta itemprop=$name content=$value>
+            <meta itemprop="$name" content="$value">
 
-        :param name:    tag name
-        :param value:   tag value
         """
         return self.meta('itemprop', name, value)
 
@@ -281,10 +270,8 @@ class Metadata(SimpleMetadata):
 
         The arguments are rendered like so::
 
-            <meta name=twitter:$name content=$value>
+            <meta name="twitter:$name" content="$value">
 
-        :param name:    property name
-        :param value:   tag value
         """
         return self.nameprop('twitter', name, value)
 
@@ -295,18 +282,14 @@ class Metadata(SimpleMetadata):
 
         The arguments are rendered like this::
 
-            <meta property=og:$name content=$value>
+            <meta property="og:$name" content="$value">
 
-        :param name:    property name
-        :param value:   tag value
         """
         return self.prop('og', name, value)
 
     def render(self):
         """
         Render the meta object into HTML.
-
-        :returns:   HTML representation of the object
         """
         s = ''
         if self.title:
