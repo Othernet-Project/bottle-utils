@@ -1,10 +1,3 @@
-"""
-.. module:: bottle_utils.flash
-   :synopsis: Cookie-based flash messages
-
-.. moduleauthor:: Outernet Inc <hello@outernet.is>
-"""
-
 from __future__ import unicode_literals
 
 import sys
@@ -30,8 +23,6 @@ def get_message():
     Return currently set message and delete the cookie. This function is lazily
     evaluated so it's side effect of removing the cookie will only become
     effective when you actually use the message it returns.
-
-    :returns: message
     """
     response.delete_cookie(MESSAGE_KEY, path=ROOT, secret=SECRET)
     return request._message
@@ -43,9 +34,7 @@ def set_message(msg):
     sets the message cookie and assigns the message to the
     ``bottle.request._message`` attribute.
 
-    In Py2, the message is UTF-8 encoded.
-
-    :param msg: message string
+    In Python 2.x, the message is UTF-8 encoded.
     """
     if PY2:
         msg = msg.encode('utf8')
@@ -59,7 +48,7 @@ def message_plugin(func):
     ``bottle.request`` and ``bottle.response`` objects for setting and
     consuming the flash messages.
 
-    See `How it works`_.
+    See `Basic usage`_.
 
     Example::
 
