@@ -7,7 +7,6 @@ except ImportError:
     _ = lambda x: x
 
 from .exceptions import ValidationError
-from .labels import Label
 from .validators import DateValidator
 
 
@@ -24,7 +23,6 @@ class DormantField(object):
 
 class Field(object):
     _id_prefix = 'id_'
-    _label_cls = Label
 
     # Translators, used as generic error message in form fields, 'value' should
     # not be translated.
@@ -40,8 +38,9 @@ class Field(object):
     def __init__(self, label=None, validators=None, value=None, name=None,
                  messages={}, **options):
         self.name = name
-        self.label = self._label_cls(label, self._id_prefix + name)
+
         self.validators = validators or []
+        self.label = label
         self.value = value() if callable(value) else value
         self.processed_value = None
         self.is_value_bound = False
