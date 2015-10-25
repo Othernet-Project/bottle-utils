@@ -1,5 +1,5 @@
-Social metadta (``bottle_utils.meta``)
-======================================
+Social metadata (``bottle_utils.meta``)
+=======================================
 
 This module provides classes for working with social meta data (Facebook,
 Google+, Twitter).

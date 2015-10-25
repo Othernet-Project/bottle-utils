@@ -1,7 +1,5 @@
 .. Bottle Utils documentation master file, created by
    sphinx-quickstart on Sun Sep 07 11:37:09 2014.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
 
 Bottle Utils documentation
 ==========================
@@ -19,27 +17,19 @@ release of Bottle.
 Installation
 ============
 
-The ``bottle-utils`` package is a virtual package that bundles togehter several
-related packages that, together, comprise Bottle Utils. You can install all
-related packages by installing this package::
+Use one of the following commands to install Bottle Utils::
 
     pip install bottle-utils
 
     easy_install bottle-utils
 
-You can also install individual packages. Here is a list of all packages that
-are part of Bottle Utils:
-
-- ``bottle-utils-common`` - Common functionalities shared by other packages
-- ``bottle-utils-ajax`` - Decorators for AJAX-specific handlers
-- ``bottle-utils-csrf`` - Decorators for CSRF protection
-- ``bottle-utils-flash`` - Plugin and methods for flash messaging
-- ``bottle-utils-html`` - Functions for use in HTML templates
-- ``bottle-utils-http`` - Decorators for managing HTTP reponse headers
-- ``bottle-utils-i18n`` - Support for internationalization
-- ``bottle-utils-lazy`` - Provides functionality for lazy evaluation of 
-  callables
-- ``bottle-utils-meta`` - Classes for handling page/social metadata
+.. note::
+    Between versions 0.3 and 0.5, bottle-utils package was split into multiple
+    packages. Packages were structured in a way that allowed the API prior to
+    version 0.3 to work without issues. However, this has caused various
+    problems with deployment and development, and the approach was subsequently
+    abandoned. Starting with version 0.5, Bottle Utils is again a monolithic
+    package.
 
 Source code
 ===========
@@ -60,11 +50,11 @@ The following functionality is available:
    csrf
    flash
    html
+   forms
    http
    i18n
    lazy
    meta
-   ...
 
 Indices and tables
 ==================
