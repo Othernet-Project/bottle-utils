@@ -1,10 +1,3 @@
-"""
-.. module:: bottle_utils.common
-   :synopsis: Common utility functions
-
-.. moduleauthor:: Outernet Inc <hello@outernet.is>
-"""
-
 from __future__ import unicode_literals
 
 import sys
@@ -26,7 +19,10 @@ ESCAPE_MAPPING = (
     ('\t', '&#9;'),
 )
 
+#: Whether Python version is 2.x
 PY2 = sys.version_info.major == 2
+
+#: Whether Python version is 3.x
 PY3 = sys.version_info.major == 3
 
 
@@ -46,9 +42,7 @@ def to_unicode(v, encoding='utf8'):
     either bytestring or Unicode string), and desired output is always Unicode
     string.
 
-    :param v:           value
-    :param encoding:    character set for decoding bytestrings
-    :returns:           value as Unicode string
+    The ``encoding`` argument is used to specify the encoding for bytestrings.
     """
     if isinstance(v, unicode):
         return v
@@ -64,9 +58,8 @@ def to_bytes(v, encoding='utf8'):
     useful when desired output is always a bytestring, and input can be any
     type (although it is intended to be used with strings and bytestrings).
 
-    :param v:           value
-    :param encoding:    character set for encoding strings
-    :returns:           value as bytestring
+    The ``encoding`` argument is used to specify the encoding of the resulting
+    bytestring.
     """
     if isinstance(v, bytes):
         return v
@@ -78,13 +71,10 @@ def to_bytes(v, encoding='utf8'):
 
 def attr_escape(attr):
     """
-    Escape HTML attribute values. This function escapes certain characters that
-    are undesirable in HTML attributes. Functions that construct attribute
-    values using user-supplied data should escape the values using this
-    function.
-
-    :param attr:    attribute value
-    :returns:       escaped attribute value
+    Escape ``attr`` string containing HTML attribute value. This function
+    escapes certain characters that are undesirable in HTML attribute values.
+    Functions that construct attribute values using user-supplied data should
+    escape the values using this function.
     """
     for s, r in ESCAPE_MAPPING:
         attr = attr.replace(s, r)
@@ -100,9 +90,6 @@ def full_url(path='/'):
     and port (if any).
 
     Because it uses the request context, it cannot be called outside a request.
-
-    :param path:    absolute path
-    :returns:       full URL including scheme and hostname
     """
     parts = request.urlparts
     url = parts.scheme + '://' + parts.hostname
@@ -116,9 +103,6 @@ def urlquote(s):
     Quote (URL-encode) a string with Unicode support. This is a simple wrapper
     for ``urllib.quote`` (or ``urllib.parse.quote``) that converts the input to
     UTF-8-encoded bytestring before quoting.
-
-    :param s:   URL component to escape
-    :returns:   encoded URL component
     """
     s = to_bytes(s)
     return quote(s)

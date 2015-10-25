@@ -1,9 +1,13 @@
 Template helpers (``bottle_utils.html``)
 ========================================
 
-Contents of this module are mostly meant to be used inside the Bottle's
-SimpleTemplate templates. It contains a few data-formatting functions as well
-as shortcuts for generating HTML snippets and binding data to form fields.
+Contents of this module are mostly meant to be used inside the view templates,
+but their usage is not limited to templates by any means. ``bottle_utils.html``
+contains a few data-formatting functions as well as shortcuts for generating
+HTML snippets and binding data to form fields.
+
+Basic usage
+-----------
 
 One way to make the module contents available to templates is to add the module 
 itself as a default template variable.::
@@ -17,9 +21,11 @@ templates::
 
     <html {{! h.attr('lang', request.locale }}>
 
-Note that, since some of these function generate HTML markup, you need to make
-sure they are not escaped by Bottle. Use the ``{{! }}`` syntax (with bang, !) 
-to allow unescaped HTML markup.
+.. note::
+    If your tempate engine auto-escapes HTML, you need to instruct it to
+    unescape strings gneerated by some of the helper functions. For instance,
+    in Bottle's SimpleTemplate engine, you need to enclose the strings in ``{{!
+    }}``.
 
 Data formatting
 ---------------
@@ -42,8 +48,6 @@ HTML rendering
 .. autofunction:: vcheckbox
 .. autofunction:: vselect
 .. autofunction:: form
-.. autofunction:: field_error
-.. autofunction:: form_errors
 
 URL handling
 ------------

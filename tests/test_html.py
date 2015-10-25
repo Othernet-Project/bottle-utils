@@ -67,6 +67,8 @@ def test_hsize():
     assert mod.hsize(12) == '12.00 B'
     assert mod.hsize(1030) == '1.01 KB'
     assert mod.hsize(2097152) == '2.00 MB'
+    assert mod.hsize(12, sep='') == '12.00B'
+    assert mod.hsize(12, rounding=0) == '12 B'
 
 
 def test_hsize_step():
@@ -384,6 +386,16 @@ def test_to_qs_unicode():
             assert q.to_qs()
         except Exception as exc:
             pytest.fail("Should not raise: {0}".format(exc))
+
+
+def test_qs_concat_left():
+    qs = mod.QueryDict('a=0')
+    assert 'foo' + qs == 'foo?a=0'
+
+
+def test_qs_conact_right():
+    qs = mod.QueryDict('a=0')
+    assert qs + '&foo=2' == '?a=0&foo=2'
 
 
 def test_add_qparam():

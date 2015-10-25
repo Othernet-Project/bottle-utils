@@ -14,7 +14,6 @@ import functools
 from bottle import (HTTPResponse, HTTPError, parse_date, parse_range_header,
                     request, response)
 
-# We only neeed MIME types for files Outernet will broadcast
 MIME_TYPES = {
     # Text/Code
     'txt': 'text/plain',
@@ -83,36 +82,37 @@ def no_cache(func):
 
 
 def get_mimetype(filename):
-    """ Guess mime-type based on file's extension
-
-    :param filename:    filename
-    :private:
+    """
+    Guess mime-type based on file's extension.
     """
     name, ext = os.path.splitext(filename)
     return MIME_TYPES.get(ext[1:], DEFAULT_TYPE)
 
 
 def format_ts(seconds=None):
-    """ Format timestamp expressed as seconds from epoch in RFC format
+    """
+    Given a timestamp in seconds since UNIX epoch, return a string
+    representation suitable for use in HTTP headers according to RFC.
 
-    If the ``seconds`` argument is omitted, or is ``None``, the current time is
-    used.
-
-    :param seconds:     seconds since local system's epoch
-    :returns:           formatted timestamp
-    :private:
+    If ``seconds`` is omitted, the time is asumed to be current time.
     """
     return time.strftime(TIMESTAMP_FMT, time.gmtime(seconds))
 
 
 def iter_read_range(fd, offset, length, chunksize=1024*1024):
-    """ Like ``bottle._file_iter_range`` but does not fail on ``seek()``
+    """
+    Return an iterator that allows reading files in chunks. The ``fd`` should
+    be a file-like object that has a ``read()`` method. The ``offset`` value
+    sets the start offset of the read. If the ``fd`` object does not support
+    ``seek()``, the file will be simply read up until offset, and the read data
+    discarded.
 
-    :param fd:          file-like object that may or may not support ``seek()``
-    :param offset:      offset from the beginning in bytes
-    :param length:      number of bytes to read
-    :param chunksize:   maximum size of the chunk
-    :private:
+    ``length`` argument specifies the amount of data to read. The read is not
+    done in one go, but in chunks. The size of a chunk is specified using
+    ``chunksize``.
+
+    This function is similar to ``bottle._file_iter_range`` but does not fail
+    on missing ``seek()`` attribute (e.g., ``StringIO`` objects).
     """
     try:
         fd.seek(offset)
@@ -128,20 +128,34 @@ def iter_read_range(fd, offset, length, chunksize=1024*1024):
         yield chunk
 
 
-def send_file(content, filename, size, timestamp):
-    """ Send a file represented by file object as HTTP response
+def send_file(content, filename, size=None, timestamp=None):
+    """
+    Convert file data into an HTTP response.
 
-    The code is partly based on ``bottle.static_file``, with the main
-    difference being the use of file-like objects instead of files on disk.
+    This method is used when the file data does not exist on disk, such as when
+    it is dynamically generated.
 
-    This may be useful when you are generating file contents on the fly. The
-    extra metadata must be supplied because we are not dealing with physical
-    files here.
+    Because the file does not exist on disk, the basic metadata which is
+    usually read from the file itself must be supplied as arguments. The
+    ``filename`` argument is the supposed filename of the file data. It is only
+    used to set the Content-Type header, and you may safely pass in just the
+    extension with leading period.
 
-    Note that the returned response is a completely new response object.
-    Modifying the reponse object in the current request context is not going to
-    affect the object returned by this function. You should modify the object
-    returned by this function instead.
+    The ``size`` argument is the payload size in bytes. For streaming files,
+    this can be particularly important as the ranges are calculated baed on
+    content length. If ``size`` is omitted, then support for ranges is not
+    advertise and ranges are never returned.
+
+    ``timestamp`` is expected to be in seconds since UNIX epoch, and is used to
+    calculate Last-Modified HTTP headers, as well as handle If-Modified-Since
+    header. If omitted, current time is used, and If-Modified-Since is never
+    checked.
+
+    .. note::
+        The returned response is a completely new response object.
+        Modifying the reponse object in the current request context is not
+        going to affect the object returned by this function. You should modify
+        the object returned by this function instead.
 
     Example::
 
@@ -150,10 +164,8 @@ def send_file(content, filename, size, timestamp):
             f = StringIO.StringIO('foo')
             return send_file(f, 'file.txt', 3, 1293281312)
 
-    :param content:     file-like object
-    :param filename:    filename to use
-    :param size:        file size in bytes
-    :param timestamp:   file's timestamp seconds since epoch
+    The code is partly based on ``bottle.static_file``, with the main
+    difference being the use of file-like objects instead of files on disk.
     """
     headers = {}
     ctype = get_mimetype(filename)
@@ -165,23 +177,27 @@ def send_file(content, filename, size, timestamp):
 
     # Set basic headers
     headers['Content-Type'] = ctype
-    headers['Content-Length'] = size
+    if size:
+        headers['Content-Length'] = size
     headers['Last-Modified'] = format_ts(timestamp)
 
     # Check if If-Modified-Since header is in request and respond early if so
-    modsince = request.environ.get('HTTP_IF_MODIFIED_SINCE')
-    modsince = modsince and parse_date(modsince.split(';')[0].strip())
-    if modsince is not None and modsince >= timestamp:
-        headers['Date'] = format_ts()
-        return HTTPResponse(status=304, **headers)
+    if timestamp:
+        modsince = request.environ.get('HTTP_IF_MODIFIED_SINCE')
+        modsince = modsince and parse_date(modsince.split(';')[0].strip())
+        if modsince is not None and modsince >= timestamp:
+            headers['Date'] = format_ts()
+            return HTTPResponse(status=304, **headers)
 
     if request.method == 'HEAD':
         # Request is a HEAD, so remove any content body
         content = ''
 
-    headers['Accept-Ranges'] = 'bytes'
+    if size:
+        headers['Accept-Ranges'] = 'bytes'
+
     ranges = request.environ.get('HTTP_RANGE')
-    if ranges:
+    if ranges and size:
         ranges = list(parse_range_header(ranges, size))
         if not ranges:
             return HTTPError(416, "Request Range Not Satisfiable")

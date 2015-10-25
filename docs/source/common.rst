@@ -10,15 +10,11 @@ the context of Bottle Utils and hasn't been tested in too many different
 versions of Python. If you want a more comprehensive solution, you should look
 at six_.
 
-``bottle_utils.common.PY2`` is a constant that is set to ``True`` if Python
-version is 2.x. Conversely, ``bottle_utils.common.PY3`` is used to detect if
-Python version is 3.x.
-
 This module also contains names ``unicode`` and ``basestring``, which work as
 expected in both Python 2.x and Python 3.x.
 
-Functions
----------
+Module contents
+---------------
 
 .. automodule:: bottle_utils.common
    :members:

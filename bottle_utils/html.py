@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
 
-"""
-.. module:: bottle_utils.html
-   :synopsis: Functions for use in HTML templates
-
-.. moduleauthor:: Outernet Inc <hello@outernet.is>
-"""
-
 from __future__ import unicode_literals
 
 import functools
@@ -30,7 +23,8 @@ ERR_CLS = 'field-error'
 
 
 class QueryDict(MultiDict):
-    """ Represents a query string in ``bottle.MultiDict`` format
+    """
+    Represents a query string in ``bottle.MultiDict`` format.
 
     This class differs from the base ``bottle.MultiDict`` class in two ways.
     First, it is instantiated with raw query string, rather than a list of
@@ -48,8 +42,17 @@ class QueryDict(MultiDict):
         >>> str(q)
         'a=1&b=2'
 
-    Note that the order of parameters in the resulting query string may differ
-    from the original.
+    The coercion also happens when using the ``+`` operator to concatenate with
+    other strings::
+
+        >>> 'foo' + q
+        'foo?a=1&b=2'
+
+    Notice that the '?' character is inserted when using the ``+`` operator.
+
+    .. note::
+        When converting back to string, the order of parameters in the
+        resulting query string may differ from the original.
 
     Furthermore, additional methods have been added to provide chaining
     capability in conjunction with ``*_qparam()`` functions in this module.
@@ -61,8 +64,8 @@ class QueryDict(MultiDict):
         >>> str(s)
         'b=3&d=2&k=12'
 
-    When used with functions like py:func:`~bottle_utils.html.add_qparam()`,
-    this provides a more intuitive API::
+    When used with functions like :py:func:`~add_qparam`, this provides a more
+    intuitive API::
 
         >>> qs = 'a=1&b=2'
         >>> q = add_qparam(qs, c=2).set_qparam(a=2)
@@ -77,47 +80,36 @@ class QueryDict(MultiDict):
     """
 
     def __init__(self, qs=''):
-        """
-        :param qs:  raw query string
-        """
         super(QueryDict, self).__init__(_parse_qsl(qs))
 
     def add_qparam(self, **params):
-        """ Add query parameter
-
-        Any keyword arguments passed to this function will be converted to
-        query parameters.
+        """
+        Add query parameter. Any keyword arguments passed to this function will
+        be converted to query parameters.
 
         Returns the instance for further chaining.
-
-        :returns:   this instance
         """
         for param, value in params.items():
             self.append(param, to_unicode(value))
         return self
 
     def set_qparam(self, **params):
-        """ Replace or add parameter
+        """
+        Replace or add parameter. Any keyword arguments passed to this function
+        will be converted to query parameters.
 
-        Any keyword arguments passed to this function will be converted to
-        query parameters.
-
-        Returns the instance for further chainign.
-
-        :returns:   this instance
+        Returns the instance for further chaining.
         """
         for param, value in params.items():
             self.replace(param, to_unicode(value))
         return self
 
     def del_qparam(self, *params):
-        """ Replace or add parameter
+        """
+        Remove a query parameter. Takes any number of parameter names to be
+        removed.
 
-        Takes any number of parameter names to be removed.
-
-        Returns the instance for further chainign.
-
-        :returns:   this instance
+        Returns the instance for further chaining.
         """
         for param in params:
             try:
@@ -127,7 +119,17 @@ class QueryDict(MultiDict):
         return self
 
     def to_qs(self):
+        """
+        Return the string representation of the query string with prepended
+        '?' character.
+        """
         return '?' + str(self)
+
+    def __radd__(self, other):
+        return other + self.to_qs()
+
+    def __add__(self, other):
+        return self.to_qs() + other
 
     def __str__(self):
         return '&'.join(['{}={}'.format(k, quote(to_bytes(v)))
@@ -182,17 +184,11 @@ def plur(word, n, plural=lambda n: n != 1,
         >>> plur('box', 2, convert=pluralize)
         'boxes'
 
-    :param word:    string to pluralize
-    :param n:       number of items from which to calculate plurals
-    :param plural:  function that returns true if the plural form should be
-                    used
-    :param convert: function that converts the string to plural
-    :returns:       word in appropriate form
     """
     return convert(word, plural(n))
 
 
-def hsize(size, unit='B', step=1024):
+def hsize(size, unit='B', step=1024, rounding=2, sep=' '):
     """
     Given size in unit produce size with human-friendly units. This is a simple
     formatting function that takes a value, a unit in which the value is
@@ -200,10 +196,13 @@ def hsize(size, unit='B', step=1024):
 
     This function rounds values to 2 decimal places and does not handle
     fractions. It also uses metric prefixes (K, M, G, etc) and only goes up to
-    Peta (P, quadrillion) prefix.
+    Peta (P, quadrillion) prefix. The number of decimal places can be
+    customized using the ``rounding`` argument.
 
     The size multiple (``step`` parameter) is 1024 by default, suitable for
     expressing values related to size of data on disk.
+
+    The ``sep`` argument represents a separator between values and units.
 
     Example::
 
@@ -215,11 +214,9 @@ def hsize(size, unit='B', step=1024):
         '1.50 KB'
         >>> hsize(2097152)
         '2.00 MB'
+        >>> hsize(12, sep='')
+        '12.00B'
 
-    :param size:    size in base units
-    :param unit:    base unit without prefix
-    :param step:    size of the multiple
-    :returns:       appropriate units
     """
     size = Decimal(size)
     order = -1
@@ -227,8 +224,10 @@ def hsize(size, unit='B', step=1024):
         size /= step
         order += 1
     if order < 0:
-        return '%.2f %s' % (round(size, 2), unit)
-    return '%.2f %s%s' % (round(size, 2), SIZES[order], unit)
+        return '%.{}f%s%s'.format(rounding) % (round(size, rounding), sep,
+                                               unit)
+    return '%.{}f%s%s%s'.format(rounding) % (round(size, rounding), sep,
+                                             SIZES[order], unit)
 
 
 def trunc(s, chars):
@@ -248,9 +247,6 @@ def trunc(s, chars):
        Keep in mind that the trucated string is always 3 characters longer than
        ``n`` because of the appended elipsis.
 
-    :param s:       input string
-    :param chars:   number of characters
-    :returns:       truncated string
     """
     if len(s) <= chars:
         return s
@@ -272,10 +268,6 @@ def yesno(val, yes='yes', no='no'):
         >>> yesno(True, 'available', 'not available')
         'available'
 
-    :param val:     value to test
-    :param yes:     string representation of 'yes'
-    :param no:      string representation of 'no'
-    :returns:       yes string or no string
     """
     return yes if val else no
 
@@ -292,9 +284,6 @@ def strft(ts, fmt):
     Actual parsing of the input is delegated to
     `python-dateutil <https://pypi.python.org/pypi/python-dateutil>`_ library.
 
-    :param ts:  input datestamp/timestamp
-    :param fmt: output format
-    :returns:   reformatted datestamp/timestamp
     """
     return parse(ts).strftime(fmt)
 
@@ -304,14 +293,14 @@ def strft(ts, fmt):
 
 def attr(name, value=None):
     """
-    Render HTML attribute. This function is used as part of
-    :py:func:`~bottle_utils.html.tag` function to render HTML attributes, but
-    can be used on its own as well. It converts the value into Unicode string
-    and sanitizes it before returning the markup.
+    Render HTML attribute. This function is used as part of :py:func:`~tag`
+    function to render HTML attributes, but can be used on its own as well. It
+    converts the value into Unicode string and sanitizes it before returning
+    the markup.
 
     Basic usage may look like this::
 
-        >>> attr('src': '/images?src=foo.png&w=12')
+        >>> attr('src', '/images?src=foo.png&w=12')
         'src="/images?src=foo.png&amp;w=12"'
 
     All attribute values are double-quoted and any double quotes found inside
@@ -328,9 +317,6 @@ def attr(name, value=None):
     Therefore, to suppress attribute values completely (i.e., not even have the
     ``=""`` part, use ``None`` as the value.
 
-    :param name:    attribute name
-    :param value:   optional attribute value
-    :returns:       correctly rendered attribute-value pair or attribute name
     """
     if value is not None:
         value = to_unicode(value)
@@ -364,9 +350,10 @@ def tag(name, content='', nonclosing=False, **attrs):
         >>> tag('not valid')
         '<not valid></not valid>
 
-    Please ensure that ``name`` argument does not come from user-specified
-    data, or, if it does, that it is properly sanitized (best way is to use a
-    whitelist of allowed names).
+    .. warning::
+        Please ensure that ``name`` argument does not come from user-specified
+        data, or, if it does, that it is properly sanitized (best way is to use
+        a whitelist of allowed names).
 
     Because attributes are specified using keyword arguments, which are then
     treated as a dictionary, there is no guarantee of attribute order. If
@@ -389,10 +376,6 @@ def tag(name, content='', nonclosing=False, **attrs):
     - ``TEXTAREA`` - alias for ``<textarea>`` tag
     - ``UL`` - alias for ``<ul>`` tag
 
-    :param name:    tag name
-    :param content: tag content
-    :param attrs:   optional tag attributes
-    :returns:       HTML of the tag with its content and attributes
     """
     open_tag = '<%s>' % name
     close_tag = '</%s>' % name
@@ -447,17 +430,13 @@ def vinput(name, values, **attrs):
     All values are properly sanitized before they are added to the markup.
 
     Any additional keyword arguments that are passed to this function are
-    passed on the the :py:func:`~bottle_utils.html.tag` function. Since the
-    generated input markup is for generic text input, some of the other usual
-    input types can be specified using ``_type`` parameter::
+    passed on the :py:func:`~tag` function. Since the generated input markup is
+    for generic text input, some of the other usual input types can be
+    specified using ``_type`` parameter::
 
         >>> input('foo', {}, _type='email')
         '<input name="foo" id="foo" type="email">'
 
-    :param name:    field name
-    :param values:  dictionary or dictionary-like object containing field
-                    values
-    :returns:       HTML markup for the field with bound value
     """
     attrs.setdefault('_id', name)
     value = values.get(name)
@@ -475,14 +454,10 @@ def varea(name, values, **attrs):
         >>> varea('foo', {'foo': 'bar'})
         '<textarea name="foo" id="foo">bar</textarea>'
 
-    This function works the same way as :py:func:`~bottle_utils.html.vinput`
-    function, so please look at it for more information. The primary difference
-    is in the generated markup.
+    This function works the same way as :py:func:`~vinput` function, so please
+    look at it for more information. The primary difference is in the generated
+    markup.
 
-    :param name:    field name
-    :param values:  dictionary or dictionary-like object containing field
-                    values
-    :returns:       HTML markup for the textarea with bound value
     """
     attrs.setdefault('_id', name)
     value = values.get(name)
@@ -533,12 +508,6 @@ def vcheckbox(name, value, values, default=False, **attrs):
         >>> vcheckbox('foo', 'bar', {}, default=True)
         '<input type="checkbox" name="foo" id="foo" value="bar" checked>'
 
-    :param name:    field name
-    :param value:   value of the checkbox
-    :param values:  dictionary or dictionary-like object containing field
-    :param default: default state when input is not bound (``True`` for
-                    checked)
-    :returns:       HTML markup for the checkbox with bound value
     """
     attrs.setdefault('_id', name)
     if name in values:
@@ -592,11 +561,6 @@ def vselect(name, choices, values, empty=None, **attrs):
     argument for ``empty`` should be a label, and the matching value is
     ``None``. The emtpy value is always inseted at the beginning of the list.
 
-    :param name:    field name
-    :param choices: iterable of select list choices
-    :param values:  dictionary or dictionary-like object containing field
-    :param empty:   label for empty value
-    :returns:       HTML markup for the select list with bound value
     """
     attrs.setdefault('_id', name)
     value = values.get(name)
@@ -630,10 +594,6 @@ def form(method=None, action=None, csrf=False, multipart=False, **attrs):
     Any additional keyword arguments will be used as attributes for the form
     tag.
 
-    :param method:      HTTP method (GET, POST, PUT, DELETE, PATCH, etc)
-    :param action:      action attribute
-    :param csrf:        include CSRF protection token
-    :param multipart:   make the form multipart
     """
     method = method and method.upper()
     if not method:
@@ -661,18 +621,20 @@ def form(method=None, action=None, csrf=False, multipart=False, **attrs):
 
 def link_other(label, url, path, wrapper=SPAN, **kwargs):
     """
-    Only wrap label in anchor if given URL is not the path. Given a label, this
-    function will match the page URL against the path to which the label should
-    point, and generate the anchor element markup as necessary.
+    Only wrap label in anchor if given target URL, ``url``, does not match the
+    ``path``. Given a label, this function will match the page URL against the
+    path to which the anchor should point, and generate the anchor element
+    markup as necessary. If the paths, match, ``wrapper`` will be used to
+    generate the markup around the label.
 
     Any additional keyword arguments are passed to the function that generates
-    the anchor markup, which is ``A`` alias for
-    :py:func:`~bottle_utils.html.tag` function.
+    the anchor markup, which is :py:func:`~A` alias of the :py:func:`~tag`
+    function.
 
     If the URLs match (meaning the page URL matches the target path), the label
     will be passed to the wrapper function. The default wrapper function is
-    :py:func:`~bottle_utils.html.SPAN`, so the label is wrapped in SPAN tag
-    when the URLs matches.::
+    :py:func:`~SPAN`, so the label is wrapped in SPAN tag when the URLs
+    matches.::
 
         >>> link_other('foo', '/here', '/there')
         '<a href="/target">foo</a>'
@@ -697,82 +659,10 @@ def link_other(label, url, path, wrapper=SPAN, **kwargs):
         >>> link_other('foo', '/there', '/there', wrapper=BUTTON, _class='cls')
         '<button class="cls">foo</button>'
 
-    :param label:   label of the link
-    :param url:     URL to which label should be linked
-    :param path:    path to test URL against
-    :param wrapper: function that should be used to wrap the label if URL
-                    matches the path (i.e., anchor is not being rendered)
     """
     if url == path:
         return wrapper(label, **kwargs)
     return A(label, href=url, **kwargs)
-
-
-def field_error(name, errors):
-    """
-    Renders error message for single form field. This function renders a
-    standardized markup for individual form field errors.
-
-    .. note::
-
-       This is not a generic helper function like the other ones. It's more of
-       an opinion on how error messages should be rendered, and it has no
-       particular rationale behind it rather than 'This is how I do things'.
-       The reason it is included here is that having consistent markup for form
-       errors tends to increase the speed at which we are able to implement
-       interfaces.
-
-    For the error messages the render, the error dictionary must contain a key
-    that matches the specified key. The key may map to a single string value or
-    an iterable containing strings. Depending on how many error messages there
-    are, one or more of span elements will be rendered. Every span will have
-    'field-error' class.
-
-    :param name:    name of the field to look up in the dict
-    :param errors:  dict-like object containing field-name-message mappings
-    :returns:       HTML of the error message if one is found, otherwise empty
-                    string
-    """
-    try:
-        return SPAN(html_escape(errors[name]), _class=ERR_CLS)
-    except KeyError:
-        return ''
-
-
-def form_errors(errors):
-    """
-    Renders a form error. This function renders a standardized markup for form
-    errors in your template.
-
-    Please see notes for :py:func:`~bottle_utils.html.field_error` for the
-    reasoning behind this helper function.
-
-    Input dictionary must contain a special key '_' which is treated as key for
-    form-wide errors that are not specific to any field. The value can either
-    be a single string or an iterable of strings.
-
-    Errors are always rendered as unordered list with each error message as
-    list item, even when there is only one error. The list items always have
-    the 'form-error' class, and the unordered list has the 'form-errors' class.
-
-    For example::
-
-        >>> form_errors({'_': 'Ouch!'})
-        '<ul class="form-errors"><li class="form-error">Ouch!</li></ul>'
-        >>> form_errors({'_': ['Ouf!', 'Pain!']})
-        '<ul class="form-errors"><li class="form-error">Ouf!</li><li clas...'
-
-    :param errors:  dictionary or dictionary-like object containing field
-                    name-error mappings
-    """
-    if '_' not in errors:
-        return ''
-    if hasattr(errors['_'], '__iter__'):
-        msgs = (html_escape(to_unicode(m)) for m in errors['_'])
-        return UL(LI(msgs, _class=FERR_ONE_CLS), _class=FERR_CLS)
-    else:
-        msg = html_escape(to_unicode(errors['_']))
-        return P(SPAN(msg, _class=FERR_ONE_CLS), _class=FERR_CLS)
 
 
 def to_qs(mapping):
@@ -784,8 +674,6 @@ def to_qs(mapping):
 
     The values for each parameter is encoded as UTF-8 and escaped.
 
-    :param mapping:     ``bottle.MultiDict`` or ``dict``-like object
-    :returns:           current path with query string built from given mapping
     """
     try:
         pairs = mapping.allitems()
@@ -807,8 +695,8 @@ def add_qparam(qs=None, **params):
     Any keyword arguments passed to this function will be converted to query
     parameters.
 
-    The returned object is a :py:func:`~bottle_utils.html.QueryDict` instance,
-    which is a ``bottle.MultiDict`` subclass.
+    The returned object is a :py:class:`~QueryDict` instance, which is a
+    ``bottle.MultiDict`` subclass.
 
     Example::
 
@@ -819,8 +707,6 @@ def add_qparam(qs=None, **params):
         >>> str(q)
         'a=1&a=2'
 
-    :param qs:          query string or QueryDict instance
-    :returns:           QueryDict object
     """
     qs = qs or request.query_string
     qs = _to_qdict(qs)
@@ -836,18 +722,16 @@ def set_qparam(qs=None, **params):
     Any keyword arguments passed to this function will be converted to query
     parameters.
 
-    The returned object is a :py:func:`~bottle_utils.html.QueryDict` instance,
-    which is a ``bottle.MultiDict`` subclass.
+    The returned object is a :py:class:`~QueryDict` instance, which is a
+    ``bottle.MultiDict`` subclass.
 
-    :param qs:          query string or QueryDict instance
-    :returns:           QueryDict object
     """
     qs = qs or request.query_string
     qs = _to_qdict(qs)
     return qs.set_qparam(**params)
 
 
-def del_qparam(qs, *params):
+def del_qparam(qs=None, *params):
     """
     Remove query string parameters
 
@@ -856,11 +740,9 @@ def del_qparam(qs, *params):
     Second and subsequent positional arguments are query parameter names to be
     removed from the query string.
 
-    The returned object is a :py:func:`~bottle_utils.html.QueryDict` instance,
-    which is a ``bottle.MultiDict`` subclass.
+    The returned object is a :py:class:`~QueryDict` instance, which is a
+    ``bottle.MultiDict`` subclass.
 
-    :param qs:          query string or QueryDict instance
-    :returns:           QueryDict object
     """
     qs = qs or request.query_string
     qs = _to_qdict(qs)
@@ -869,18 +751,15 @@ def del_qparam(qs, *params):
 
 def perc_range(n, min_val, max_val, rounding=2):
     """
-    Return percentage of `n` within `min_val` to `max_val` range
+    Return percentage of `n` within `min_val` to `max_val` range. The
+    ``rounding`` argument is used to specify the number of decimal places to
+    include after the floating point.
 
     Example::
 
         >>> perc_range(40, 20, 60)
         50
 
-    :param n:           number
-    :param min_val:     smallest value of the range
-    :param max_val:     largest value of the range
-    :param rounding:    number of fractional digits to keep
-    :returns:           percentage of `n` in the range
     """
     return round(
         min([1, max([0, n - min_val]) / (max_val - min_val)]) * 100, rounding)

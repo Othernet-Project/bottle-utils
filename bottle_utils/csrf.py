@@ -1,10 +1,3 @@
-"""
-.. module:: bottle_utils.csrf
-   :synopsis: CSRF-protection decorators
-
-.. moduleauthor:: Outernet Inc <hello@outernet.is>
-"""
-
 from __future__ import unicode_literals
 
 import os
@@ -24,12 +17,11 @@ ENCODING = 'latin1'
 
 def get_conf():
     """
-    Return parsed configruation options. This function obtains
+    Return parsed configruation options. This function obtains the
+    configuration from ``bottle.request.app.config`` object which is expected
+    to be a dictionary-like object.
 
     This function raises ``KeyError`` if configuration misses
-
-    :raises: KeyError
-    :returns: tuple of secret, token name, path, and cookie timeout
     """
     conf = request.app.config
     csrf_secret = conf['csrf.secret']
@@ -73,8 +65,8 @@ def csrf_token(func):
     When an existing token cookie is found, it is reused. The existing token is
     reset so that the expiration time is extended each time it is reused.
 
-    The POST handler must use the :py:func:`~bottle_utils.csrf.csrf_protect`
-    decotrator for the token to be used in any way.
+    The POST handler must use the :py:func:`~csrf_protect` decotrator for the
+    token to be used in any way.
 
     The token is available in the ``bottle.request`` object as ``csrf_token``
     attribute::
@@ -117,7 +109,7 @@ def csrf_protect(func):
     form data matches the token in the cookie. It is assumed that the GET
     request handler successfully set the token for the request and that the
     form was instrumented with a CSRF token field. Use the
-    :py:func:`~bottle_utils.csrf.csrf_token` decorator to do this.
+    :py:func:`~csrf_token` decorator to do this.
 
     If the handler function returns (i.e., it is not interrupted with
     ``bottle.abort()``, ``bottle.redirect()``, and similar functions that throw
@@ -159,8 +151,7 @@ def csrf_tag():
     since it uses the ``bottle.request`` object to obtain the token.
 
     If the handler in which this function is invoked is not decorated with
-    :py:func:`~bottle_utils.csrf.csrf_token`, an ``AttributeError`` will be
-    raised.
+    :py:func:`~csrf_token`, an ``AttributeError`` will be raised.
 
     :returns:   HTML markup for hidden CSRF token field
     """
