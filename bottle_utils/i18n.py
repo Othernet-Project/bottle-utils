@@ -391,7 +391,7 @@ class I18NPlugin(object):
         if noplugin:
             return
         try:
-            self.app.install(self)
+            self.install_plugin()
         except AttributeError:
             # It's not strictly necessary to install the plugin automatically
             # like this, especially if there are other WSGI middleware in the
@@ -406,6 +406,10 @@ class I18NPlugin(object):
         if locale:
             e['PATH_INFO'] = self.strip_prefix(path, locale)
         return self.app(e, h)
+
+    def install_plugin(self, app=None):
+        app = app or self.app
+        app.install(self)
 
     def apply(self, callback, route):
         try:
