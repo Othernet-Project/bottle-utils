@@ -8,30 +8,44 @@ from .exceptions import ValidationError
 
 
 class Form(object):
-    """Base form class to be subclassed. Definition of new forms:
+    """
+    Base form class to be subclassed. To define a new form subclass this
+    class::
 
-    class NewForm(Form):
-        field1 = Field('Field 1')
-        field2 = Field('Field 2', [Required])
+        class NewForm(Form):
+            field1 = Field('Field 1')
+            field2 = Field('Field 2', [Required])
 
-        def preprocess_field1(self, value):
-            return value.replace('this', 'that')
+    Forms support field pre- and post-procesors. These methods are named after
+    the field names by prepending ``preprocess_`` and ``postprocess_``
+    respectively. For example::
 
-        def postprocess_field1(self, value):
-            return value + 'done'
+        class NewForm(Form):
+            field1 = Field('Field 1')
+            field2 = Field('Field 2', [Required])
+
+            def preprocess_field1(self, value):
+                return value.replace('this', 'that')
+
+            def postprocess_field1(self, value):
+                return value + 'done'
 
     Preprocessors can be defined for individual fields, and are ran before any
     validation happens over the field's data. Preprocessors are also allowed
-    to raise `ValidationError`, though their actual purpose is to perform some
-    manipulation over the incoming data, before it is passed over to the
+    to raise ``ValidationError``, though their actual purpose is to perform
+    some manipulation over the incoming data, before it is passed over to the
     validators. The return value of the preprocessor is the value that is going
     to be validated further.
 
-    Postprocessors perform a similar purpose as preprocessors, only they are
-    invoked after and if the field-level validation passed. Their return value
-    is the value that is going to be the stored as cleaned / validated data.
+    Postprocessors perform a similar purpose as preprocessors, except that they
+    are invoked after field-level validation passes. Their return value is the
+    value that is going to be the stored as cleaned / validated data.
     """
+
+    #: Prefix to use for looking up preprocessors
     _pre_processor_prefix = 'preprocess_'
+
+    #: Prefix to use for looking up postprocessors
     _post_processor_prefix = 'postprocess_'
 
     # Translators, used as generic error message in forms, 'value' should not
@@ -61,27 +75,33 @@ class Form(object):
                 field_instance.bind_value(data.get(field_name))
 
     @property
-    def field_messages(self):
-        """ Dictionary of all field error messages
-
-        This value maps the field names to error message maps. Field names are
-        mapped to fields' messages property, which maps error type to actual
-        message. This dictionary can also be used to modify the messages
-        because message mappings are not copied.
+    def field_errors(self):
+        """
+        Dictionary of all field error messages. This property maps the field
+        names to error message maps. Field names are mapped to fields' messages
+        property, which maps error type to actual message. This dictionary can
+        also be used to modify the messages because message mappings are not
+        copied.
         """
         messages = {}
         for field_name, field in self.fields.items():
             messages[field_name] = field.messages
         return messages
 
+    #: Alias for :py:attr:`~field_errors` retained for
+    # backwards-compatibility
+    field_messages = field_errors
+
     @property
     def fields(self):
-        """Returns a dictionary of all the fields found on the form instance.
-        The return value is never cached so dynamically adding new fields to
-        the form is allowed."""
+        """
+        Dictionary of all the fields found on the form instance.  The return
+        value is never cached so dynamically adding new fields to the form is
+        allowed.
+        """
         types = (Field, DormantField)
         is_form_field = lambda name: isinstance(getattr(self, name), types)
-        ignored_attrs = ['fields', 'field_messages']
+        ignored_attrs = ['fields', 'field_messages', 'field_errors']
         return dict((name, getattr(self, name)) for name in dir(self)
                     if name not in ignored_attrs and is_form_field(name))
 
@@ -98,7 +118,8 @@ class Form(object):
         return value
 
     def is_valid(self):
-        """Perform full form validation over the initialized form. The method
+        """
+        Perform full form validation over the initialized form. The method
         has the following side-effects:
 
         - in case errors are found, the form's `errors` container is going to
@@ -106,7 +127,7 @@ class Form(object):
         - validated and processed values are going to be put into the
           `processed_data` dictionary.
 
-        :returns:  boolean indication whether the form is valid or not
+        Return value is a boolean, and is ``True`` is form data is valid.
         """
         for field_name, field in self.fields.items():
             # run pre-processor on value, if defined
@@ -157,6 +178,15 @@ class Form(object):
 
     @property
     def error(self):
+        """
+        Form-specific error message. This property evaluates to an empty string
+        if form has no errors of its own.
+
+        .. note::
+            This property contains **only** form-specific errors, but no
+            field errors. Field errors are available as the
+            :py:attr:`~field_errors` property.
+        """
         if not self._error:
             return ''
         message = self.messages.get(self._error.message, self.generic_error)
