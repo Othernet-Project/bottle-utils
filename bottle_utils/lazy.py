@@ -14,25 +14,17 @@ __all__ = ('Lazy', 'CachingLazy', 'lazy', 'caching_lazy')
 
 class Lazy(object):
     """
-    Proxy object that evaluates a function when its value is needed. This
-    object provides most of the magic methods found in Python `data model
-    <https://docs.python.org/2/reference/datamodel.html>`_, and wraps a
-    callable waiting for any of them to be accessed. It evaluates the callable
-    when the magic methods or any other attributes are accessed and returns the
-    actual result of evaluation at that point.
+    Lazy proxy object. This proxy always evaluates the function when it is
+    used.
 
-    The proxy object always reevaluates the result. There is also a
-    :py:class:`~bottle_utils.lazy.CachinLazy` class which only evaluates once.
-
-    A lazy object is instantiated with callable as first argument, followed by
-    any arguments and keyword arguments that were originally passed to the
-    callable.
-
-    :param func:    callable
+    Any positional and keyword arguments that are passed to the constructor are
+    stored and passed to the function except the ``_func`` argument which is
+    the function itself. Because of this, the wrapped callable cannot use an
+    argument named ``_func`` itself.
     """
 
-    def __init__(self, func, *args, **kwargs):
-        self._func = func
+    def __init__(self, _func, *args, **kwargs):
+        self._func = _func
         self._args = args
         self._kwargs = kwargs
 
@@ -123,17 +115,18 @@ class Lazy(object):
 
 class CachingLazy(Lazy):
     """
-    Caching version of the :py:class:`~bottle_utils.lazy.Lazy` class. The only
-    difference is that this class caches the results of evaluation and
-    evaluates only once.
+    Caching version of the :py:class:`~Lazy` class. Unlike the parent class,
+    this class only evaluates the callable once, and remembers the resutls. On
+    subsequent use, it returns the original result. This is probably closer to
+    the behavior of a normal return value.
 
     :param func:    callable
     """
 
-    def __init__(self, func, *args, **kwargs):
+    def __init__(self, _func, *args, **kwargs):
         self._called = False
         self._cached = None
-        super(CachingLazy, self).__init__(func, *args, **kwargs)
+        super(CachingLazy, self).__init__(_func, *args, **kwargs)
 
     def _eval(self):
         if self._called:
@@ -145,14 +138,15 @@ class CachingLazy(Lazy):
 
 def lazy(fn):
     """
-    Convert a function into lazily evaluated version. This decorator sets us a
-    :py:class:`bottle_utils.lazy.Lazy` proxy for decorated function.
+    Convert a function into lazily evaluated version. This decorator causes the
+    function to return a :py:class:`~Lazy` proxy instead of the actual results.
 
     Usage is simple::
 
         @lazy
         def my_lazy_func():
             return 'foo'
+
     """
     @wraps(fn)
     def wrapper(*args, **kwargs):
@@ -162,14 +156,16 @@ def lazy(fn):
 
 def caching_lazy(fn):
     """
-    Convert a function into lazily evaluated version. This decorator sets us a
-    :py:class:`bottle_utils.lazy.CachingLazy` proxy for decorated function.
+    Convert a function into cached lazily evaluated version. This decorator
+    modifies the function to return a :py:class:`~CachingLazy` proxy instead of
+    the actual result.
 
     This decorator has no arguments::
 
         @caching_lazy
         def my_lazy_func():
             return 'foo'
+
     """
     @wraps(fn)
     def wrapper(*args, **kwargs):
