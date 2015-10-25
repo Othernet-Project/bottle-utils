@@ -32,5 +32,4 @@ Classes
 
 .. automodule:: bottle_utils.meta
    :members:
-   :show-inheritance:
 
