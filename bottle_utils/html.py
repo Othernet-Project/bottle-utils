@@ -192,7 +192,7 @@ def plur(word, n, plural=lambda n: n != 1,
     return convert(word, plural(n))
 
 
-def hsize(size, unit='B', step=1024):
+def hsize(size, unit='B', step=1024, rounding=2, sep=' '):
     """
     Given size in unit produce size with human-friendly units. This is a simple
     formatting function that takes a value, a unit in which the value is
@@ -200,10 +200,13 @@ def hsize(size, unit='B', step=1024):
 
     This function rounds values to 2 decimal places and does not handle
     fractions. It also uses metric prefixes (K, M, G, etc) and only goes up to
-    Peta (P, quadrillion) prefix.
+    Peta (P, quadrillion) prefix. The number of decimal places can be
+    customized using the ``rounding`` argument.
 
     The size multiple (``step`` parameter) is 1024 by default, suitable for
     expressing values related to size of data on disk.
+
+    The ``sep`` argument represents a separator between values and units.
 
     Example::
 
@@ -215,11 +218,9 @@ def hsize(size, unit='B', step=1024):
         '1.50 KB'
         >>> hsize(2097152)
         '2.00 MB'
+        >>> hsize(12, sep='')
+        '12.00B'
 
-    :param size:    size in base units
-    :param unit:    base unit without prefix
-    :param step:    size of the multiple
-    :returns:       appropriate units
     """
     size = Decimal(size)
     order = -1
@@ -227,8 +228,10 @@ def hsize(size, unit='B', step=1024):
         size /= step
         order += 1
     if order < 0:
-        return '%.2f %s' % (round(size, 2), unit)
-    return '%.2f %s%s' % (round(size, 2), SIZES[order], unit)
+        return '%.{}f%s%s'.format(rounding) % (round(size, rounding), sep,
+                                               unit)
+    return '%.{}f%s%s%s'.format(rounding) % (round(size, rounding), sep,
+                                             SIZES[order], unit)
 
 
 def trunc(s, chars):

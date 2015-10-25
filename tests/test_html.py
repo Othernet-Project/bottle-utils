@@ -67,6 +67,8 @@ def test_hsize():
     assert mod.hsize(12) == '12.00 B'
     assert mod.hsize(1030) == '1.01 KB'
     assert mod.hsize(2097152) == '2.00 MB'
+    assert mod.hsize(12, sep='') == '12.00B'
+    assert mod.hsize(12, rounding=0) == '12 B'
 
 
 def test_hsize_step():
