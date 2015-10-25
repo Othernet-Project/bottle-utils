@@ -119,8 +119,6 @@ class CachingLazy(Lazy):
     this class only evaluates the callable once, and remembers the resutls. On
     subsequent use, it returns the original result. This is probably closer to
     the behavior of a normal return value.
-
-    :param func:    callable
     """
 
     def __init__(self, _func, *args, **kwargs):
