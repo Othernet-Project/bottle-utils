@@ -100,10 +100,11 @@ class Form(object):
     def is_valid(self):
         """Perform full form validation over the initialized form. The method
         has the following side-effects:
-          - in case errors are found, the form's `errors` container is going to
-            be populated accordingly.
-          - validated and processed values are going to be put into the
-            `processed_data` dictionary.
+
+        - in case errors are found, the form's `errors` container is going to
+          be populated accordingly.
+        - validated and processed values are going to be put into the
+          `processed_data` dictionary.
 
         :returns:  boolean indication whether the form is valid or not
         """
