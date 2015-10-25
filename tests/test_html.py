@@ -388,6 +388,16 @@ def test_to_qs_unicode():
             pytest.fail("Should not raise: {0}".format(exc))
 
 
+def test_qs_concat_left():
+    qs = mod.QueryDict('a=0')
+    assert 'foo' + qs == 'foo?a=0'
+
+
+def test_qs_conact_right():
+    qs = mod.QueryDict('a=0')
+    assert qs + '&foo=2' == '?a=0&foo=2'
+
+
 def test_add_qparam():
     qs = 'a=1&b=3&c=4'
     ret = mod.add_qparam(qs, a='0')

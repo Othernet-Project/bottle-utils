@@ -129,6 +129,12 @@ class QueryDict(MultiDict):
     def to_qs(self):
         return '?' + str(self)
 
+    def __radd__(self, other):
+        return other + self.to_qs()
+
+    def __add__(self, other):
+        return self.to_qs() + other
+
     def __str__(self):
         return '&'.join(['{}={}'.format(k, quote(to_bytes(v)))
                          for k, v in self.allitems()])
