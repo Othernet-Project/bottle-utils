@@ -789,7 +789,7 @@ def set_qparam(qs=None, **params):
     return qs.set_qparam(**params)
 
 
-def del_qparam(qs, *params):
+def del_qparam(qs=None, *params):
     """
     Remove query string parameters
 
