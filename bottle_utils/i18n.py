@@ -1,5 +1,6 @@
 import gettext
 import functools
+
 from warnings import warn
 
 from bottle import (redirect,
@@ -10,6 +11,7 @@ from bottle import (redirect,
                     DictMixin)
 
 from .lazy import lazy
+from .html import quoted_url
 from .common import to_unicode
 
 
@@ -164,7 +166,7 @@ def i18n_url(route, **params):
     currently selected locale.
     """
     locale = params.pop('locale', request.locale)
-    path = request.app.get_url(route, **params)
+    path = quoted_url(route, **params)
     return i18n_path(path, locale=locale)
 
 
