@@ -5,13 +5,13 @@ from __future__ import unicode_literals
 import functools
 
 try:
-    from urllib import quote
+    from urllib import quote, unquote
 except ImportError:
-    from urllib.parse import quote
+    from urllib.parse import quote, unquote
 
 from decimal import Decimal
 from dateutil.parser import parse
-from bottle import request, html_escape, MultiDict, _parse_qsl
+from bottle import request, MultiDict, _parse_qsl
 
 from .common import to_bytes, to_unicode, attr_escape, basestring, unicode
 
@@ -20,6 +20,10 @@ SIZES = 'KMGTP'
 FERR_CLS = 'form-errors'
 FERR_ONE_CLS = 'form-error'
 ERR_CLS = 'field-error'
+
+
+urlquote = lambda value: quote(to_bytes(value))
+urlunquote = lambda value: to_unicode(unquote(value))
 
 
 class QueryDict(MultiDict):
@@ -132,7 +136,7 @@ class QueryDict(MultiDict):
         return self.to_qs() + other
 
     def __str__(self):
-        return '&'.join(['{}={}'.format(k, quote(to_bytes(v)))
+        return '&'.join(['{}={}'.format(urlquote(k), urlquote(v))
                          for k, v in self.allitems()])
 
 
@@ -665,6 +669,27 @@ def link_other(label, url, path, wrapper=SPAN, **kwargs):
     return A(label, href=url, **kwargs)
 
 
+def quote_dict(mapping):
+    """URL quote keys and values of the passed in dict-like object.
+
+    :param mapping:     ``bottle.MultiDict`` or ``dict``-like object
+    :returns:           dict with url quoted values
+    """
+    try:
+        pairs = mapping.allitems()
+    except AttributeError:
+        pairs = mapping.items()
+    qdict = QueryDict()
+    for k, v in pairs:
+        qdict[urlquote(k)] = urlquote(v)
+    return qdict
+
+
+def quoted_url(route, **params):
+    """Return matching URL with it's query parameters quoted."""
+    return request.app.get_url(route, **quote_dict(params))
+
+
 def to_qs(mapping):
     """
     Convert a mapping object to query string appended to current path. This
@@ -675,12 +700,8 @@ def to_qs(mapping):
     The values for each parameter is encoded as UTF-8 and escaped.
 
     """
-    try:
-        pairs = mapping.allitems()
-    except AttributeError:
-        pairs = mapping.items()
-    return request.path + '?' + '&'.join(
-        ['%s=%s' % (k, quote(to_bytes(v))) for k, v in pairs])
+    qs = ['{}={}'.format(k, v) for k, v in quote_dict(mapping).allitems()]
+    return request.path + '?' + '&'.join(qs)
 
 
 _to_qdict = lambda qs: QueryDict(qs) if isinstance(qs, basestring) else qs
