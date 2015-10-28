@@ -18,7 +18,6 @@ from .fields import (DormantField,
                      BooleanField,
                      SelectField)
 from .forms import Form
-from .labels import Label
 from .validators import Validator, Required, DateValidator, InRangeValidator
 
 
@@ -37,7 +36,6 @@ __all__ = ['ValidationError',
            'BooleanField',
            'SelectField',
            'Form',
-           'Label',
            'Validator',
            'Required',
            'DateValidator',
