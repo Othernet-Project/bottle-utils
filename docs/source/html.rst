@@ -9,7 +9,7 @@ HTML snippets and binding data to form fields.
 Basic usage
 -----------
 
-One way to make the module contents available to templates is to add the module 
+One way to make the module contents available to templates is to add the module
 itself as a default template variable.::
 
     import bottle
@@ -57,3 +57,7 @@ URL handling
 .. autofunction:: add_qparam
 .. autofunction:: set_qparam
 .. autofunction:: del_qparam
+.. autofunction:: urlquote
+.. autofunction:: urlunquote
+.. autofunction:: quote_dict
+.. autofunction:: quoted_url
