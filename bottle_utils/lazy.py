@@ -109,6 +109,8 @@ class Lazy(object):
     def __bool__(self):
         return bool(self._eval())
 
+    __nonzero__ = __bool__
+
     def __hash__(self):
         return hash(self._eval())
 
