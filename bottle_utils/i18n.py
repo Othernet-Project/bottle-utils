@@ -415,3 +415,11 @@ class I18NPlugin(object):
         ``ORIGINAL_PATH`` key.
         """
         return path[len(locale) + 1:]
+
+    def set_locale(self, locale):
+        """
+        Store the passed in ``locale`` in a 'locale' cookie, which is used to
+        override the value of the global ``default_locale``.
+        """
+        request.locale = locale
+        response.set_cookie('locale', locale, path='/')
