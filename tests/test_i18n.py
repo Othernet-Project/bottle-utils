@@ -8,10 +8,7 @@ All rights reserved
 Licensed under BSD license. See ``LICENSE`` file in the source directory.
 """
 
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+import mock
 
 import bottle_utils.i18n as mod
 
@@ -144,25 +141,28 @@ def test_i18n_url_returns_lazy():
     assert is_lazy(s), "Should be a lazy object"
 
 
-@mock.patch(MOD + 'request')
-@mock.patch(MOD + 'i18n_path')
-def test_i18n_path_calls_get_url(i18n_path, req):
+@mock.patch.object(mod, 'quoted_url')
+@mock.patch.object(mod, 'request')
+@mock.patch.object(mod, 'i18n_path')
+def test_i18n_path_calls_get_url(i18n_path, req, quoted_url):
     s = mod.i18n_url('foo', bar=2)
     s._eval()
-    req.app.get_url.assert_called_once_with('foo', bar=2)
+    quoted_url.assert_called_once_with('foo', bar=2)
 
 
-@mock.patch(MOD + 'request')
-def test_i18n_url_prefixes_get_url_results(req):
-    req.app.get_url.return_value = '/foo/2/'
+@mock.patch.object(mod, 'quoted_url')
+@mock.patch.object(mod, 'request')
+def test_i18n_url_prefixes_get_url_results(req, quoted_url):
+    quoted_url.return_value = '/foo/2/'
     req.locale = 'en'
     s = mod.i18n_url('foo', bar=2)
     assert s == '/en/foo/2/'
 
 
-@mock.patch(MOD + 'request')
-def test_i18n_url_locale_override(req):
-    req.app.get_url.return_value = '/foo/2/'
+@mock.patch.object(mod, 'quoted_url')
+@mock.patch.object(mod, 'request')
+def test_i18n_url_locale_override(req, quoted_url):
+    quoted_url.return_value = '/foo/2/'
     req.locale = 'en'
     s = mod.i18n_url('foo', bar=2, locale='es')
     assert s == '/es/foo/2/'
@@ -225,7 +225,7 @@ def test_initialization_no_plugin(BaseTemplate, translation):
     langs = [('foo', 'bar')]
     mod.I18NPlugin(app, langs, default_locale='foo',
                    locale_dir='nonexistent', noplugin=True)
-    assert app.install.called == False, "Should not install the plugin"
+    assert not app.install.called, "Should not install the plugin"
 
 
 @mock.patch(MOD + 'gettext.translation')

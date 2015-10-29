@@ -11,10 +11,8 @@ Licensed under BSD license. See ``LICENSE`` file in the source directory.
 from __future__ import unicode_literals
 
 import sys
-try:
-    from unittest import mock
-except ImportError:
-    import mock
+
+import mock
 
 import bottle_utils.meta as mod
 
@@ -53,7 +51,7 @@ def test_simple_description(simple):
     simple.assert_called_once_with('description', 'foo')
 
 
-@mock.patch(MOD + 'Metadata.meta')
+@mock.patch.object(mod.Metadata, 'meta')
 def test_metadata_prop(meta):
     m = mod.Metadata()
     ret = m.prop('foo', 'bar', 'baz')
@@ -61,7 +59,7 @@ def test_metadata_prop(meta):
     meta.assert_called_once_with('property', 'foo:bar', 'baz')
 
 
-@mock.patch(MOD + 'Metadata.meta')
+@mock.patch.object(mod.Metadata, 'meta')
 def test_metadata_simple(meta):
     m = mod.Metadata()
     ret = m.simple('foo', 'bar')
@@ -69,7 +67,7 @@ def test_metadata_simple(meta):
     meta.assert_called_once_with('name', 'foo', 'bar')
 
 
-@mock.patch(MOD + 'Metadata.meta')
+@mock.patch.object(mod.Metadata, 'meta')
 def test_metadata_nameprop(meta):
     m = mod.Metadata()
     ret = m.nameprop('foo', 'bar', 'baz')
@@ -77,7 +75,7 @@ def test_metadata_nameprop(meta):
     meta.assert_called_once_with('name', 'foo:bar', 'baz')
 
 
-@mock.patch(MOD + 'Metadata.meta')
+@mock.patch.object(mod.Metadata, 'meta')
 def test_metadata_itemprop(meta):
     m = mod.Metadata()
     ret = m.itemprop('foo', 'bar')
@@ -104,7 +102,7 @@ def test_metadata_ogprop(prop):
 @mock.patch.object(mod.Metadata, 'ogprop')
 @mock.patch.object(mod.Metadata, 'twitterprop')
 @mock.patch.object(mod.Metadata, 'itemprop')
-def test_metadata_title(itemprop, ogprop, twitterprop):
+def test_metadata_title(itemprop, twitterprop, ogprop):
     itemprop.return_value = ogprop.return_value = twitterprop.return_value = ''
     m = mod.Metadata(title='foo')
     m.render()
@@ -117,7 +115,7 @@ def test_metadata_title(itemprop, ogprop, twitterprop):
 @mock.patch.object(mod.Metadata, 'ogprop')
 @mock.patch.object(mod.Metadata, 'twitterprop')
 @mock.patch.object(mod.Metadata, 'itemprop')
-def test_metadata_description(itemprop, ogprop, twitterprop, simple):
+def test_metadata_description(itemprop, twitterprop, ogprop, simple):
     itemprop.return_value = ogprop.return_value = twitterprop.return_value = ''
     simple.return_value = ''
     m = mod.Metadata(description='foo')
@@ -127,27 +125,27 @@ def test_metadata_description(itemprop, ogprop, twitterprop, simple):
     itemprop.assert_called_once_with('description', 'foo')
 
 
-@mock.patch(MOD + 'full_url')
+@mock.patch.object(mod, 'full_url')
 def test_metadata_make_full(full_url):
     ret = mod.Metadata.make_full('foo')
     full_url.assert_called_once_with('foo')
     assert ret == full_url.return_value
 
 
-@mock.patch(MOD + 'full_url')
+@mock.patch.object(mod, 'full_url')
 def test_metadata_make_full_with_full_url(full_url):
     mod.Metadata.make_full('http://foo/')
     assert not full_url.called
 
 
-@mock.patch(MOD + 'full_url')
+@mock.patch.object(mod, 'full_url')
 def test_metadata_make_full_special_case(full_url):
     # This is expected, and it's OK. We hope developers aren't that dumb.
     mod.Metadata.make_full('httpfoo')
     assert not full_url.called
 
 
-@mock.patch(MOD + 'Metadata.make_full')
+@mock.patch.object(mod.Metadata, 'make_full')
 def test_metadata_assign_image(make_full):
     m = mod.Metadata(thumbnail='foo.png')
     make_full.assert_called_once_with('foo.png')
@@ -157,8 +155,8 @@ def test_metadata_assign_image(make_full):
 @mock.patch.object(mod.Metadata, 'ogprop')
 @mock.patch.object(mod.Metadata, 'twitterprop')
 @mock.patch.object(mod.Metadata, 'itemprop')
-@mock.patch(MOD + 'Metadata.make_full')
-def test_metadata_image(make_full, ogprop, twitterprop, itemprop):
+@mock.patch.object(mod.Metadata, 'make_full')
+def test_metadata_image(make_full, itemprop, twitterprop, ogprop):
     itemprop.return_value = ogprop.return_value = twitterprop.return_value = ''
     make_full.return_value = 'foobar'
     m = mod.Metadata(thumbnail='foo')
@@ -168,7 +166,7 @@ def test_metadata_image(make_full, ogprop, twitterprop, itemprop):
     itemprop.assert_called_once_with('image', 'foobar')
 
 
-@mock.patch(MOD + 'Metadata.make_full')
+@mock.patch.object(mod.Metadata, 'make_full')
 def test_metadata_assign_url(make_full):
     m = mod.Metadata(url='/foo')
     make_full.assert_called_once_with('/foo')
@@ -178,8 +176,8 @@ def test_metadata_assign_url(make_full):
 @mock.patch.object(mod.Metadata, 'ogprop')
 @mock.patch.object(mod.Metadata, 'twitterprop')
 @mock.patch.object(mod.Metadata, 'itemprop')
-@mock.patch(MOD + 'Metadata.make_full')
-def test_metadata_url(make_full, ogprop, twitterprop, itemprop):
+@mock.patch.object(mod.Metadata, 'make_full')
+def test_metadata_url(make_full, itemprop, twitterprop, ogprop):
     itemprop.return_value = ogprop.return_value = twitterprop.return_value = ''
     make_full.return_value = 'foobar'
     m = mod.Metadata(url='foo')
@@ -187,4 +185,3 @@ def test_metadata_url(make_full, ogprop, twitterprop, itemprop):
     ogprop.assert_called_once_with('url', 'foobar')
     twitterprop.assert_called_once_with('url', 'foobar')
     itemprop.assert_called_once_with('url', 'foobar')
-
