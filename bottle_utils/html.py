@@ -130,10 +130,10 @@ class QueryDict(MultiDict):
         return '?' + str(self)
 
     def __radd__(self, other):
-        return other + self.to_qs()
+        return other + str(self.to_qs())
 
     def __add__(self, other):
-        return self.to_qs() + other
+        return str(self.to_qs()) + other
 
     def __str__(self):
         return '&'.join(['{}={}'.format(urlquote(k), urlquote(v))
