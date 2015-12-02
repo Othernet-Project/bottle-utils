@@ -13,7 +13,8 @@ from decimal import Decimal
 from dateutil.parser import parse
 from bottle import request, MultiDict, _parse_qsl
 
-from .common import to_bytes, to_unicode, attr_escape, basestring, unicode
+from .common import (to_bytes, to_unicode, attr_escape, html_escape,
+                     basestring, unicode)
 
 
 SIZES = 'KMGTP'
