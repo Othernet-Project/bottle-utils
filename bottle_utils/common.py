@@ -19,6 +19,11 @@ ESCAPE_MAPPING = (
     ('\t', '&#9;'),
 )
 
+HTML_ESCAPE_MAPPING = ESCAPE_MAPPING + (
+    ('<', '&lt;'),
+    ('>', '&gt;'),
+)
+
 #: Whether Python version is 2.x
 PY2 = sys.version_info.major == 2
 
@@ -79,6 +84,18 @@ def attr_escape(attr):
     for s, r in ESCAPE_MAPPING:
         attr = attr.replace(s, r)
     return attr
+
+
+def html_escape(html):
+    """
+    Escape ``html`` strning containing HTML. This function escapes characters
+    that are not desirable in HTML markup, when the source string should
+    represent text content only. User-supplied data that should appar in markup
+    should be escaped using this function.
+    """
+    for s, r in HTML_ESCAPE_MAPPING:
+        html = html.replace(s, r)
+    return html
 
 
 def full_url(path='/'):

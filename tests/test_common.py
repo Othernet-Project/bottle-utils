@@ -35,6 +35,10 @@ def test_attr_escaping():
     assert mod.attr_escape('/?q=foo&b=bar') == '/?q=foo&amp;b=bar'
 
 
+def test_html_escaping():
+    assert mod.html_escape('<foo>bar</foo>') == '&lt;foo&gt;bar&lt;/foo&gt;'
+
+
 @mock.patch(MOD + 'request')
 def test_full_url(request):
     request.urlparts.scheme = 'http'
