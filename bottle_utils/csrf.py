@@ -81,7 +81,7 @@ def csrf_token(func):
     hidden field must have a name ``_csrf_token``::
 
         <form method="POST">
-            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            <input type="hidden" name="_csrf_token" value="{{ token }}">
             ....
         </form>
     """
@@ -162,4 +162,3 @@ def csrf_tag():
     except AttributeError:
         pass
     return HIDDEN(token_name, token)
-
