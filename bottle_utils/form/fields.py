@@ -317,8 +317,11 @@ class BooleanField(Field):
 
     def parse(self, value):
         if not value or isinstance(value, basestring):
-            return self.expected_value == value
-        return self.expected_value in value
+            self.default = self.expected_value == value
+        else:
+            self.default = self.expected_value in value
+
+        return self.default
 
 
 class SelectField(Field):
