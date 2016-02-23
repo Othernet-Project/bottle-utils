@@ -339,7 +339,7 @@ class SelectField(Field):
 
     type = 'select'
 
-    def __init__(self, label, validators=None, value=None, choices=None,
+    def __init__(self, label=None, validators=None, value=None, choices=None,
                  **options):
         #: Iterable of value-label pairs of valid choices
         self.choices = choices or tuple()
