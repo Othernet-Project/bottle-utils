@@ -230,7 +230,7 @@ class DateField(StringField):
     :type: text
     """
 
-    def __init__(self, label, validators=None, value=None, **options):
+    def __init__(self, label=None, validators=None, value=None, **options):
         validators = [DateValidator()] + list(validators or [])
         super(DateField, self).__init__(label,
                                         validators=validators,
@@ -304,7 +304,7 @@ class BooleanField(Field):
 
     type = 'checkbox'
 
-    def __init__(self, label, validators=None, value=None, default=False,
+    def __init__(self, label=None, validators=None, value=None, default=False,
                  **options):
         #: Default state of the field
         self.default = default
