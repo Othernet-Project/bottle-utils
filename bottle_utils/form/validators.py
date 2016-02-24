@@ -131,3 +131,40 @@ class InRangeValidator(Validator):
                     'max_val', {'value': value, 'max': self.max_value})
         except Exception:
             raise ValidationError('generic', {'value': value})
+
+
+class LengthValidator(Validator):
+    """
+    Validates that value's length is within specified range. This validator
+    works with any objects that support the ``len()`` function.
+
+    The ``min_len`` and ``max_len`` arguments are used to set the lower and
+    upper bounds respectively. The check for those bounds are only done when
+    the arguments are supplied so, when both arguments are omitted, this
+    validator is effectively pass-through.
+
+    :error name(s): min_len, max_len
+    """
+
+    messages = {
+        'min_len': _('Must be at least {len} long'),
+        'max_len': _('Must not be longer than {len}'),
+    }
+
+    def __init__(self, min_len=None, max_len=None, **kwargs):
+        self.min_len = min_len
+        self.max_len = max_len
+        super(LengthValidator, self).__init__(**kwargs)
+
+    def validate(self, value):
+        try:
+            if self.min_len is not None and len(value) < self.min_len:
+                raise ValidationError(
+                    'min_len', {'value': value, 'len': self.min_len})
+            if self.max_len is not None and len(value) > self.max_len:
+                raise ValidationError(
+                    'max_len', {'value': value, 'len': self.max_len})
+
+        except Exception:
+            raise ValidationError('generic', {'value': value})
+
