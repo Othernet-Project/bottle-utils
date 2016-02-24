@@ -122,15 +122,12 @@ class InRangeValidator(Validator):
         super(InRangeValidator, self).__init__(**kwargs)
 
     def validate(self, value):
-        try:
-            if self.min_value is not None and self.min_value > value:
-                raise ValidationError(
-                    'min_val', {'value': value, 'min': self.min_value})
-            if self.max_value is not None and self.max_value < value:
-                raise ValidationError(
-                    'max_val', {'value': value, 'max': self.max_value})
-        except Exception:
-            raise ValidationError('generic', {'value': value})
+        if self.min_value is not None and self.min_value > value:
+            raise ValidationError(
+                'min_val', {'value': value, 'min': self.min_value})
+        if self.max_value is not None and self.max_value < value:
+            raise ValidationError(
+                'max_val', {'value': value, 'max': self.max_value})
 
 
 class LengthValidator(Validator):
@@ -157,14 +154,10 @@ class LengthValidator(Validator):
         super(LengthValidator, self).__init__(**kwargs)
 
     def validate(self, value):
-        try:
-            if self.min_len is not None and len(value) < self.min_len:
-                raise ValidationError(
-                    'min_len', {'value': value, 'len': self.min_len})
-            if self.max_len is not None and len(value) > self.max_len:
-                raise ValidationError(
-                    'max_len', {'value': value, 'len': self.max_len})
-
-        except Exception:
-            raise ValidationError('generic', {'value': value})
+        if self.min_len is not None and len(value) < self.min_len:
+            raise ValidationError(
+                'min_len', {'value': value, 'len': self.min_len})
+        if self.max_len is not None and len(value) > self.max_len:
+            raise ValidationError(
+                'max_len', {'value': value, 'len': self.max_len})
 
