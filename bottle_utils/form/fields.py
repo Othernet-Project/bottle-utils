@@ -9,6 +9,26 @@ except ImportError:
 from .exceptions import ValidationError
 from .validators import DateValidator
 
+class ErrorMixin(object):
+    """
+    Mixin class used to provide error rendering functionality.
+    """
+
+    @property
+    def error(self):
+        """
+        Human readable error message. This property evaluates to empty string
+        if there are no errors.
+        """
+        if not self._error:
+            return ''
+        message = self.messages.get(self._error.message)
+        if not message:
+            return self.generic_error
+        if self._error.params:
+            return message.format(self._error.params)
+        return message
+
 
 class DormantField(object):
     """
@@ -27,7 +47,7 @@ class DormantField(object):
         return self.field_cls(name=name, *self.args, **self.kwargs)
 
 
-class Field(object):
+class Field(ErrorMixin):
     """
     Form field base class. This class provides the base functionality for all
     form fields.
@@ -145,16 +165,6 @@ class Field(object):
                 return False
 
         return True
-
-    @property
-    def error(self):
-        """
-        Human readable error message. This property evaluates to empty string
-        if there are no errors.
-        """
-        if not self._error:
-            return ''
-        return self.messages.get(self._error.message, self.generic_error)
 
     def parse(self, value):
         """

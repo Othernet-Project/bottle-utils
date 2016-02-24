@@ -11,6 +11,9 @@ Validation
    :members:
    :exclude-members: Validator
 
+.. autoclass:: bottle_utils.form.exceptions.ValidationError
+   :members:
+
 Fields
 ------
 
