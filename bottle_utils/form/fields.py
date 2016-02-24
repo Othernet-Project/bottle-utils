@@ -26,7 +26,7 @@ class ErrorMixin(object):
         if not message:
             return self.generic_error
         if self._error.params:
-            return message.format(self._error.params)
+            return message.format(**self._error.params)
         return message
 
 
