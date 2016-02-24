@@ -51,6 +51,8 @@ class Field(object):
     :py:attr:`~options` property on the instance.
     """
 
+    ValidationError = ValidationError
+
     #: Field ID attribute prefix (this is prepended to the field name)
     _id_prefix = ''
 
