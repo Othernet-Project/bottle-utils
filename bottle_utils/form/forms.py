@@ -3,11 +3,11 @@ try:
 except ImportError:
     _ = lambda x: x
 
-from .fields import DormantField, Field
+from .fields import DormantField, Field, ErrorMixin
 from .exceptions import ValidationError
 
 
-class Form(object):
+class Form(ErrorMixin):
     """
     Base form class to be subclassed. To define a new form subclass this
     class::
@@ -50,8 +50,7 @@ class Form(object):
     #: Prefix to use for looking up postprocessors
     _post_processor_prefix = 'postprocess_'
 
-    # Translators, used as generic error message in forms, 'value' should not
-    # be translated.
+    # Translators, used as generic error message in forms
     generic_error = _('Form contains invalid data.')
     messages = {}
 
@@ -177,19 +176,3 @@ class Form(object):
         error is found, a `ValidationError` exception should be raised by the
         function."""
         pass
-
-    @property
-    def error(self):
-        """
-        Form-specific error message. This property evaluates to an empty string
-        if form has no errors of its own.
-
-        .. note::
-            This property contains **only** form-specific errors, but no
-            field errors. Field errors are available as the
-            :py:attr:`~field_errors` property.
-        """
-        if not self._error:
-            return ''
-        message = self.messages.get(self._error.message, self.generic_error)
-        return message
