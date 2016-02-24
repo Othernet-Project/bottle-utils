@@ -18,7 +18,8 @@ from .fields import (DormantField,
                      BooleanField,
                      SelectField)
 from .forms import Form
-from .validators import Validator, Required, DateValidator, InRangeValidator
+from .validators import (Validator, Required, DateValidator, InRangeValidator,
+                         LengthValidator)
 
 
 __all__ = ['ValidationError',
