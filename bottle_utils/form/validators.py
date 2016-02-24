@@ -122,6 +122,8 @@ class InRangeValidator(Validator):
         super(InRangeValidator, self).__init__(**kwargs)
 
     def validate(self, value):
+        if value is None:
+            return
         if self.min_value is not None and self.min_value > value:
             raise ValidationError(
                 'min_val', {'value': value, 'min': self.min_value})
@@ -154,6 +156,8 @@ class LengthValidator(Validator):
         super(LengthValidator, self).__init__(**kwargs)
 
     def validate(self, value):
+        if not value:
+            return
         if self.min_len is not None and len(value) < self.min_len:
             raise ValidationError(
                 'min_len', {'value': value, 'len': self.min_len})
