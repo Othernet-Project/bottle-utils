@@ -42,6 +42,8 @@ class Form(object):
     value that is going to be the stored as cleaned / validated data.
     """
 
+    ValidationError = ValidationError
+
     #: Prefix to use for looking up preprocessors
     _pre_processor_prefix = 'preprocess_'
 
