@@ -1,2 +1,2 @@
-__version__ = '1.0'
+__version__ = '2.0.dev1'
 __author__ = 'Outernet Inc <hello@outernet.is>'
