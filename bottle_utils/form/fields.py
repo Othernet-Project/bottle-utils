@@ -30,7 +30,19 @@ class ErrorMixin(object):
         return message
 
 
-class DormantField(object):
+class Ordered(object):
+    #: Counter attribute holding the number of fields found on a form, used
+    #: to assign indexes to individual fields, so their order can be kept
+    _counter = 0
+
+    def __init__(self):
+        #: Assign index to the instantiated field and increment the shared
+        #: counter, so the next field will get a higher index
+        self._order = self._counter
+        Ordered._counter += 1
+
+
+class DormantField(Ordered):
     """
     Proxy for unbound fields. This class holds the the field constructor
     arguments until the data can be bound to it.
@@ -39,6 +51,7 @@ class DormantField(object):
     """
 
     def __init__(self, field_cls, args, kwargs):
+        super(DormantField, self).__init__()  # needed to apply ordering
         self.field_cls = field_cls
         self.args = args
         self.kwargs = kwargs
@@ -47,7 +60,7 @@ class DormantField(object):
         return self.field_cls(name=name, *self.args, **self.kwargs)
 
 
-class Field(ErrorMixin):
+class Field(Ordered, ErrorMixin):
     """
     Form field base class. This class provides the base functionality for all
     form fields.
@@ -95,6 +108,8 @@ class Field(ErrorMixin):
 
     def __init__(self, label=None, validators=None, value=None, name=None,
                  messages={}, **options):
+        super(Field, self).__init__()  # needed to apply ordering
+
         #: Field name
         self.name = name
 

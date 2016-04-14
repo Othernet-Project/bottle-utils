@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 try:
     from bottle_utils.i18n import lazy_gettext as _
 except ImportError:
@@ -103,8 +105,9 @@ class Form(ErrorMixin):
         types = (Field, DormantField)
         is_form_field = lambda name: isinstance(getattr(self, name), types)
         ignored_attrs = ['fields', 'field_messages', 'field_errors']
-        return dict((name, getattr(self, name)) for name in dir(self)
-                    if name not in ignored_attrs and is_form_field(name))
+        pairs = [(name, getattr(self, name)) for name in dir(self)
+                 if name not in ignored_attrs and is_form_field(name)]
+        return OrderedDict(sorted(pairs, key=lambda x: x[1]._order))
 
     def _add_error(self, field, error):
         # if the error is from one of the processors, bind it to the field too

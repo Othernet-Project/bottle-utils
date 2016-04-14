@@ -20,9 +20,6 @@ except ImportError:
 import pytest
 
 import bottle_utils.form as mod
-from bottle_utils.lazy import Lazy
-
-MOD = mod.__name__
 
 
 class TestValidator(object):
@@ -56,6 +53,14 @@ class TestValidator(object):
 
 
 class TestField(object):
+
+    def test_order(self):
+        field1 = mod.Field()
+        field2 = mod.Field()
+        field3 = mod.Field()
+        assert field1._order == 0
+        assert field2._order == 1
+        assert field3._order == 2
 
     def test_bind(self):
         class CustomField(mod.Field):
@@ -246,6 +251,12 @@ class TestForm(object):
     def test_fields(self, form_cls):
         form = form_cls({})
         assert form.fields == {'field1': form.field1, 'field2': form.field2}
+
+    def test_fields_order(self, form_cls):
+        form = form_cls()
+        fields = list(form.fields.items())
+        assert fields[0][1].name == 'field1'
+        assert fields[1][1].name == 'field2'
 
     def test_is_valid_success(self, form_cls):
         mocked_field = mock.Mock()
