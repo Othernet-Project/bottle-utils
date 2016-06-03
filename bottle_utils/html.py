@@ -698,7 +698,10 @@ def full_quoted_url(route, **params):
     prefix, including port if not on typical http ports.
     """
 
-    domain = request.urlparts.netloc
+    try:
+        domain, _ = request.urlparts.netloc.split(':')
+    except ValueError:
+        domain = request.urlparts.netloc
     if request.urlparts.port in HTTP_PORTS:
         port = ''
     else:
