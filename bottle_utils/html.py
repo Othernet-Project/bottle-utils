@@ -707,7 +707,7 @@ def full_quoted_url(route, with_scheme=False, **params):
     else:
         port = ':' + str(request.urlparts.port)
     suffix = quoted_url(route, **params)
-    scheme = request.urlparts.scheme if with_scheme else '//'
+    scheme = str(request.urlparts.scheme + "://") if with_scheme else '//'
 
     return '{c}{d}{p}{s}'.format(c=scheme, d=domain, p=port, s=suffix)
 
