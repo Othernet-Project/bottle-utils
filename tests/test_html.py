@@ -15,6 +15,11 @@ from __future__ import unicode_literals
 import mock
 import pytest
 
+try:
+    import urlparse
+except ImportError:
+    import urllib.parse as urlparse
+
 import bottle_utils.html as mod
 
 
@@ -480,3 +485,19 @@ def test_del_qparam_default(request):
     ret = mod.del_qparam(None, 'a')
     assert 'a=1' not in str(ret)
     assert 'b=2' in str(ret)
+
+
+@pytest.mark.parametrize('parts expected with_scheme'.split, (
+    ['https://outernet.is:80/', '//outernet.is/?query', False],
+    ['https://outernet.is:443/', '//outernet.is/?query', False],
+    ['https://outernet.is:1234/', '//outernet.is:1234/?query', False],
+    ['https://outernet.is:80/', 'https://outernet.is/?query', True],
+    ['http://outernet.is:80/', 'http://outernet.is/?query', True],
+))
+@mock.Mock(MOD + 'request.urlparts')
+@mock.patch(MOD + 'quoted_url', return_value='/?query')
+def test_full_quoted_url(parts, expected, with_scheme, request, quoted_url):
+    expected = '//outernet.is/?query'
+    request.urlparts = urlparse.urlsplit('https://outernet.is:80/')
+    ret = mod.full_quoted_url('test', with_scheme=False)
+    assert ret == expected
