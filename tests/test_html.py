@@ -487,20 +487,26 @@ def test_del_qparam_default(request):
     assert 'b=2' in str(ret)
 
 
-@pytest.mark.parametrize('parts expected with_scheme'.split, (
-    ['https://outernet.is:80/', '//outernet.is/', False],
-    ['https://outernet.is:443/', '//outernet.is/', False],
-    ['https://outernet.is:1234/', '//outernet.is:1234/', False],
-    ['https://outernet.is:80/', 'https://outernet.is/', True],
-    ['http://outernet.is:80/', 'http://outernet.is/', True],
-    ['http://outernet.is/', 'http://outernet.is/', True],
-    ['http://outernet.is/', '//outernet.is/', False],
-    ['https://outernet.is/', 'https://outernet.is/', True],
-    ['https://outernet.is/', '//outernet.is/', False],
+@mock.patch(MOD + 'request')
+@pytest.mark.parametrize(('parts', 'expected', 'path', 'with_scheme'), (
+    ['http://outernet.is/?query', '//outernet.is', '', False],
+    ['http://outernet.is/?query', 'http://outernet.is', '', True],
+    ['http://outernet.is/?query', '//outernet.is/suffix', '/suffix', False],
+    ['https://outernet.is/?query', '//outernet.is', '', False],
+    ['https://outernet.is/?query', 'https://outernet.is', '', True],
+    ['https://outernet.is/?query', '//outernet.is/suffix', '/suffix', False],
+    ['http://outernet.is:80/?query', 'http://outernet.is', '', True],
+    ['https://outernet.is:80/?query', '//outernet.is', '', False],
+    ['https://outernet.is:80/?query', 'https://outernet.is', '', True],
+    ['http://outernet.is:443/?query', 'http://outernet.is', '', True],
+    ['https://outernet.is:443/?query', '//outernet.is', '', False],
+    ['https://outernet.is:443/?query', 'https://outernet.is', '', True],
+    ['https://outernet.is:443/?query', 'https://outernet.is/path', '/path', True],
+    ['http://outernet.is:1234/?query', 'http://outernet.is:1234', '', True],
+    ['https://outernet.is:1234/?query', '//outernet.is:1234', '', False],
+    ['https://outernet.is:1234/?query', '//outernet.is:1234/path', '/path', False],
 ))
-@mock.Mock(MOD + 'request.urlparts')
-def test_full_domain(parts, expected, with_scheme, request):
-    expected = '//outernet.is/?query'
-    request.urlparts = urlparse.urlsplit('https://outernet.is:80/')
-    ret = mod.full_quoted_url(with_scheme=with_scheme)
+def test_full_domain(request, parts, expected, path, with_scheme):
+    request.urlparts = urlparse.urlsplit(parts)
+    ret = mod.full_url(path=path, with_scheme=with_scheme)
     assert ret == expected
