@@ -692,9 +692,13 @@ def quoted_url(route, **params):
     return request.app.get_url(route, **quote_dict(params))
 
 
-def full_domain(with_scheme=False):
+def full_url(path='', with_scheme=False):
     """
-    Return a full domain prefix, including port if not on typical http ports.
+    Return full URL with an optional scheme, the domain, the port if it's not a
+    typical http port, and an optional path.
+
+    Note that the path is added to the URL verbatim, therefore it must start
+    with a forward slash and must be a string.
     """
 
     try:
@@ -707,7 +711,7 @@ def full_domain(with_scheme=False):
         port = ':' + str(request.urlparts.port)
     scheme = str(request.urlparts.scheme + "://") if with_scheme else '//'
 
-    return '{s}{d}{p}'.format(s=scheme, d=domain, p=port)
+    return ''.join([scheme, domain, port, path])
 
 
 def to_qs(mapping):
