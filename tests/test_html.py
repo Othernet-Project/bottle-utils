@@ -493,6 +493,8 @@ def test_del_qparam_default(request):
     ['https://outernet.is:1234/', '//outernet.is:1234/?query', False],
     ['https://outernet.is:80/', 'https://outernet.is/?query', True],
     ['http://outernet.is:80/', 'http://outernet.is/?query', True],
+    ['http://outernet.is/', 'http://outernet.is/?query', True],
+    ['https://outernet.is/', '//outernet.is/?query', False],
 ))
 @mock.Mock(MOD + 'request.urlparts')
 @mock.patch(MOD + 'quoted_url', return_value='/?query')
