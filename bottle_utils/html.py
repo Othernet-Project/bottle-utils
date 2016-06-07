@@ -692,10 +692,9 @@ def quoted_url(route, **params):
     return request.app.get_url(route, **quote_dict(params))
 
 
-def full_quoted_url(route, with_scheme=False, **params):
+def full_domain(with_scheme=False):
     """
-    Return matching URL with its query parameters quoted and a full domain
-    prefix, including port if not on typical http ports.
+    Return a full domain prefix, including port if not on typical http ports.
     """
 
     try:
@@ -706,10 +705,9 @@ def full_quoted_url(route, with_scheme=False, **params):
         port = ''
     else:
         port = ':' + str(request.urlparts.port)
-    suffix = quoted_url(route, **params)
     scheme = str(request.urlparts.scheme + "://") if with_scheme else '//'
 
-    return '{c}{d}{p}{s}'.format(c=scheme, d=domain, p=port, s=suffix)
+    return '{s}{d}{p}'.format(s=scheme, d=domain, p=port)
 
 
 def to_qs(mapping):
