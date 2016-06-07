@@ -21,7 +21,7 @@ SIZES = 'KMGTP'
 FERR_CLS = 'form-errors'
 FERR_ONE_CLS = 'form-error'
 ERR_CLS = 'field-error'
-HTTP_PORTS = '80 443'.split()
+HTTP_PORTS = ('80', '443')
 
 
 urlquote = lambda value: quote(to_bytes(value))
