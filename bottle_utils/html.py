@@ -698,10 +698,10 @@ def full_domain(with_scheme=False):
     """
 
     try:
-        domain, _ = request.urlparts.netloc.split(':')
+        domain, _ = request.urlparts.netloc.rsplit(':')
     except ValueError:
         domain = request.urlparts.netloc
-    if request.urlparts.port in HTTP_PORTS:
+    if request.urlparts.port in HTTP_PORTS or request.urlparts.port is None:
         port = ''
     else:
         port = ':' + str(request.urlparts.port)
