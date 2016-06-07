@@ -488,18 +488,19 @@ def test_del_qparam_default(request):
 
 
 @pytest.mark.parametrize('parts expected with_scheme'.split, (
-    ['https://outernet.is:80/', '//outernet.is/?query', False],
-    ['https://outernet.is:443/', '//outernet.is/?query', False],
-    ['https://outernet.is:1234/', '//outernet.is:1234/?query', False],
-    ['https://outernet.is:80/', 'https://outernet.is/?query', True],
-    ['http://outernet.is:80/', 'http://outernet.is/?query', True],
-    ['http://outernet.is/', 'http://outernet.is/?query', True],
-    ['https://outernet.is/', '//outernet.is/?query', False],
+    ['https://outernet.is:80/', '//outernet.is/', False],
+    ['https://outernet.is:443/', '//outernet.is/', False],
+    ['https://outernet.is:1234/', '//outernet.is:1234/', False],
+    ['https://outernet.is:80/', 'https://outernet.is/', True],
+    ['http://outernet.is:80/', 'http://outernet.is/', True],
+    ['http://outernet.is/', 'http://outernet.is/', True],
+    ['http://outernet.is/', '//outernet.is/', False],
+    ['https://outernet.is/', 'https://outernet.is/', True],
+    ['https://outernet.is/', '//outernet.is/', False],
 ))
 @mock.Mock(MOD + 'request.urlparts')
-@mock.patch(MOD + 'quoted_url', return_value='/?query')
-def test_full_quoted_url(parts, expected, with_scheme, request, quoted_url):
+def test_full_domain(parts, expected, with_scheme, request):
     expected = '//outernet.is/?query'
     request.urlparts = urlparse.urlsplit('https://outernet.is:80/')
-    ret = mod.full_quoted_url('test', with_scheme=False)
+    ret = mod.full_quoted_url(with_scheme=with_scheme)
     assert ret == expected
