@@ -61,3 +61,4 @@ URL handling
 .. autofunction:: urlunquote
 .. autofunction:: quote_dict
 .. autofunction:: quoted_url
+.. autofunction:: full_quoted_url

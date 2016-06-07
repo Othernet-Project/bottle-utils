@@ -21,6 +21,7 @@ SIZES = 'KMGTP'
 FERR_CLS = 'form-errors'
 FERR_ONE_CLS = 'form-error'
 ERR_CLS = 'field-error'
+HTTP_PORTS = ('80', '443')
 
 
 urlquote = lambda value: quote(to_bytes(value))
@@ -689,6 +690,28 @@ def quote_dict(mapping):
 def quoted_url(route, **params):
     """Return matching URL with it's query parameters quoted."""
     return request.app.get_url(route, **quote_dict(params))
+
+
+def full_url(path='', with_scheme=False):
+    """
+    Return full URL with an optional scheme, the domain, the port if it's not a
+    typical http port, and an optional path.
+
+    Note that the path is added to the URL verbatim, therefore it must start
+    with a forward slash and must be a string.
+    """
+
+    try:
+        domain, _ = request.urlparts.netloc.rsplit(':')
+    except ValueError:
+        domain = request.urlparts.netloc
+    if request.urlparts.port in HTTP_PORTS or request.urlparts.port is None:
+        port = ''
+    else:
+        port = ':' + str(request.urlparts.port)
+    scheme = str(request.urlparts.scheme + "://") if with_scheme else '//'
+
+    return ''.join([scheme, domain, port, path])
 
 
 def to_qs(mapping):
