@@ -152,9 +152,10 @@ class Field(ErrorMixin):
         argument.
         """
         try:
-            self.processed_value = self.parse(self.value)
+            self.processed_value = self.parse(self.processed_value)
         except ValueError as exc:
-            self._error = ValidationError('generic', {'value': self.value})
+            self._error = ValidationError('generic',
+                                          {'value': self.processed_value})
             return False
 
         for validate in self.validators:
