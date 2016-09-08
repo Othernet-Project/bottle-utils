@@ -353,6 +353,9 @@ class BooleanField(Field):
     def parse(self, value):
         if not value or isinstance(value, basestring):
             return self.expected_value == value
+        # Bool values may be passed to it as initial values
+        if isinstance(value, bool):
+            return value
         # Check if value is present in collection
         return self.expected_value in value
 
