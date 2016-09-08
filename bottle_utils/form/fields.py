@@ -328,13 +328,18 @@ class BooleanField(Field):
                                            value=value,
                                            **options)
 
+    @property
+    def checked(self):
+        if not self.is_value_bound:
+            return self.default
+        # when value is bound to the field, it must match the expected value
+        return self.parse(self.value)
+
     def parse(self, value):
         if not value or isinstance(value, basestring):
-            self.default = self.expected_value == value
-        else:
-            self.default = self.expected_value in value
-
-        return self.default
+            return self.expected_value == value
+        # Check if value is present in collection
+        return self.expected_value in value
 
 
 class SelectField(Field):
