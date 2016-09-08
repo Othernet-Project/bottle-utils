@@ -1,4 +1,3 @@
-from bottle_utils import html
 from bottle_utils.common import basestring, unicode
 
 try:
@@ -8,6 +7,7 @@ except ImportError:
 
 from .exceptions import ValidationError
 from .validators import DateValidator
+
 
 class ErrorMixin(object):
     """
@@ -57,8 +57,8 @@ class Field(ErrorMixin):
     The ``validators`` argument is used to specify the validators that will be
     used on the field data.
 
-    If any data should be bound to a field, the ``value`` argument can be used to
-    specify it. Value can be a callable, in which case it is called and its
+    If any data should be bound to a field, the ``value`` argument can be used
+    to specify it. Value can be a callable, in which case it is called and its
     return value used as ``value``.
 
     The ``name`` argument is used to specify the field name.
